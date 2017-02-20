@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/content_rpt_hoy"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.guma.desarrollo.gmv.RptHoyActivity"
+    tools:showIn="@layout/activity_rpt_hoy">
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="4dp"
+    card_view:cardUseCompatPadding="true">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="10dp">
+                <TextView
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Nº PEDIDOS" />
+                <TextView
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="MONTO" />
+
+            </TableRow>
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="10dp">
+                <TextView
+                    android:gravity="center"
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="10" />
+                <TextView
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="C$ 12,000" />
+
+            </TableRow>
+        </TableLayout>
+
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="4dp"
+        card_view:cardUseCompatPadding="true">
+
+    <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="10dp">
+                <TextView
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Nº COBROS" />
+                <TextView
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="MONTO" />
+
+            </TableRow>
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="10dp">
+                <TextView
+                    android:gravity="center"
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="5" />
+                <TextView
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="C$ 5,000" />
+
+            </TableRow>
+        </TableLayout>
+
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="4dp"
+        card_view:cardUseCompatPadding="true">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="10dp">
+                <TextView
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="OTRAS GESTIONES" />
+
+
+            </TableRow>
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="10dp">
+                <TextView
+                    android:gravity="center"
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="5" />
+
+
+            </TableRow>
+        </TableLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
+

@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">GMV</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Usuario</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="action_sign_in">Acceder</string>
+    <string name="action_sign_in_short">ACCEDER</string>
+    <string name="title_activity_agenda">AgendaActivity</string>
+    <string name="title_activity_marcar_registro">MarcarRegistroActivity</string>
+    <string name="title_activity_acciones">AccionesActivity</string>
+    <string name="title_activity_cobro_in">CobroInActivity</string>
+    <string name="title_activity_pedido">PedidoActivity</string>
+    <string name="title_activity_articulos">ArticulosActivity</string>
+    <string name="title_activity_detalles_articulo">DetallesArticuloActivity</string>
+    <string name="title_activity_indicadores_cliente">IndicadoresClienteActivity</string>
+    <string name="title_activity_resumen">ResumenActivity</string>
+    <string name="title_activity_cumpleanno">CumpleannoActivity</string>
+    <string name="title_activity_bandeja_pedidos">BandejaPedidosActivity</string>
+    <string name="title_activity_bandeja_cobros">BandejaCobrosActivity</string>
+    <string name="title_activity_rpt_hoy">RptHoyActivity</string>
+
+</resources>
