@@ -19,5 +19,6 @@
     <string name="title_activity_bandeja_pedidos">BandejaPedidosActivity</string>
     <string name="title_activity_bandeja_cobros">BandejaCobrosActivity</string>
     <string name="title_activity_rpt_hoy">RptHoyActivity</string>
+    <string name="resumen_direccion">Villa Fontana Club Terraza 150m. Oeste, Managua,Nicaragua</string>
 
 </resources>

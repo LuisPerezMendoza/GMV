@@ -20,28 +20,19 @@ public class LeadsAdapter extends ArrayAdapter<Lead> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Obtener inflater.
         LayoutInflater inflater = (LayoutInflater) getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        // ¿Existe el view actual?
-        if (null == convertView) {
-            convertView = inflater.inflate(
-                    R.layout.list_item,
-                    parent,
-                    false);
-        }
 
-        // Referencias UI.
+        if (null == convertView) {
+            convertView = inflater.inflate(R.layout.list_item,parent,false);
+        }
 
         TextView name = (TextView) convertView.findViewById(R.id.tv_name_ART);
         TextView title = (TextView) convertView.findViewById(R.id.txtCodigo);
         TextView company = (TextView) convertView.findViewById(R.id.txtPrecio);
 
-        // Lead actual.
         Lead lead = getItem(position);
-
-        // Setup.
         name.setText(lead.getName());
         title.setText(lead.getTitle());
         company.setText(lead.getCompany());

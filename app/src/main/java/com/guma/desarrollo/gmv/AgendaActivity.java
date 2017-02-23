@@ -1,14 +1,18 @@
 package com.guma.desarrollo.gmv;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,13 +22,14 @@ import android.content.DialogInterface;
 
 import android.support.v7.app.AlertDialog;
 
-public class AgendaActivity extends AppCompatActivity {
+public class AgendaActivity extends AppCompatActivity  implements ConnectivityReceiver.ConnectivityReceiverListener{
 
     private LinkedHashMap<String, GroupInfo> subjects = new LinkedHashMap<String, GroupInfo>();
     private ArrayList<GroupInfo> deptList = new ArrayList<GroupInfo>();
 
     private CustomAdapter listAdapter;
     private ExpandableListView simpleExpandableListView;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,7 @@ public class AgendaActivity extends AppCompatActivity {
         listAdapter = new CustomAdapter(AgendaActivity.this, deptList);
         simpleExpandableListView.setAdapter(listAdapter);
         expandAll();
+
 
 
         simpleExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -107,9 +113,30 @@ public class AgendaActivity extends AppCompatActivity {
 
 
     }
+    private void checkConnection() {
+        boolean isConnected = ConnectivityReceiver.isConnected();
+        showSnack(isConnected);
+
+    }
+
+    private void showSnack(boolean isConnected) {
+        Toast.makeText(this, String.valueOf(isConnected), Toast.LENGTH_SHORT).show();
+        menu.getItem(0).setIcon(isConnected ? getResources().getDrawable(R.drawable.btngreen) : getResources().getDrawable(R.drawable.btnred));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MyApplication.getInstance().setConnectivityListener(this);
+    }
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        showSnack(isConnected);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_agenda, menu);
+        this.menu = menu;
         return true;
     }
     private void expandAll() {
@@ -118,8 +145,6 @@ public class AgendaActivity extends AppCompatActivity {
             simpleExpandableListView.expandGroup(i);
         }
     }
-
-    //method to collapse all groups
     private void collapseAll() {
         int count = listAdapter.getGroupCount();
         for (int i = 0; i < count; i++){

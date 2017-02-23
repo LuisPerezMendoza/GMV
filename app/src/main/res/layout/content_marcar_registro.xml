@@ -60,18 +60,20 @@
                 android:layout_height="fill_parent"
                 android:layout_margin="10dp">
                 <TextView
+                    android:id="@+id/txtlati"
                     android:layout_marginLeft="30dp"
                     android:layout_height="fill_parent"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="67.9" />
+                    android:text="0.0" />
                 <TextView
+                    android:id="@+id/txtlongi"
                     android:layout_height="fill_parent"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="-23.4" />
+                    android:text="0.0" />
 
             </TableRow>
             <TableRow
@@ -99,13 +101,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginLeft="10dp">
-                <RadioButton android:id="@+id/radio_pirates"
+                <RadioButton android:id="@+id/inLocal"
                     android:layout_height="fill_parent"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:text="En Local"
                     android:onClick="onRadioButtonClicked"/>
-                <RadioButton android:id="@+id/radio_ninjas"
+                <RadioButton android:id="@+id/outLocal"
                     android:layout_height="fill_parent"
                     android:layout_width="0dp"
                     android:layout_weight="1"

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/GMV.iml" filepath="$PROJECT_DIR$/GMV.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/gmv.iml" filepath="$PROJECT_DIR$/gmv.iml" />
     </modules>
   </component>
 </project>

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+tools:context=".MainActivity" >
 
-    <item
-        android:id="@+id/stadoAntena"
-        android:orderInCategory="200"
-        android:icon="@drawable/btngreen"
-        app:showAsAction="ifRoom|collapseActionView"
-        android:title="add" />
+<item
+    android:icon="@drawable/btngreen"
+    android:id="@+id/stadoAntena"
+    android:title="ADD"
+    android:orderInCategory="100"
+    app:showAsAction="always"/>
 </menu>
