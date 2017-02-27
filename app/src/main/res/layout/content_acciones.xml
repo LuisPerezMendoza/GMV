@@ -20,30 +20,43 @@
         android:layout_height="wrap_content"
         android:id="@+id/txtNameCliente"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textAlignment="center" />
 
     <Button
+
         android:text="COBRO"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnCBR"/>
+        android:id="@+id/btnCBR"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_primary_rounded"
+        android:textColor="@color/white"/>
 
     <Button
         android:text="PEDIDO"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnPD" />
+        android:id="@+id/btnPD"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_primary_rounded"
+        android:textColor="@color/white"/>
 
     <Button
         android:text="RAZON"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnRZ" />
+        android:id="@+id/btnRZ"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_primary_rounded"
+        android:textColor="@color/white"/>
 
     <Button
         android:text="CERRAR VISITA"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnCV" />
+        android:id="@+id/btnCV"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_primary_rounded"
+        android:textColor="@color/white"/>
 </LinearLayout>

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
@@ -20,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -44,26 +46,19 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
         LocationListener, ResultCallback<Status> {
 
     private static final String TAG = MarcarRegistroActivity.class.getSimpleName();
-
     private static final String LOCATION_KEY = "location-key";
-    private static final String ACTIVITY_KEY = "activity-key";
-
-    // Location API
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private LocationSettingsRequest mLocationSettingsRequest;
     private Location mLastLocation;
-
-    // Activity Recognition API
     private ActivityDetectionBroadcastReceiver mBroadcastReceiver;
-     // UI
     private TextView mLatitude;
     private TextView mLongitude;
-    private ImageView mDectectedActivityIcon;
-
-    // Códigos de petición
     public static final int REQUEST_LOCATION = 1;
     public static final int REQUEST_CHECK_SETTINGS = 2;
+
+    Button btn_step_2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +67,10 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("PASO 1 [Registrar visita]");
-        findViewById(R.id.btnGoToStep2).setOnClickListener(new View.OnClickListener() {
+
+        btn_step_2 = (Button) findViewById(R.id.btnGoToStep2);
+
+        btn_step_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MarcarRegistroActivity.this, AccionesActivity.class));
@@ -92,7 +90,6 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
         createLocationRequest();
         buildLocationSettingsRequest();
         checkLocationSettings();
-
         mBroadcastReceiver = new ActivityDetectionBroadcastReceiver();
         updateValuesFromBundle(savedInstanceState);
 
@@ -119,7 +116,6 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
             stopLocationUpdates();
             stopActivityUpdates();
         }
-
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
@@ -151,16 +147,21 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
                         startLocationUpdates();
                         break;
                     case Activity.RESULT_CANCELED:
+                        finish();
                         break;
                 }
                 break;
         }
     }
 
-    public void onRequestPermissionsResult(int requestCode,String[] permissions,int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions,
+                                           int[] grantResults) {
         if (requestCode == REQUEST_LOCATION) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.length == 1&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
                 startLocationUpdates();
+
             } else {
                 Toast.makeText(this, "Permisos no otorgados", Toast.LENGTH_LONG).show();
             }
@@ -207,9 +208,7 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         try {
-                            status.startResolutionForResult(
-                                    MarcarRegistroActivity.this,
-                                    REQUEST_CHECK_SETTINGS);
+                            status.startResolutionForResult(MarcarRegistroActivity.this,REQUEST_CHECK_SETTINGS);
                         } catch (IntentSender.SendIntentException e) {
                             // Sin operaciones
                         }
@@ -228,16 +227,15 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
                 mLastLocation = savedInstanceState.getParcelable(LOCATION_KEY);
                 updateLocationUI();
             }
-
-
-
-
         }
     }
 
     private void updateLocationUI() {
         mLatitude.setText(String.valueOf(mLastLocation.getLatitude()));
         mLongitude.setText(String.valueOf(mLastLocation.getLongitude()));
+        btn_step_2.setEnabled(true);
+        btn_step_2.setBackgroundResource(R.drawable.button_primary);
+        btn_step_2.setTextColor(Color.parseColor("#"+Integer.toHexString(getResources().getColor(R.color.white))));
     }
 
 
@@ -358,7 +356,8 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
     public class ActivityDetectionBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "onReceive: OK");
+            int type = intent.getIntExtra(Constants.ACTIVITY_KEY, -1);
+
         }
 
     }

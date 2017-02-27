@@ -1,8 +1,10 @@
 package com.guma.desarrollo.gmv;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +33,11 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
     private ExpandableListView simpleExpandableListView;
     private Menu menu;
 
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+    private boolean checked;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +50,11 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
         listAdapter = new CustomAdapter(AgendaActivity.this, deptList);
         simpleExpandableListView.setAdapter(listAdapter);
         expandAll();
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = preferences.edit();
+
+        checked = preferences.getBoolean("pref",false);
 
 
 
@@ -76,7 +88,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
         findViewById(R.id.imgMenu).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final CharSequence[]items = { "PEDIDO", "COBRO","ENVIAR","RECIBIR","REPORTE DEL DIA"};
+                final CharSequence[]items = { "PEDIDO", "COBRO","ENVIAR","RECIBIR","REPORTE DEL DIA","SALIR"};
                 new AlertDialog.Builder(v.getContext()).setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -95,7 +107,15 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                                         if (items[which].equals(items[4])){
                                             startActivity(new Intent(AgendaActivity.this,RptHoyActivity.class));
                                         } else {
-                                            Toast.makeText(AgendaActivity.this, "Se produjo un error", Toast.LENGTH_SHORT).show();
+                                            if (items[which].equals(items[5])){
+                                                checked = false;
+                                                editor.putBoolean("pref", false).commit();
+                                                editor.apply();
+                                                finish();
+                                            }else{
+                                                Toast.makeText(AgendaActivity.this, "Se produjo un error", Toast.LENGTH_SHORT).show();
+                                            }
+
                                         }
                                     }
                                 }

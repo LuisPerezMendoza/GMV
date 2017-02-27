@@ -17,11 +17,7 @@ public class LeadsRepository {
     }
 
     private LeadsRepository() {
-        saveLead(new Lead("Cefazolina 1g Polvo para Sol. Iny. Vial Unidad (Reyoung)", "13705071", "57.96"));
-        saveLead(new Lead("Cefazolina 1g Polvo para Sol. Iny. Vial Unidad (Reyoung)", "13705071", "57.96"));
-        saveLead(new Lead("Cefazolina 1g Polvo para Sol. Iny. Vial Unidad (Reyoung)", "13705071", "57.96"));
-        saveLead(new Lead("Cefazolina 1g Polvo para Sol. Iny. Vial Unidad (Reyoung)", "13705071", "57.96"));
-        saveLead(new Lead("Cefazolina 1g Polvo para Sol. Iny. Vial Unidad (Reyoung)", "13705071", "57.96"));
+        saveLead(new Lead("ARTICULO", "13705071", "57.96"));
     }
 
     private void saveLead(Lead lead) {

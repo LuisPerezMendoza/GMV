@@ -12,64 +12,125 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.guma.desarrollo.gmv.ResumenActivity"
     tools:showIn="@layout/activity_resumen">
-
-
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/idViewTicket"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:gravity="center"
+                style="@style/AppTheme"
+                android:text="EL BUEN AGUACATE S.A"/>
+        </android.support.design.widget.TextInputLayout>
 
-        <TextView
-            android:gravity="center"
-            android:text="UNIMARK S.A"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView2" />
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:text="Direccion del Negocio"/>
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:text="Nº PEDIDO:"/>
+            <TextView
+                android:id="@+id/IdPedido"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:text="#PEDIDO"/>
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:text="Le Atendio:"/>
+            <TextView
+                android:id="@+id/NombreVendedor"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:text="Nombre Vendedor"/>
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/NombreCliente"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:text="Nombre de Cliente"/>
+        </android.support.design.widget.TextInputLayout>
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_height="fill_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Descripcibn"
+                />
+            <TextView
 
-        <TextView
-            android:gravity="center"
-            android:text="@string/resumen_direccion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView3" />
-        <TextView
-            android:gravity="center"
-            android:text="Nº PEDIDO:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView4" />
+                android:layout_height="fill_parent"
+                android:layout_width="100dp"
+                android:gravity="start"
+                android:padding="10dp"
+                android:text="Total"
+                />
 
-        <TextView
-            android:gravity="center"
-            android:text="#PEDIDO"
+        </LinearLayout>
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView5" />
+            android:layout_height="wrap_content">
+            <ListView
 
-        <TextView
-            android:gravity="center"
-            android:text="Le Atendio:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView6" />
-        <TextView
-            android:gravity="center"
-            android:text="Nombre del Vendedor:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView7" />
-        <TextView
-            android:gravity="center"
-            android:text="Nombre del cliente:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView8" />
+                android:id="@+id/ListView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                />
+        </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:id="@+id/btnSaveSale"
-            android:text="Guardar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+
+
+
     </LinearLayout>
+
+
 
 </RelativeLayout>

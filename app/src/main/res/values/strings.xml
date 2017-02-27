@@ -21,4 +21,12 @@
     <string name="title_activity_rpt_hoy">RptHoyActivity</string>
     <string name="resumen_direccion">Villa Fontana Club Terraza 150m. Oeste, Managua,Nicaragua</string>
 
+    <string-array name="array_transc">
+        <item>EFECTIVO</item>
+        <item>CHEQUE</item>
+        <item>TRANSFERENCIA</item>
+    </string-array>
+
 </resources>
+
+
