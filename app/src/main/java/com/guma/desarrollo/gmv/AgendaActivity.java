@@ -120,7 +120,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
     }
 
     private void showSnack(boolean isConnected) {
-        Toast.makeText(this, String.valueOf(isConnected), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, String.valueOf(isConnected), Toast.LENGTH_SHORT).show();
         menu.getItem(0).setIcon(isConnected ? getResources().getDrawable(R.drawable.btngreen) : getResources().getDrawable(R.drawable.btnred));
     }
 

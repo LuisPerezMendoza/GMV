@@ -92,8 +92,10 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
         createLocationRequest();
         buildLocationSettingsRequest();
         checkLocationSettings();
+
         mBroadcastReceiver = new ActivityDetectionBroadcastReceiver();
         updateValuesFromBundle(savedInstanceState);
+
         RadioButton rb = (RadioButton) findViewById(R.id.inLocal);
         rb.setChecked(true);
     }

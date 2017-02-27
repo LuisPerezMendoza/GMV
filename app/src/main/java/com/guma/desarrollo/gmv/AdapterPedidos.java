@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -14,23 +15,44 @@ import java.util.List;
 
 public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosViewHolder>{
 
-    List<pedido> pedidos;
+    List<Pedido> pedidos;
 
-    public AdapterPedidos(List<pedido> pedidos) {
+    public AdapterPedidos(List<Pedido> pedidos) {
         this.pedidos = pedidos;
     }
 
     @Override
     public PedidosViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_pedidos,parent,false);
         PedidosViewHolder holder = new PedidosViewHolder(v);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(PedidosViewHolder holder, int position) {
-        pedido pdd = pedidos.get(position);
-        holder.name.setText(pdd.getIdClilente());
+        final Pedido pdd = pedidos.get(position);
+        String st = "";
+
+        switch (pdd.getEstado()){
+            case "0":
+                st ="PENDIENTE";
+                break;
+            case "1":
+                st ="INGRESADO";
+                break;
+        }
+        holder.name.setText(pdd.getCliente());
+        holder.codigo.setText(pdd.getCliente());
+        holder.estado.setText(st);
+
+
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), pdd.getCliente(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -39,11 +61,14 @@ public class AdapterPedidos extends RecyclerView.Adapter<AdapterPedidos.PedidosV
     }
 
     public static class PedidosViewHolder extends RecyclerView.ViewHolder{
-        TextView name;
+        TextView name,codigo,estado;
         public PedidosViewHolder(View itemView) {
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.tv_name_ART);
+            name = (TextView) itemView.findViewById(R.id.txt_id_pedido);
+            codigo = (TextView) itemView.findViewById(R.id.txt_id_cliente);
+            estado = (TextView) itemView.findViewById(R.id.txt_id_estado);
 
         }
     }
+
 }

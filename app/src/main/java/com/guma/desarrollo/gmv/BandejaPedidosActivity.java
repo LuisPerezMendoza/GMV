@@ -7,6 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,11 +21,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class BandejaPedidosActivity extends AppCompatActivity {
     RecyclerView rv;
+    private DatabaseReference mDatabase;
+    List<Pedido> lstPedidos;
 
-    List<pedido> lstPedidos;
 
     AdapterPedidos adapterPedidos;
     @Override
@@ -39,35 +44,17 @@ public class BandejaPedidosActivity extends AppCompatActivity {
 
         lstPedidos = new ArrayList<>();
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         adapterPedidos = new AdapterPedidos(lstPedidos);
         rv.setAdapter(adapterPedidos);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                //TextView txt = (TextView) findViewById(R.id.txt);
-                //txt.setText(dataSnapshot.getValue(String.class));
-                Toast.makeText(BandejaPedidosActivity.this, dataSnapshot.getValue(String.class), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("", "Failed to read value.", error.toException());
-            }
-        });
-
-        /*FirebaseDatabase.getInstance().getReference().getRoot().addValueEventListener(new ValueEventListener() {
+        mDatabase.child(ReferenciaFireBase.PEDIDOS_REFERENCE).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 lstPedidos.removeAll(lstPedidos);
                 for(DataSnapshot snp: dataSnapshot.getChildren()){
-                    pedido pd = snp.getValue(pedido.class);
-                    lstPedidos.add(pd);
+                    lstPedidos.add(snp.getValue(Pedido.class));
                 }
-
                 adapterPedidos.notifyDataSetChanged();
             }
 
@@ -75,7 +62,17 @@ public class BandejaPedidosActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });*/
+        });
+
+        findViewById(R.id.btAddFire).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDatabase.child(ReferenciaFireBase.PEDIDOS_REFERENCE).child(UUID.randomUUID().toString()).setValue(new Pedido("01636", "0","F06"));
+            }
+        });
+
+
+
 
 
     }
@@ -84,4 +81,5 @@ public class BandejaPedidosActivity extends AppCompatActivity {
         if (id == 16908332){ finish(); }
         return super.onOptionsItemSelected(item);
     }
+
 }
