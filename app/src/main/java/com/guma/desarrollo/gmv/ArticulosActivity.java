@@ -1,10 +1,7 @@
 package com.guma.desarrollo.gmv;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,11 +11,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.guma.desarrollo.core.Articulo;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ArticulosActivity extends AppCompatActivity {
     private ListView listView;
@@ -32,7 +29,10 @@ public class ArticulosActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         listView = (ListView) findViewById(R.id.listView);
+
+        ReferenciasContexto.setContextArticulo(ArticulosActivity.this);
         listView.setAdapter(new Articulo_Leads(this, Articulo_Repository.getInstance().getArticulos()));
+
         setTitle("ARTICULOS");
         final ArrayList<String> strings = new ArrayList<String>();
 

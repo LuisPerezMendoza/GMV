@@ -2,19 +2,14 @@ package com.guma.desarrollo.gmv;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,8 +19,21 @@ import android.content.DialogInterface;
 
 import android.support.v7.app.AlertDialog;
 
+import com.guma.desarrollo.core.Articulo;
+import com.guma.desarrollo.core.ManagerURI;
+import com.guma.desarrollo.core.SQLiteHelper;
+import com.guma.desarrollo.gmv.api.ArticuloApiService;
+import com.guma.desarrollo.gmv.models.ArticuloRespuesta;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class AgendaActivity extends AppCompatActivity  implements ConnectivityReceiver.ConnectivityReceiverListener{
 
+    private static final String TAG = "AgendaActivity";
     private LinkedHashMap<String, GroupInfo> subjects = new LinkedHashMap<String, GroupInfo>();
     private ArrayList<GroupInfo> deptList = new ArrayList<GroupInfo>();
 
@@ -36,7 +44,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private boolean checked;
-
+    private Retrofit retrofit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +107,12 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                                 startActivity(new Intent(AgendaActivity.this,BandejaCobrosActivity.class));
                             }else{
                                 if (items[which].equals(items[2])){
-                                    Toast.makeText(AgendaActivity.this, "EN DESARROLLO", Toast.LENGTH_SHORT).show();
+                                    retrofit = new Retrofit.Builder()
+                                            .baseUrl(ManagerURI.getURL_Base())
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+
+                                    obtenerDatos();
                                 } else {
                                     if (items[which].equals(items[3])){
                                         Toast.makeText(AgendaActivity.this, "EN DESARROLLO", Toast.LENGTH_SHORT).show();
@@ -127,23 +140,37 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
 
             }
         });
+    }
 
+    private void obtenerDatos() {
 
+        ArticuloApiService service = retrofit.create(ArticuloApiService.class);
+        final Call<ArticuloRespuesta> ArticuloRespuestaCall = service.obtenerListaArticulos();
+        ArticuloRespuestaCall.enqueue(new Callback<ArticuloRespuesta>() {
+            @Override
+            public void onResponse(Call<ArticuloRespuesta> call, Response<ArticuloRespuesta> response) {
+                if(response.isSuccessful()){
+                    ArticuloRespuesta articuloRespuesta = response.body();
 
-
-
+                    SQLiteHelper.SaveArticulos(AgendaActivity.this,articuloRespuesta.getResults());
+                }else{
+                    Log.d(TAG, "onResponse: " + response.errorBody());
+                }
+            }
+            @Override
+            public void onFailure(Call<ArticuloRespuesta> call, Throwable t) {
+                //Toast.makeText(AgendaActivity.this, "onFailure", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
     }
     private void checkConnection() {
         boolean isConnected = ConnectivityReceiver.isConnected();
         showSnack(isConnected);
-
     }
-
     private void showSnack(boolean isConnected) {
-        //Toast.makeText(this, String.valueOf(isConnected), Toast.LENGTH_SHORT).show();
         menu.getItem(0).setIcon(isConnected ? getResources().getDrawable(R.drawable.btngreen) : getResources().getDrawable(R.drawable.btnred));
     }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -171,16 +198,11 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
             simpleExpandableListView.collapseGroup(i);
         }
     }
-
-
     private void loadData(){
         addProduct("LUNES","CLIENTE");
-
     }
     private int addProduct(String department, String product){
-
         int groupPosition = 0;
-
         GroupInfo headerInfo = subjects.get(department);
         if(headerInfo == null){
             headerInfo = new GroupInfo();
