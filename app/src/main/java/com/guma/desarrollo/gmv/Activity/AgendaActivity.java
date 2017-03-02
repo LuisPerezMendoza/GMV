@@ -1,7 +1,9 @@
-package com.guma.desarrollo.gmv;
+package com.guma.desarrollo.gmv.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -19,11 +21,19 @@ import android.content.DialogInterface;
 
 import android.support.v7.app.AlertDialog;
 
-import com.guma.desarrollo.core.Articulo;
+import com.guma.desarrollo.core.Articulos_model;
+import com.guma.desarrollo.core.Clientes_model;
 import com.guma.desarrollo.core.ManagerURI;
-import com.guma.desarrollo.core.SQLiteHelper;
+import com.guma.desarrollo.gmv.ChildInfo;
+import com.guma.desarrollo.gmv.api.ConnectivityReceiver;
+import com.guma.desarrollo.gmv.Adapters.CustomAdapter;
+import com.guma.desarrollo.gmv.GroupInfo;
+import com.guma.desarrollo.gmv.MyApplication;
+import com.guma.desarrollo.gmv.R;
 import com.guma.desarrollo.gmv.api.ArticuloApiService;
+import com.guma.desarrollo.gmv.api.ClienteMoraApiServices;
 import com.guma.desarrollo.gmv.models.ArticuloRespuesta;
+import com.guma.desarrollo.gmv.models.ClienteMoraRespuesta;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,7 +41,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class AgendaActivity extends AppCompatActivity  implements ConnectivityReceiver.ConnectivityReceiverListener{
+public class AgendaActivity extends AppCompatActivity  implements ConnectivityReceiver.ConnectivityReceiverListener {
 
     private static final String TAG = "AgendaActivity";
     private LinkedHashMap<String, GroupInfo> subjects = new LinkedHashMap<String, GroupInfo>();
@@ -45,6 +55,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
     private SharedPreferences.Editor editor;
     private boolean checked;
     private Retrofit retrofit;
+    private Retrofit retrofit_mora;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,15 +118,14 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                                 startActivity(new Intent(AgendaActivity.this,BandejaCobrosActivity.class));
                             }else{
                                 if (items[which].equals(items[2])){
-                                    retrofit = new Retrofit.Builder()
-                                            .baseUrl(ManagerURI.getURL_Base())
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build();
 
-                                    obtenerDatos();
                                 } else {
                                     if (items[which].equals(items[3])){
-                                        Toast.makeText(AgendaActivity.this, "EN DESARROLLO", Toast.LENGTH_SHORT).show();
+                                            if (ManagerURI.isOnlinea(AgendaActivity.this)==true){
+                                                new MyTask().execute("");
+                                            } else {
+                                                Toast.makeText(AgendaActivity.this, "No Posee Cobertura de datos...", Toast.LENGTH_SHORT).show();
+                                            }
                                     } else {
                                         if (items[which].equals(items[4])){
                                             startActivity(new Intent(AgendaActivity.this,RptHoyActivity.class));
@@ -142,28 +152,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
         });
     }
 
-    private void obtenerDatos() {
 
-        ArticuloApiService service = retrofit.create(ArticuloApiService.class);
-        final Call<ArticuloRespuesta> ArticuloRespuestaCall = service.obtenerListaArticulos();
-        ArticuloRespuestaCall.enqueue(new Callback<ArticuloRespuesta>() {
-            @Override
-            public void onResponse(Call<ArticuloRespuesta> call, Response<ArticuloRespuesta> response) {
-                if(response.isSuccessful()){
-                    ArticuloRespuesta articuloRespuesta = response.body();
-
-                    SQLiteHelper.SaveArticulos(AgendaActivity.this,articuloRespuesta.getResults());
-                }else{
-                    Log.d(TAG, "onResponse: " + response.errorBody());
-                }
-            }
-            @Override
-            public void onFailure(Call<ArticuloRespuesta> call, Throwable t) {
-                //Toast.makeText(AgendaActivity.this, "onFailure", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "onFailure: " + t.getMessage());
-            }
-        });
-    }
     private void checkConnection() {
         boolean isConnected = ConnectivityReceiver.isConnected();
         showSnack(isConnected);
@@ -222,5 +211,79 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
         return groupPosition;
     }
 
+    private class MyTask extends AsyncTask<String,String,String>{
+        public ProgressDialog pdialog;
+        @Override
+        protected void onPreExecute() {
+            pdialog = ProgressDialog.show(AgendaActivity.this, "","Procesando. Porfavor Espere...", true);
+            super.onPreExecute();
+        }
 
+        @Override
+        protected String doInBackground(String... params) {
+            retrofit = new Retrofit.Builder().baseUrl(ManagerURI.getURL_Base()).addConverterFactory(GsonConverterFactory.create()).build();
+            ArticuloApiService service = retrofit.create(ArticuloApiService.class);
+            final Call<ArticuloRespuesta> ArticuloRespuestaCall = service.obtenerListaArticulos();
+            ArticuloRespuestaCall.enqueue(new Callback<ArticuloRespuesta>() {
+                @Override
+                public void onResponse(Call<ArticuloRespuesta> call, Response<ArticuloRespuesta> response) {
+                    if(response.isSuccessful()){
+                        ArticuloRespuesta articuloRespuesta = response.body();
+                        Articulos_model.SaveArticulos(AgendaActivity.this,articuloRespuesta.getResults());
+                    }else{
+                        pdialog.dismiss();
+                        Log.d(TAG, "onResponse: " + response.errorBody() );
+                        Toast.makeText(AgendaActivity.this, ""+response.errorBody(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onFailure(Call<ArticuloRespuesta> call, Throwable t) {
+                    pdialog.dismiss();
+                    Toast.makeText(AgendaActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            retrofit_mora = new Retrofit.Builder().baseUrl(ManagerURI.getURL_Base()).addConverterFactory(GsonConverterFactory.create()).build();
+            ClienteMoraApiServices service_mora = retrofit_mora.create(ClienteMoraApiServices.class);
+            final Call<ClienteMoraRespuesta> ClienteMoraRespuestaCall = service_mora.obtenerListaClienteMora();
+            ClienteMoraRespuestaCall.enqueue(new Callback<ClienteMoraRespuesta>() {
+                @Override
+                public void onResponse(Call<ClienteMoraRespuesta> call, Response<ClienteMoraRespuesta> response) {
+                    if(response.isSuccessful()){
+                        ClienteMoraRespuesta moraRespuesta = response.body();
+                        Clientes_model.SaveClienteMora(AgendaActivity.this,moraRespuesta.getResults());
+                        Alerta();
+                    }else{
+                        pdialog.dismiss();
+                        Log.d(TAG, "onResponse: " + response.errorBody() );
+                        Toast.makeText(AgendaActivity.this, ""+response.errorBody(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ClienteMoraRespuesta> call, Throwable t) {
+                    pdialog.dismiss();
+                    Log.d(TAG, "onResponse: " + t.getMessage() );
+                    Toast.makeText(AgendaActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+
+                }
+            });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            pdialog.dismiss();
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+        }
+    }
+
+    private void Alerta() {
+        new AlertDialog.Builder(AgendaActivity.this).setTitle("RECIBIDO").setMessage("Informacion Recibida...").setCancelable(false).setPositiveButton("OK",null).show();
+    }
 }

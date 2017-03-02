@@ -1,4 +1,4 @@
-package com.guma.desarrollo.gmv;
+package com.guma.desarrollo.gmv.Adapters;
 
 import java.util.ArrayList;
 import java.util.HashMap;

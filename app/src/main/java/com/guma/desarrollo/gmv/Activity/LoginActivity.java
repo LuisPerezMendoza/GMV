@@ -1,4 +1,4 @@
-package com.guma.desarrollo.gmv;
+package com.guma.desarrollo.gmv.Activity;
 
 
 import android.content.Intent;
@@ -7,10 +7,12 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.guma.desarrollo.core.ManagerURI;
+import com.guma.desarrollo.core.SQLiteHelper;
+import com.guma.desarrollo.gmv.R;
+
+import java.io.IOException;
 
 public class LoginActivity extends AppCompatActivity  {
     private SharedPreferences preferences;
@@ -25,6 +27,12 @@ public class LoginActivity extends AppCompatActivity  {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
         checked = preferences.getBoolean("pref", false);
+
+        try {
+            new SQLiteHelper(ManagerURI.getDirDb(),LoginActivity.this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override

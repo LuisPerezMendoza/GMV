@@ -1,11 +1,10 @@
-package com.guma.desarrollo.gmv;
+package com.guma.desarrollo.gmv.Activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,6 +13,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.guma.desarrollo.core.Articulo;
+import com.guma.desarrollo.gmv.Adapters.Articulo_Leads;
+import com.guma.desarrollo.gmv.models.Articulo_Repository;
+import com.guma.desarrollo.gmv.R;
 
 import java.util.ArrayList;
 

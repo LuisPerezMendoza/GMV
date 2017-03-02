@@ -1,4 +1,4 @@
-package com.guma.desarrollo.gmv;
+package com.guma.desarrollo.gmv.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.guma.desarrollo.gmv.R;
 
 import java.util.List;
 

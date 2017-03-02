@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LoginActivity"
+            android:name=".Activity.LoginActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,64 +26,64 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AgendaActivity"
+            android:name=".Activity.AgendaActivity"
             android:label="@string/title_activity_agenda"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MarcarRegistroActivity"
+            android:name=".Activity.MarcarRegistroActivity"
             android:label="@string/title_activity_marcar_registro"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AccionesActivity"
+            android:name=".Activity.AccionesActivity"
             android:label="@string/title_activity_acciones"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".CobroInActivity"
+            android:name=".Activity.CobroInActivity"
             android:label="@string/title_activity_cobro_in"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".PedidoActivity"
+            android:name=".Activity.PedidoActivity"
             android:label="@string/title_activity_pedido"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ArticulosActivity"
+            android:name=".Activity.ArticulosActivity"
             android:label="@string/title_activity_articulos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".IndicadoresClienteActivity"
+            android:name=".Activity.IndicadoresClienteActivity"
             android:label="@string/title_activity_indicadores_cliente"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ResumenActivity"
+            android:name=".Activity.ResumenActivity"
             android:label="@string/title_activity_resumen"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".CumpleannoActivity"
+            android:name=".Activity.CumpleannoActivity"
             android:label="@string/title_activity_cumpleanno"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".BandejaPedidosActivity"
+            android:name=".Activity.BandejaPedidosActivity"
             android:label="@string/title_activity_bandeja_pedidos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".BandejaCobrosActivity"
+            android:name=".Activity.BandejaCobrosActivity"
             android:label="@string/title_activity_bandeja_cobros"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".RptHoyActivity"
+            android:name=".Activity.RptHoyActivity"
             android:label="@string/title_activity_rpt_hoy"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".QrActivity"></activity>
+        <activity android:name=".Activity.QrActivity"></activity>
 
         <receiver
-            android:name=".ConnectivityReceiver"
+            android:name=".api.ConnectivityReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
         <service
-            android:name=".DetectedActivitiesIntentService"
+            android:name=".api.DetectedActivitiesIntentService"
             android:exported="false"/>
     </application>
 

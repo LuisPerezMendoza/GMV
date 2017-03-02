@@ -1,4 +1,4 @@
-package com.guma.desarrollo.gmv;
+package com.guma.desarrollo.gmv.Adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.guma.desarrollo.gmv.Pedido;
+import com.guma.desarrollo.gmv.R;
 
 import java.util.List;
 

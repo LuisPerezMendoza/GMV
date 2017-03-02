@@ -1,4 +1,4 @@
-package com.guma.desarrollo.gmv;
+package com.guma.desarrollo.gmv.Activity;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,6 +11,7 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.guma.desarrollo.gmv.R;
 
 import java.util.ArrayList;
 

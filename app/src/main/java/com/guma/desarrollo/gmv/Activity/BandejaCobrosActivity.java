@@ -1,4 +1,4 @@
-package com.guma.desarrollo.gmv;
+package com.guma.desarrollo.gmv.Activity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.test.ServiceTestCase;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.guma.desarrollo.gmv.R;
 
 public class BandejaCobrosActivity extends AppCompatActivity {
 

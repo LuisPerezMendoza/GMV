@@ -2,6 +2,8 @@ package com.guma.desarrollo.gmv;
 
 import android.app.Application;
 
+import com.guma.desarrollo.gmv.api.ConnectivityReceiver;
+
 /**
  * Created by maryan.espinoza on 22/02/2017.
  */

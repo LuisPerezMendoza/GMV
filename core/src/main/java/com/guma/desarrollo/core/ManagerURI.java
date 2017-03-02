@@ -13,7 +13,8 @@ import java.io.File;
 
 public class ManagerURI {
     private static Context myContext;
-    private static String SERVER = "192.168.1.211";
+    //private static String SERVER = "192.168.1.211";
+    private static String SERVER = "165.98.75.219:8448";
     private static String URL_Base= "http://"+ SERVER + "/gmv_rest/index.php/";
     private static String  DIR_DB = "/data/data/com.guma.desarrollo.gmv/";
   //  private static String  DIR_DB = myContext.getFilesDir().getPath();

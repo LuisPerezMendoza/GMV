@@ -14,12 +14,6 @@ public class Pedido {
     public String cliente;
     public String estado;
     public String idvendedor;
-
-
-
-
-
-
     public Pedido() {
     }
 

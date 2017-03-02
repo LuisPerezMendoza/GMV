@@ -1,13 +1,15 @@
-package com.guma.desarrollo.gmv;
+package com.guma.desarrollo.gmv.Activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ExpandableListView;
+
+import com.guma.desarrollo.gmv.ChildInfo;
+import com.guma.desarrollo.gmv.Adapters.CustomAdapter;
+import com.guma.desarrollo.gmv.GroupInfo;
+import com.guma.desarrollo.gmv.R;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

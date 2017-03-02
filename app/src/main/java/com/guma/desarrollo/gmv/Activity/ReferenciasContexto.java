@@ -1,4 +1,4 @@
-package com.guma.desarrollo.gmv;
+package com.guma.desarrollo.gmv.Activity;
 
 import android.content.Context;
 
@@ -8,6 +8,15 @@ import android.content.Context;
 
 public class ReferenciasContexto {
     private static Context ContextArticulo;
+    private static Context ContextClienteMora;
+
+    public static Context getContextClienteMora() {
+        return ContextClienteMora;
+    }
+
+    public static void setContextClienteMora(Context contextClienteMora) {
+        ContextClienteMora = contextClienteMora;
+    }
 
     public static Context getContextArticulo() {
         return ContextArticulo;

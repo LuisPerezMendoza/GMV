@@ -1,12 +1,12 @@
-package com.guma.desarrollo.gmv;
+package com.guma.desarrollo.gmv.api;
 
 import android.app.IntentService;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.google.android.gms.location.ActivityRecognitionResult;
 import com.google.android.gms.location.DetectedActivity;
+import com.guma.desarrollo.gmv.Constants;
 
 import java.util.List;
 
@@ -26,30 +26,17 @@ public class DetectedActivitiesIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        // Lo primero es obtener el resultado de reconocimiento.
         ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
-
-        // Luego, obtén actividad más probable.
         DetectedActivity detectedActivity = result.getMostProbableActivity();
 
-        Log.d(TAG, "Actividad dectectada: Tipo " +
-                Constants.getStringActivity(detectedActivity.getType()) +
-                " - Confianza " + detectedActivity.getConfidence());
+        //Log.d(TAG, "Actividad dectectada: Tipo " +Constants.getStringActivity(detectedActivity.getType()) +" - Confianza " + detectedActivity.getConfidence());
 
         int type = detectedActivity.getType();
-
         if (DetectedActivity.ON_FOOT == type) {
             type = walkingOrRunning(result.getProbableActivities());
         }
-
-
-        // Ahora, crea un intent con una acción personalizada.
         Intent localIntent = new Intent(Constants.BROADCAST_ACTION);
-
-        // El siguiente paso, es poner las actividades en el intent
         localIntent.putExtra(Constants.ACTIVITY_KEY, type);
-
-        // Y finalmente envía los datos hacia la actividad
         LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
     }
 

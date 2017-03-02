@@ -1,10 +1,12 @@
-package com.guma.desarrollo.gmv;
+package com.guma.desarrollo.gmv.api;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
+import com.guma.desarrollo.gmv.MyApplication;
 
 /**
  * Created by maryan.espinoza on 22/02/2017.
