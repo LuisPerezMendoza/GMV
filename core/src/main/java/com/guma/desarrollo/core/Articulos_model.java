@@ -63,7 +63,6 @@ public class Articulos_model {
             Cursor cursor = myDataBase.query(true, "ARTICULOS", null, null, null, null, null, null, null);
             Log.d("", "SaveArticulos: Guardados " + cursor.getCount());
             if(cursor.getCount() > 0) {
-
                 cursor.moveToFirst();
                 while(!cursor.isAfterLast()) {
                     Articulo tmp = new Articulo();
