@@ -17,15 +17,11 @@ public class Articulos_model {
     public static void  SaveArticulos(Context context, ArrayList<Articulo> ARTI){
         SQLiteDatabase myDataBase = null;
         SQLiteHelper myDbHelper = null;
-
-
         try
         {
             myDbHelper = new SQLiteHelper(ManagerURI.getDirDb(), context);
             myDataBase = myDbHelper.getWritableDatabase();
-
             SQLiteHelper.ExecuteSQL(ManagerURI.getDirDb(), context,"DELETE FROM ARTICULOS");
-            Log.d("", "SaveArticulos: A Guardar " + ARTI.size());
             for(int i=0;i<ARTI.size();i++){
                 Articulo a = ARTI.get(i);
                 ContentValues contentValues = new ContentValues();
@@ -42,7 +38,6 @@ public class Articulos_model {
         }
         catch (Exception e) {
             e.printStackTrace();
-            Log.d("", "SaveArticulos: Error " +e.getMessage());
         }
         finally
         {
@@ -55,13 +50,11 @@ public class Articulos_model {
         List<Articulo> lista = new ArrayList<>();
         SQLiteDatabase myDataBase = null;
         SQLiteHelper myDbHelper = null;
-        Log.d("", "SaveArticulos: A leer " );
         try
         {
             myDbHelper = new SQLiteHelper(basedir, context);
             myDataBase = myDbHelper.getReadableDatabase();
             Cursor cursor = myDataBase.query(true, "ARTICULOS", null, null, null, null, null, null, null);
-            Log.d("", "SaveArticulos: Guardados " + cursor.getCount());
             if(cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 while(!cursor.isAfterLast()) {

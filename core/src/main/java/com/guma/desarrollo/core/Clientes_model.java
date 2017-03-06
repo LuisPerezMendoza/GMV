@@ -14,20 +14,16 @@ import java.util.List;
  */
 
 public class Clientes_model {
-    public static void  SaveClienteMora(Context context, ArrayList<ClienteMora> MORAS){
+    public static void  SaveMora(Context context, ArrayList<Mora> MORAS){
         SQLiteDatabase myDataBase = null;
         SQLiteHelper myDbHelper = null;
-
-
         try
         {
             myDbHelper = new SQLiteHelper(ManagerURI.getDirDb(), context);
             myDataBase = myDbHelper.getWritableDatabase();
-
             SQLiteHelper.ExecuteSQL(ManagerURI.getDirDb(), context,"DELETE FROM CLIENTES_MORA");
-            Log.d("", "SaveClienteMora: A Guardar " + MORAS.size());
             for(int i=0;i<MORAS.size();i++){
-                ClienteMora a = MORAS.get(i);
+                Mora a = MORAS.get(i);
                 ContentValues contentValues = new ContentValues();
                 contentValues.put("CLIENTE" , a.getmCliente());
                 contentValues.put("NOMBRE" , a.getmNombre());
@@ -45,7 +41,6 @@ public class Clientes_model {
         }
         catch (Exception e) {
             e.printStackTrace();
-            Log.d("", "SaveArticulos: Error " +e.getMessage());
         }
         finally
         {
@@ -53,8 +48,8 @@ public class Clientes_model {
             if(myDbHelper != null) { myDbHelper.close(); }
         }
     }
-    public static List<ClienteMora> getInfoMora(String basedir, Context context,String Cliente) {
-        List<ClienteMora> lista = new ArrayList<>();
+    public static List<Mora> getMora(String basedir, Context context,String Cliente) {
+        List<Mora> lista = new ArrayList<>();
         SQLiteDatabase myDataBase = null;
         SQLiteHelper myDbHelper = null;
         try
@@ -66,7 +61,7 @@ public class Clientes_model {
 
                 cursor.moveToFirst();
                 while(!cursor.isAfterLast()) {
-                    ClienteMora tmp = new ClienteMora();
+                    Mora tmp = new Mora();
                     tmp.setmCliente(cursor.getString(cursor.getColumnIndex("CLIENTE")));
                     tmp.setmNombre(cursor.getString(cursor.getColumnIndex("NOMBRE")));
                     tmp.setmVencidos(cursor.getString(cursor.getColumnIndex("VENCIDOS")));
@@ -77,6 +72,134 @@ public class Clientes_model {
                     tmp.setmMd120(cursor.getString(cursor.getColumnIndex("MD120")));
                     tmp.setmSaldo(cursor.getString(cursor.getColumnIndex("SALDO")));
                     tmp.setmLimite(cursor.getString(cursor.getColumnIndex("LIMITE")));
+                    lista.add(tmp);
+                    cursor.moveToNext();
+                }
+            }
+        }
+        catch (Exception e) { e.printStackTrace(); }
+        finally
+        {
+            if(myDataBase != null) { myDataBase.close(); }
+            if(myDbHelper != null) { myDbHelper.close(); }
+        }
+        return lista;
+    }
+    public static void  SaveIndicadores(Context context, ArrayList<Indicadores> Indica){
+        SQLiteDatabase myDataBase = null;
+        SQLiteHelper myDbHelper = null;
+        try
+        {
+            myDbHelper = new SQLiteHelper(ManagerURI.getDirDb(), context);
+            myDataBase = myDbHelper.getWritableDatabase();
+            SQLiteHelper.ExecuteSQL(ManagerURI.getDirDb(), context,"DELETE FROM CLIENTES_INDICADORES");
+            for(int i=0;i<Indica.size();i++){
+                Indicadores a = Indica.get(i);
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("CLIENTE" , a.getmCliente());
+                contentValues.put("NOMBRE" , a.getmNombre());
+                contentValues.put("VENDEDOR" , a.getmVendedor());
+                contentValues.put("META" , a.getmMetas());
+                contentValues.put("VENTAACTUAL" , a.getmVentasActual());
+                contentValues.put("VENTAS3M" , a.getmPromedioVenta3M());
+                contentValues.put("ITEM3M" , a.getmCantidadItems3M());
+                contentValues.put("CREDITO" , a.getmCredito());
+                contentValues.put("LIMITE" , a.getmLimite());
+                myDataBase.insert("CLIENTES_INDICADORES", null, contentValues );
+            }
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if(myDataBase != null) { myDataBase.close(); }
+            if(myDbHelper != null) { myDbHelper.close(); }
+        }
+    }
+    public static void  SaveClientes(Context context, ArrayList<Clientes> Indica){
+        SQLiteDatabase myDataBase = null;
+        SQLiteHelper myDbHelper = null;
+        try
+        {
+            myDbHelper = new SQLiteHelper(ManagerURI.getDirDb(), context);
+            myDataBase = myDbHelper.getWritableDatabase();
+            SQLiteHelper.ExecuteSQL(ManagerURI.getDirDb(), context,"DELETE FROM CLIENTES_INDICADORES");
+            for(int i=0;i<Indica.size();i++){
+                Clientes a = Indica.get(i);
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("CLIENTE" , a.getmCliente());
+                contentValues.put("NOMBRE" , a.getmNombre());
+                contentValues.put("DIRECCION" , a.getmDireccion());
+                contentValues.put("RUC" , a.getmRuc());
+                contentValues.put("PUNTOS" , a.getmPuntos());
+                contentValues.put("MOROSO" , a.getmMoroso());
+                myDataBase.insert("CLIENTES", null, contentValues );
+            }
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if(myDataBase != null) { myDataBase.close(); }
+            if(myDbHelper != null) { myDbHelper.close(); }
+        }
+    }
+
+    public static List<Indicadores> getIndicadores(String basedir, Context context, String Cliente) {
+        List<Indicadores> lista = new ArrayList<>();
+        SQLiteDatabase myDataBase = null;
+        SQLiteHelper myDbHelper = null;
+        try
+        {
+            myDbHelper = new SQLiteHelper(basedir, context);
+            myDataBase = myDbHelper.getReadableDatabase();
+            Cursor cursor = myDataBase.query(true, "CLIENTES_INDICADORES", null, "CLIENTE"+ "=?", new String[] { Cliente }, null, null, null, null);
+            if(cursor.getCount() > 0) {
+
+                cursor.moveToFirst();
+                while(!cursor.isAfterLast()) {
+                    Indicadores tmp = new Indicadores();
+                    tmp.setmCliente(cursor.getString(cursor.getColumnIndex("CLIENTE")));
+                    tmp.setmNombre(cursor.getString(cursor.getColumnIndex("NOMBRE")));
+                    tmp.setmVendedor(cursor.getString(cursor.getColumnIndex("VENDEDOR")));
+                    tmp.setmMetas(cursor.getString(cursor.getColumnIndex("META")));
+                    tmp.setmVentasActual(cursor.getString(cursor.getColumnIndex("VENTAACTUAL")));
+                    tmp.setmPromedioVenta3M(cursor.getString(cursor.getColumnIndex("VENTAS3M")));
+                    tmp.setmCantidadItems3M(cursor.getString(cursor.getColumnIndex("ITEM3M")));
+                    tmp.setmCredito(cursor.getString(cursor.getColumnIndex("CREDITO")));
+                    tmp.setmLimite(cursor.getString(cursor.getColumnIndex("LIMITE")));
+                    lista.add(tmp);
+                    cursor.moveToNext();
+                }
+            }
+        }
+        catch (Exception e) { e.printStackTrace(); }
+        finally
+        {
+            if(myDataBase != null) { myDataBase.close(); }
+            if(myDbHelper != null) { myDbHelper.close(); }
+        }
+        return lista;
+    }
+    public static List<Clientes> getClientes(String basedir, Context context) {
+        List<Clientes> lista = new ArrayList<>();
+        SQLiteDatabase myDataBase = null;
+        SQLiteHelper myDbHelper = null;
+        try
+        {
+            myDbHelper = new SQLiteHelper(basedir, context);
+            myDataBase = myDbHelper.getReadableDatabase();
+            Cursor cursor = myDataBase.query(true, "CLIENTES", null, null, null, null, null, null, null);
+            if(cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                while(!cursor.isAfterLast()) {
+                    Clientes tmp = new Clientes();
+                    tmp.setmCliente(cursor.getString(cursor.getColumnIndex("CLIENTE")));
+                    tmp.setmNombre(cursor.getString(cursor.getColumnIndex("NOMBRE")));
                     lista.add(tmp);
                     cursor.moveToNext();
                 }

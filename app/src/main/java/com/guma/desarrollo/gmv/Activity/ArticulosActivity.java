@@ -52,6 +52,7 @@ public class ArticulosActivity extends AppCompatActivity implements SearchView.O
     private Articulo_Leads lbs;
     private List<Articulo> objects;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +62,11 @@ public class ArticulosActivity extends AppCompatActivity implements SearchView.O
         listView = (ListView) findViewById(R.id.listView);
         if (getSupportActionBar() != null){ getSupportActionBar().setDisplayHomeAsUpEnabled(true); }
         ReferenciasContexto.setContextArticulo(ArticulosActivity.this);
+
         objects = Articulo_Repository.getInstance().getArticulos();
         lbs = new Articulo_Leads(this, objects);
         listView.setAdapter(lbs);
+
         searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         setTitle("ARTICULOS");
         final ArrayList<String> strings = new ArrayList<>();

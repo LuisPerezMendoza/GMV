@@ -4,6 +4,24 @@ public class ChildInfo {
 
     private String sequence = "";
     private String name = "";
+    private String Codigo="";
+    private String Cumple="";
+
+    public String getCodigo() {
+        return Codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        Codigo = codigo;
+    }
+
+    public String getCumple() {
+        return Cumple;
+    }
+
+    public void setCumple(String cumple) {
+        Cumple = cumple;
+    }
 
     public String getSequence() {
         return sequence;

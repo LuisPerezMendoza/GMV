@@ -12,7 +12,7 @@
         <TextView
             android:id="@+id/tvListItemName"
             android:layout_height="fill_parent"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:textStyle="bold"
             android:gravity="start"
             android:padding="5dp"

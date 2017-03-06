@@ -20,10 +20,16 @@
     <string name="title_activity_bandeja_cobros">BandejaCobrosActivity</string>
     <string name="title_activity_rpt_hoy">RptHoyActivity</string>
     <string name="resumen_direccion">Villa Fontana Club Terraza 150m. Oeste, Managua,Nicaragua</string>
+    <string name="resumen_empresa">UNIMARK S.A </string>
+
     <string name="app_label">Buscar</string>
     <string name="search_hint">Buscar</string>
     <string name="search">Buscador</string>
     <string name="action_settings">Buscador</string>
+    <string name="resumen_npedido">#PEDIDO</string>
+    <string name="resumen_name_vendedor">Nombre Vendedor:</string>
+    <string name="title_resumen_Descripcion">Descripción</string>
+    <string name="title_resumen_Total">Total</string>
 
     <string-array name="array_transc">
         <item>EFECTIVO</item>

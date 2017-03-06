@@ -1,7 +1,9 @@
 package com.guma.desarrollo.gmv.Activity;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.guma.desarrollo.core.ClienteMora;
+import com.guma.desarrollo.core.Mora;
 import com.guma.desarrollo.core.Clientes_model;
 import com.guma.desarrollo.core.ManagerURI;
 import com.guma.desarrollo.gmv.R;
@@ -19,12 +21,17 @@ import java.util.List;
 
 public class CobroInActivity extends AppCompatActivity {
     TextView mSaldo,mLimite,m30,m60,m90,m120,md120,mTotal;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cobro_in);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = preferences.edit();
 
         mSaldo = (TextView) findViewById(R.id.txtmSaldo);
         mLimite = (TextView) findViewById(R.id.txtmLimite);
@@ -54,7 +61,8 @@ public class CobroInActivity extends AppCompatActivity {
                         }).show();
             }
         });
-        List<ClienteMora> obj = Clientes_model.getInfoMora(ManagerURI.getDirDb(), CobroInActivity.this,"01006");
+
+        List<Mora> obj = Clientes_model.getMora(ManagerURI.getDirDb(), CobroInActivity.this,preferences.getString("ClsSelected"," --ERROR--"));
         setTitle("PASO 2 [ Cobro ] - " + obj.get(0).getmNombre());
         mSaldo.setText("C$ " + obj.get(0).getmSaldo());
         mLimite.setText("C$ " + obj.get(0).getmLimite());

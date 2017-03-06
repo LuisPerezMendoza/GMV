@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by maryan.espinoza on 01/03/2017.
  */
 
-public class ArticuloRespuesta {
+public class Respuesta_articulos {
     private ArrayList<Articulo> results;
 
     public ArrayList<Articulo> getResults() {

@@ -3,7 +3,9 @@ package com.guma.desarrollo.gmv.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -26,7 +28,10 @@ import java.util.Map;
 public class PedidoActivity extends AppCompatActivity {
     private ListView listView;
     List<Map<String, Object>> list;
-    TextView txtNameCliente,SubTotal,ivaTotal,Total,txtCount;
+    TextView SubTotal,ivaTotal,Total,txtCount;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +39,13 @@ public class PedidoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pedido);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle("Nombre Cliente");
+
         listView = (ListView) findViewById(R.id.listViewSettingConnect);
-        list = new ArrayList<Map<String, Object>>();
+        list = new ArrayList<>();
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = preferences.edit();
+        setTitle(preferences.getString("NameClsSelected"," --ERROR--"));
 
         SubTotal = (TextView) findViewById(R.id.SubTotal);
         ivaTotal = (TextView) findViewById(R.id.ivaTotal);
@@ -129,7 +138,6 @@ public class PedidoActivity extends AppCompatActivity {
             map.put("ITEMNAME", data.getStringArrayListExtra("myItem").get(0));
             map.put("ITEMPRECIO", data.getStringArrayListExtra("myItem").get(1));
             map.put("ITEMCANTI",  data.getStringArrayListExtra("myItem").get(2));
-
             map.put("ITEMVALOR", data.getStringArrayListExtra("myItem").get(3));
             map.put("ITEMSUBTOTAL", data.getStringArrayListExtra("myItem").get(4));
             map.put("ITEMVALORTOTAL", data.getStringArrayListExtra("myItem").get(5));

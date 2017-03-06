@@ -4,7 +4,7 @@ package com.guma.desarrollo.core;
  * Created by maryan.espinoza on 02/03/2017.
  */
 
-public class ClienteMora {
+public class Mora {
     String mCliente;
     String mNombre;
     String mVencidos;
@@ -16,7 +16,7 @@ public class ClienteMora {
     String mSaldo;
     String mLimite;
 
-    public ClienteMora(String mCliente, String mNombre, String mVencidos, String mD30, String mD60, String mD90, String mD120, String mMd120, String mSaldo, String mLimite) {
+    public Mora(String mCliente, String mNombre, String mVencidos, String mD30, String mD60, String mD90, String mD120, String mMd120, String mSaldo, String mLimite) {
         this.mCliente = mCliente;
         this.mNombre = mNombre;
         this.mVencidos = mVencidos;
@@ -28,7 +28,7 @@ public class ClienteMora {
         this.mSaldo = mSaldo;
         this.mLimite = mLimite;
     }
-    public ClienteMora(){
+    public Mora(){
 
     }
 

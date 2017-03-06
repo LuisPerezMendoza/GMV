@@ -31,7 +31,7 @@
                 android:textSize="15sp"
                 android:gravity="center"
                 style="@style/AppTheme"
-                android:text="EL BUEN AGUACATE S.A"/>
+                android:text="@string/resumen_empresa"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:gravity="center"
-                android:text="Direccion del Negocio"/>
+                android:text="@string/resumen_direccion"/>
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:gravity="center"
-                android:text="#PEDIDO"/>
+                android:text="@string/resumen_npedido"/>
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -77,8 +77,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
-                android:gravity="center"
-                android:text="Nombre Vendedor"/>
+                android:gravity="center"/>
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -89,8 +88,7 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="15sp"
-                android:gravity="center"
-                android:text="Nombre de Cliente"/>
+                android:gravity="center"/>
         </android.support.design.widget.TextInputLayout>
         <LinearLayout
             android:layout_marginTop="20dp"
@@ -102,7 +100,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="Descripcibn"
+                android:text="@string/title_resumen_Descripcion"
                 />
             <TextView
 
@@ -110,7 +108,7 @@
                 android:layout_width="100dp"
                 android:gravity="start"
                 android:padding="10dp"
-                android:text="Total"
+                android:text="@string/title_resumen_Total"
                 />
 
         </LinearLayout>
