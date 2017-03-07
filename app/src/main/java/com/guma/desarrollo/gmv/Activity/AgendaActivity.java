@@ -27,25 +27,19 @@ import android.content.DialogInterface;
 
 import android.support.v7.app.AlertDialog;
 
-import com.guma.desarrollo.core.Articulo;
 import com.guma.desarrollo.core.Articulos_model;
 import com.guma.desarrollo.core.Clientes;
 import com.guma.desarrollo.core.Clientes_model;
 import com.guma.desarrollo.core.Clock;
 import com.guma.desarrollo.core.ManagerURI;
-import com.guma.desarrollo.gmv.Adapters.Articulo_Leads;
 import com.guma.desarrollo.gmv.Adapters.Clientes_Leads;
 import com.guma.desarrollo.gmv.ChildInfo;
-import com.guma.desarrollo.gmv.api.Servicio_indicadores;
-import com.guma.desarrollo.gmv.api.Servicio_clientes;
 import com.guma.desarrollo.gmv.api.ConnectivityReceiver;
 import com.guma.desarrollo.gmv.Adapters.CustomAdapter;
 import com.guma.desarrollo.gmv.GroupInfo;
 import com.guma.desarrollo.gmv.MyApplication;
 import com.guma.desarrollo.gmv.R;
-import com.guma.desarrollo.gmv.api.Servicio_articulos;
-import com.guma.desarrollo.gmv.api.Servicio_mora;
-import com.guma.desarrollo.gmv.models.Articulo_Repository;
+import com.guma.desarrollo.gmv.api.Servicio;
 import com.guma.desarrollo.gmv.models.Clientes_Repository;
 import com.guma.desarrollo.gmv.models.Respuesta_articulos;
 import com.guma.desarrollo.gmv.models.Respuesta_indicadores;
@@ -119,7 +113,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
             @Override
             public boolean onGroupClick(final ExpandableListView parent, View v, int groupPosition, long id) {
                 GroupInfo headerInfo = deptList.get(groupPosition);
-                Toast.makeText(getBaseContext(), " Header is :: " + headerInfo.getName(),Toast.LENGTH_LONG).show();
+                //Toast.makeText(getBaseContext(), " Header is :: " + headerInfo.getName(),Toast.LENGTH_LONG).show();
                 LayoutInflater li = LayoutInflater.from(AgendaActivity.this);
                 View promptsView = li.inflate(R.layout.input_search_cliente, null);
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AgendaActivity.this);
@@ -129,19 +123,14 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Clientes cls = (Clientes) parent.getItemAtPosition(position);
-                       // Toast.makeText(AgendaActivity.this, cls.getmCliente(), Toast.LENGTH_SHORT).show();
-                       // Toast.makeText(AgendaActivity.this, cls.getmNombre(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AgendaActivity.this, cls.getmCliente(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AgendaActivity.this, cls.getmNombre(), Toast.LENGTH_SHORT).show();
                     }
                 });
                 sv = (SearchView) promptsView.findViewById(R.id.svClientes);
                 sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String text) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String text) {
                         text = text.toLowerCase(Locale.getDefault());
                         ArrayList<Clientes> newList = new ArrayList<>();
                         for(Clientes clientes:objects){
@@ -150,6 +139,12 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                             }
                         }
                         lstClientes.setAdapter(new Clientes_Leads(AgendaActivity.this, newList));
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String text) {
+
                         return false;
                     }
                 });
@@ -304,14 +299,14 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
         @Override
         protected String doInBackground(String... params) {
             retrofit = new Retrofit.Builder().baseUrl(ManagerURI.getURL_Base()).addConverterFactory(GsonConverterFactory.create()).build();
-            Servicio_articulos service = retrofit.create(Servicio_articulos.class);
+            Servicio service = retrofit.create(Servicio.class);
             final Call<Respuesta_articulos> ArticuloRespuestaCall = service.obtenerListaArticulos();
             ArticuloRespuestaCall.enqueue(new Callback<Respuesta_articulos>() {
                 @Override
                 public void onResponse(Call<Respuesta_articulos> call, Response<Respuesta_articulos> response) {
                     if(response.isSuccessful()){
-                        Log.d(TAG, "onResponse: Articulos");
                         Respuesta_articulos articuloRespuesta = response.body();
+                        Log.d(TAG, "onResponse: Articulos " + articuloRespuesta.getCount());
                         Articulos_model.SaveArticulos(AgendaActivity.this,articuloRespuesta.getResults());
                     }else{
                         pdialog.dismiss();
@@ -322,24 +317,23 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                 @Override
                 public void onFailure(Call<Respuesta_articulos> call, Throwable t) {
                     pdialog.dismiss();
-                    Toast.makeText(AgendaActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
 
             retrofit_mora = new Retrofit.Builder().baseUrl(ManagerURI.getURL_Base()).addConverterFactory(GsonConverterFactory.create()).build();
-            Servicio_mora service_mora = retrofit_mora.create(Servicio_mora.class);
+            Servicio service_mora = retrofit_mora.create(Servicio.class);
             final Call<Respuesta_mora> ClienteMoraRespuestaCall = service_mora.obtenerListaClienteMora();
             ClienteMoraRespuestaCall.enqueue(new Callback<Respuesta_mora>() {
                 @Override
                 public void onResponse(Call<Respuesta_mora> call, Response<Respuesta_mora> response) {
                     if(response.isSuccessful()){
-                        Log.d(TAG, "onResponse: Mora");
+
                         Respuesta_mora moraRespuesta = response.body();
+                        Log.d(TAG, "onResponse: Mora " + moraRespuesta.getCount());
                         Clientes_model.SaveMora(AgendaActivity.this,moraRespuesta.getResults());
                     }else{
                         pdialog.dismiss();
                         Log.d(TAG, "onResponse: " + response.errorBody() );
-                        Toast.makeText(AgendaActivity.this, ""+response.errorBody(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -347,25 +341,23 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                 public void onFailure(Call<Respuesta_mora> call, Throwable t) {
                     pdialog.dismiss();
                     Log.d(TAG, "onResponse: " + t.getMessage() );
-                    Toast.makeText(AgendaActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
 
                 }
             });
 
             retrofit_indicadores = new Retrofit.Builder().baseUrl(ManagerURI.getURL_Base()).addConverterFactory(GsonConverterFactory.create()).build();
-            Servicio_indicadores service_indicadores = retrofit_indicadores.create(Servicio_indicadores.class);
+            Servicio service_indicadores = retrofit_indicadores.create(Servicio.class);
             final Call<Respuesta_indicadores> ClienteIndicadoresRespuestaCall = service_indicadores.obtenerListaClienteIndicadores();
             ClienteIndicadoresRespuestaCall.enqueue(new Callback<Respuesta_indicadores>() {
                 @Override
                 public void onResponse(Call<Respuesta_indicadores> call, Response<Respuesta_indicadores> response) {
                     if(response.isSuccessful()){
-                        Log.d(TAG, "onResponse: Indicadores");
                         Respuesta_indicadores IndicadorRespuesta = response.body();
+                        Log.d(TAG, "onResponse: Indicadores " + IndicadorRespuesta.getCount() );
                         Clientes_model.SaveIndicadores(AgendaActivity.this,IndicadorRespuesta.getResults());
                     }else{
                         pdialog.dismiss();
                         Log.d(TAG, "onResponse: " + response.errorBody() );
-                        Toast.makeText(AgendaActivity.this, ""+response.errorBody(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -377,20 +369,20 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                 }
             });
             retrofit_clientes = new Retrofit.Builder().baseUrl(ManagerURI.getURL_Base()).addConverterFactory(GsonConverterFactory.create()).build();
-            Servicio_clientes service_clientes = retrofit_clientes.create(Servicio_clientes.class);
+            Servicio service_clientes = retrofit_clientes.create(Servicio.class);
             final Call<Respuesta_clientes> clientesRespuesta = service_clientes.obtenerListaClientes();
             clientesRespuesta.enqueue(new Callback<Respuesta_clientes>() {
                 @Override
                 public void onResponse(Call<Respuesta_clientes> call, Response<Respuesta_clientes> response) {
                     if(response.isSuccessful()){
-                        Log.d(TAG, "onResponse: Indicadores");
+
                         Respuesta_clientes clRespuesta = response.body();
+                        Log.d(TAG, "onResponse: Clientes "  + clRespuesta.getCount());
                         Clientes_model.SaveClientes(AgendaActivity.this,clRespuesta .getResults());
                         Alerta();
                     }else{
                         pdialog.dismiss();
                         Log.d(TAG, "onResponse: " + response.errorBody() );
-                        Toast.makeText(AgendaActivity.this, ""+response.errorBody(), Toast.LENGTH_SHORT).show();
                     }
                 }
 

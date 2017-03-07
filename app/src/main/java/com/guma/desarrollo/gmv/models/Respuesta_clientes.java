@@ -11,12 +11,11 @@ import java.util.ArrayList;
 
 public class Respuesta_clientes {
     private ArrayList<Clientes> results;
-
+    private int count;
+    public int getCount() {
+        return count = results.size();
+    }
     public ArrayList<Clientes> getResults() {
         return results;
-    }
-
-    public void setResults(ArrayList<Clientes> results) {
-        this.results = results;
     }
 }

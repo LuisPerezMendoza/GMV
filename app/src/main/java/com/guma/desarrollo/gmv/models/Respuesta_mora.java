@@ -10,12 +10,12 @@ import java.util.ArrayList;
 
 public class Respuesta_mora {
     private ArrayList<Mora> results;
-
+    private int count;
+    public int getCount() {
+        return count = results.size();
+    }
     public ArrayList<Mora> getResults() {
         return results;
     }
 
-    public void setResults(ArrayList<Mora> results) {
-        this.results = results;
-    }
 }

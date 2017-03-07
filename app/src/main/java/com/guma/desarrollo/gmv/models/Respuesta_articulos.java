@@ -10,12 +10,11 @@ import java.util.ArrayList;
 
 public class Respuesta_articulos {
     private ArrayList<Articulo> results;
-
+    private int count;
+    public int getCount() {
+        return count = results.size();
+    }
     public ArrayList<Articulo> getResults() {
         return results;
-    }
-
-    public void setResults(ArrayList<Articulo> results) {
-        this.results = results;
     }
 }

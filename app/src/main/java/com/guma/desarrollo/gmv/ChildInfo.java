@@ -10,7 +10,6 @@ public class ChildInfo {
     public String getCodigo() {
         return Codigo;
     }
-
     public void setCodigo(String codigo) {
         Codigo = codigo;
     }

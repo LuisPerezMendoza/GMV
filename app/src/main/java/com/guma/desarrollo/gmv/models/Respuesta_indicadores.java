@@ -10,12 +10,13 @@ import java.util.ArrayList;
 
 public class Respuesta_indicadores {
     private ArrayList<Indicadores> results;
-
+    private int count;
+    public int getCount() {
+        return count = results.size();
+    }
     public ArrayList<Indicadores> getResults() {
         return results;
     }
 
-    public void setResults(ArrayList<Indicadores> results) {
-        this.results = results;
-    }
+
 }
