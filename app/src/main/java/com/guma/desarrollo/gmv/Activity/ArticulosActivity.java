@@ -216,7 +216,5 @@ public class ArticulosActivity extends AppCompatActivity implements SearchView.O
             }
             listView.setAdapter(new Articulo_Leads(this, newList));
         }
-
-
     }
 }

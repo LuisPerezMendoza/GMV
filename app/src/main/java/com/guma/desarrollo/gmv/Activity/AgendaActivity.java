@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import android.content.DialogInterface;
 
@@ -45,7 +46,9 @@ import com.guma.desarrollo.gmv.models.Respuesta_articulos;
 import com.guma.desarrollo.gmv.models.Respuesta_indicadores;
 import com.guma.desarrollo.gmv.models.Respuesta_mora;
 import com.guma.desarrollo.gmv.models.Respuesta_clientes;
+import com.guma.desarrollo.gmv.models.Respuesta_puntos;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,10 +68,11 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private boolean checked;
-    private Retrofit retrofit,retrofit_mora,retrofit_indicadores,retrofit_clientes;
+    private Retrofit retrofit,retrofit_mora,retrofit_indicadores,retrofit_clientes,retrofit_puntos;
     private ListView lstClientes;
     private List<Clientes> objects;
     private Clientes_Leads lbs;
+
 
     SearchView sv;
 
@@ -298,10 +302,16 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
 
         @Override
         protected String doInBackground(String... params) {
-            retrofit = new Retrofit.Builder().baseUrl(ManagerURI.getURL_Base()).addConverterFactory(GsonConverterFactory.create()).build();
-            Servicio service = retrofit.create(Servicio.class);
-            final Call<Respuesta_articulos> ArticuloRespuestaCall = service.obtenerListaArticulos();
-            ArticuloRespuestaCall.enqueue(new Callback<Respuesta_articulos>() {
+
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(ManagerURI.getURL_Base())
+                    .client(ManagerURI.ConfigTimeOut())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            retrofit
+                    .create(Servicio.class)
+                    .obtenerListaArticulos()
+                    .enqueue(new Callback<Respuesta_articulos>() {
                 @Override
                 public void onResponse(Call<Respuesta_articulos> call, Response<Respuesta_articulos> response) {
                     if(response.isSuccessful()){
@@ -320,10 +330,15 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                 }
             });
 
-            retrofit_mora = new Retrofit.Builder().baseUrl(ManagerURI.getURL_Base()).addConverterFactory(GsonConverterFactory.create()).build();
-            Servicio service_mora = retrofit_mora.create(Servicio.class);
-            final Call<Respuesta_mora> ClienteMoraRespuestaCall = service_mora.obtenerListaClienteMora();
-            ClienteMoraRespuestaCall.enqueue(new Callback<Respuesta_mora>() {
+            retrofit_mora = new Retrofit.Builder()
+                    .baseUrl(ManagerURI.getURL_Base())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(ManagerURI.ConfigTimeOut())
+                    .build();
+            retrofit_mora
+                    .create(Servicio.class)
+                    .obtenerListaClienteMora()
+                    .enqueue(new Callback<Respuesta_mora>() {
                 @Override
                 public void onResponse(Call<Respuesta_mora> call, Response<Respuesta_mora> response) {
                     if(response.isSuccessful()){
@@ -345,10 +360,16 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                 }
             });
 
-            retrofit_indicadores = new Retrofit.Builder().baseUrl(ManagerURI.getURL_Base()).addConverterFactory(GsonConverterFactory.create()).build();
-            Servicio service_indicadores = retrofit_indicadores.create(Servicio.class);
-            final Call<Respuesta_indicadores> ClienteIndicadoresRespuestaCall = service_indicadores.obtenerListaClienteIndicadores();
-            ClienteIndicadoresRespuestaCall.enqueue(new Callback<Respuesta_indicadores>() {
+            retrofit_indicadores = new Retrofit
+                    .Builder()
+                    .baseUrl(ManagerURI.getURL_Base())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(ManagerURI.ConfigTimeOut())
+                    .build();
+            retrofit_indicadores
+                    .create(Servicio.class)
+                    .obtenerListaClienteIndicadores()
+                    .enqueue(new Callback<Respuesta_indicadores>() {
                 @Override
                 public void onResponse(Call<Respuesta_indicadores> call, Response<Respuesta_indicadores> response) {
                     if(response.isSuccessful()){
@@ -368,18 +389,21 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
 
                 }
             });
-            retrofit_clientes = new Retrofit.Builder().baseUrl(ManagerURI.getURL_Base()).addConverterFactory(GsonConverterFactory.create()).build();
-            Servicio service_clientes = retrofit_clientes.create(Servicio.class);
-            final Call<Respuesta_clientes> clientesRespuesta = service_clientes.obtenerListaClientes();
-            clientesRespuesta.enqueue(new Callback<Respuesta_clientes>() {
+            retrofit_clientes = new Retrofit.Builder()
+                    .baseUrl(ManagerURI.getURL_Base())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(ManagerURI.ConfigTimeOut())
+                    .build();
+            retrofit_clientes.
+                    create(Servicio.class).
+                    obtenerListaClientes().
+                    enqueue(new Callback<Respuesta_clientes>() {
                 @Override
                 public void onResponse(Call<Respuesta_clientes> call, Response<Respuesta_clientes> response) {
                     if(response.isSuccessful()){
-
                         Respuesta_clientes clRespuesta = response.body();
                         Log.d(TAG, "onResponse: Clientes "  + clRespuesta.getCount());
                         Clientes_model.SaveClientes(AgendaActivity.this,clRespuesta .getResults());
-                        Alerta();
                     }else{
                         pdialog.dismiss();
                         Log.d(TAG, "onResponse: " + response.errorBody() );
@@ -391,6 +415,33 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                     pdialog.dismiss();
                     Log.d(TAG, "onResponse: " + t.getMessage() );
 
+                }
+            });
+            retrofit_puntos = new Retrofit.Builder()
+                    .baseUrl(ManagerURI.getURL_Base())
+                    .client(ManagerURI.ConfigTimeOut())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            retrofit_puntos.create(Servicio.class)
+                    .obtenerFacturasPuntos()
+                    .enqueue(new Callback<Respuesta_puntos>() {
+                @Override
+                public void onResponse(Call<Respuesta_puntos> call, Response<Respuesta_puntos> response) {
+                    if(response.isSuccessful()){
+                        Respuesta_puntos clpuntos = response.body();
+                        Log.d(TAG, "onResponse: Facturas "  + clpuntos.getCount());
+                        Clientes_model.SaveFacturas(AgendaActivity.this,clpuntos.getResults());
+                        Alerta();
+                    }else{
+                        pdialog.dismiss();
+                        Log.d(TAG, "onResponse: " + response.errorBody() );
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Respuesta_puntos> call, Throwable t) {
+                    pdialog.dismiss();
+                    Log.d(TAG, "onResponse: " + t.getMessage() );
                 }
             });
             editor.putString("lst",Clock.getTimeStamp()).apply();
@@ -412,5 +463,4 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
     private void Alerta() {
         new AlertDialog.Builder(AgendaActivity.this).setTitle("RECIBIDO").setMessage("Informacion Recibida...").setCancelable(false).setPositiveButton("OK",null).show();
     }
-
 }

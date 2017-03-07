@@ -3,27 +3,37 @@ package com.guma.desarrollo.core;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Environment;
 
-import java.io.File;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 
 /**
  * Created by maryan.espinoza on 29/12/2016.
  */
 
 public class ManagerURI {
-    private static Context myContext;
-    private static String SERVER = "192.168.1.211";
-    //private static String SERVER = "165.98.75.219:8448";
+    //private static String SERVER = "192.168.1.211";
+    private static String SERVER = "165.98.75.219:8448";
     private static String URL_Base= "http://"+ SERVER + "/gmv_rest/index.php/";
     private static String  DIR_DB = "/data/data/com.guma.desarrollo.gmv/";
-  //  private static String  DIR_DB = myContext.getFilesDir().getPath();
+
     public static String getURL_Base() {
         return URL_Base;
     }
 
     public static String getDirDb() {
         return DIR_DB;
+    }
+
+    public static OkHttpClient ConfigTimeOut(){
+        OkHttpClient okHttpClient = new OkHttpClient()
+                .newBuilder()
+                .connectTimeout(2, TimeUnit.MINUTES)
+                .readTimeout(2, TimeUnit.MINUTES)
+                .build();
+
+        return okHttpClient;
     }
 
 
@@ -34,7 +44,6 @@ public class ManagerURI {
             return true;
         }else {
             return false;
-
         }
     }
 

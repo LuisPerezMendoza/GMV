@@ -4,6 +4,7 @@ import com.guma.desarrollo.gmv.models.Respuesta_articulos;
 import com.guma.desarrollo.gmv.models.Respuesta_clientes;
 import com.guma.desarrollo.gmv.models.Respuesta_indicadores;
 import com.guma.desarrollo.gmv.models.Respuesta_mora;
+import com.guma.desarrollo.gmv.models.Respuesta_puntos;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -24,4 +25,7 @@ public interface Servicio {
 
     @GET("ClientesMora")
     Call<Respuesta_mora> obtenerListaClienteMora();
+
+    @GET("Puntos")
+    Call<Respuesta_puntos> obtenerFacturasPuntos();
 }
