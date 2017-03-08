@@ -34,7 +34,6 @@ public class FacturasActivity extends AppCompatActivity implements SearchView.On
     private SharedPreferences.Editor editor;
 
     private ListView listView;
-    //private List<Facturas> objects;
     ArrayList<Facturas> fList;
 
     @Override
@@ -53,14 +52,11 @@ public class FacturasActivity extends AppCompatActivity implements SearchView.On
         for (Facturas articulo : Clientes_model.getFacturas(ManagerURI.getDirDb(), FacturasActivity.this,preferences.getString("ClsSelected",""))){
             fList.add(articulo);
         }
-        //objects = fList;
         listView.setAdapter(new Facturas_Leads(this, fList));
     }
     public boolean onOptionsItemSelected(MenuItem item)    {
         int id = item.getItemId();
         if (id == 16908332){
-            listView.setAdapter(new Facturas_Leads(this, new ArrayList<Facturas>()));
-
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -94,7 +90,6 @@ public class FacturasActivity extends AppCompatActivity implements SearchView.On
         return false;
     }
     public void filterData(String query) {
-
         if (query.isEmpty()){
             listView.setAdapter(new Facturas_Leads(this, fList));
         }else{

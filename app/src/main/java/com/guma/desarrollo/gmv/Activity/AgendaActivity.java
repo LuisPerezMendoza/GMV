@@ -19,10 +19,10 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import android.content.DialogInterface;
 
@@ -35,6 +35,9 @@ import com.guma.desarrollo.core.Clock;
 import com.guma.desarrollo.core.ManagerURI;
 import com.guma.desarrollo.gmv.Adapters.Clientes_Leads;
 import com.guma.desarrollo.gmv.ChildInfo;
+import com.guma.desarrollo.gmv.Tasks.TaskDownload;
+import com.guma.desarrollo.gmv.Tasks.TaskUnload;
+import com.guma.desarrollo.gmv.api.Class_retrofit;
 import com.guma.desarrollo.gmv.api.ConnectivityReceiver;
 import com.guma.desarrollo.gmv.Adapters.CustomAdapter;
 import com.guma.desarrollo.gmv.GroupInfo;
@@ -48,16 +51,15 @@ import com.guma.desarrollo.gmv.models.Respuesta_mora;
 import com.guma.desarrollo.gmv.models.Respuesta_clientes;
 import com.guma.desarrollo.gmv.models.Respuesta_puntos;
 
-import okhttp3.OkHttpClient;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AgendaActivity extends AppCompatActivity  implements ConnectivityReceiver.ConnectivityReceiverListener {
 
-    private static final String TAG = "AgendaActivity";
+
     private LinkedHashMap<String, GroupInfo> subjects = new LinkedHashMap<String, GroupInfo>();
     private ArrayList<GroupInfo> deptList = new ArrayList<GroupInfo>();
 
@@ -68,7 +70,6 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private boolean checked;
-    private Retrofit retrofit,retrofit_mora,retrofit_indicadores,retrofit_clientes,retrofit_puntos;
     private ListView lstClientes;
     private List<Clientes> objects;
     private Clientes_Leads lbs;
@@ -91,13 +92,11 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
 
         objects = Clientes_Repository.getInstance().getArticulos();
         lbs = new Clientes_Leads(this, objects);
-
-
-
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = preferences.edit();
+
         checked = preferences.getBoolean("pref",false);
-        setTitle("Ultm. Actualizacion: " + preferences.getString("lst","00/00/0000"));
+        setTitle("Ultm. Actualizacion: " + preferences.getString("lstDownload","00/00/0000"));
         simpleExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
@@ -189,10 +188,12 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                             }else{
                                 if (items[which].equals(items[2])){
 
+                                    new TaskUnload(AgendaActivity.this).execute();
+
                                 } else {
                                     if (items[which].equals(items[3])){
                                             if (ManagerURI.isOnlinea(AgendaActivity.this)==true){
-                                                new MyTask().execute("");
+                                                new TaskDownload(AgendaActivity.this).execute(0);
                                             } else {
                                                 Toast.makeText(AgendaActivity.this, "No Posee Cobertura de datos...", Toast.LENGTH_SHORT).show();
                                             }
@@ -221,6 +222,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
             }
         });
         expandAll();
+        AutoTask();
     }
 
     private void checkConnection() {
@@ -234,11 +236,14 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
     protected void onResume() {
         super.onResume();
         setTitle("Ultm. Actualizacion: " + preferences.getString("lst","00/00/0000"));
+        AutoTask();
         MyApplication.getInstance().setConnectivityListener(this);
     }
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
-        showSnack(isConnected);
+        //boolean isConnected = ;
+       // showSnack(ConnectivityReceiver.isConnected());
+        checkConnection();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -291,176 +296,16 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
         groupPosition = deptList.indexOf(headerInfo);
         return groupPosition;
     }
-
-    private class MyTask extends AsyncTask<String,String,String>{
-        public ProgressDialog pdialog;
-        @Override
-        protected void onPreExecute() {
-            pdialog = ProgressDialog.show(AgendaActivity.this, "","Procesando. Porfavor Espere...", true);
-            super.onPreExecute();
+    private void AutoTask(){
+        if (Integer.parseInt(Clock.getDiferencia(Clock.StringToDate(Clock.getNow()),Clock.StringToDate(preferences.getString("lstDownload","00/00/0000")))) >= 6){
+            new TaskDownload(AgendaActivity.this).execute(0);
         }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(ManagerURI.getURL_Base())
-                    .client(ManagerURI.ConfigTimeOut())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            retrofit
-                    .create(Servicio.class)
-                    .obtenerListaArticulos()
-                    .enqueue(new Callback<Respuesta_articulos>() {
-                @Override
-                public void onResponse(Call<Respuesta_articulos> call, Response<Respuesta_articulos> response) {
-                    if(response.isSuccessful()){
-                        Respuesta_articulos articuloRespuesta = response.body();
-                        Log.d(TAG, "onResponse: Articulos " + articuloRespuesta.getCount());
-                        Articulos_model.SaveArticulos(AgendaActivity.this,articuloRespuesta.getResults());
-                    }else{
-                        pdialog.dismiss();
-                        Log.d(TAG, "onResponse: " + response.errorBody() );
-                        Toast.makeText(AgendaActivity.this, ""+response.errorBody(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-                @Override
-                public void onFailure(Call<Respuesta_articulos> call, Throwable t) {
-                    pdialog.dismiss();
-                }
-            });
-
-            retrofit_mora = new Retrofit.Builder()
-                    .baseUrl(ManagerURI.getURL_Base())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .client(ManagerURI.ConfigTimeOut())
-                    .build();
-            retrofit_mora
-                    .create(Servicio.class)
-                    .obtenerListaClienteMora()
-                    .enqueue(new Callback<Respuesta_mora>() {
-                @Override
-                public void onResponse(Call<Respuesta_mora> call, Response<Respuesta_mora> response) {
-                    if(response.isSuccessful()){
-
-                        Respuesta_mora moraRespuesta = response.body();
-                        Log.d(TAG, "onResponse: Mora " + moraRespuesta.getCount());
-                        Clientes_model.SaveMora(AgendaActivity.this,moraRespuesta.getResults());
-                    }else{
-                        pdialog.dismiss();
-                        Log.d(TAG, "onResponse: " + response.errorBody() );
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Respuesta_mora> call, Throwable t) {
-                    pdialog.dismiss();
-                    Log.d(TAG, "onResponse: " + t.getMessage() );
-
-                }
-            });
-
-            retrofit_indicadores = new Retrofit
-                    .Builder()
-                    .baseUrl(ManagerURI.getURL_Base())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .client(ManagerURI.ConfigTimeOut())
-                    .build();
-            retrofit_indicadores
-                    .create(Servicio.class)
-                    .obtenerListaClienteIndicadores()
-                    .enqueue(new Callback<Respuesta_indicadores>() {
-                @Override
-                public void onResponse(Call<Respuesta_indicadores> call, Response<Respuesta_indicadores> response) {
-                    if(response.isSuccessful()){
-                        Respuesta_indicadores IndicadorRespuesta = response.body();
-                        Log.d(TAG, "onResponse: Indicadores " + IndicadorRespuesta.getCount() );
-                        Clientes_model.SaveIndicadores(AgendaActivity.this,IndicadorRespuesta.getResults());
-                    }else{
-                        pdialog.dismiss();
-                        Log.d(TAG, "onResponse: " + response.errorBody() );
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Respuesta_indicadores> call, Throwable t) {
-                    pdialog.dismiss();
-                    Log.d(TAG, "onResponse: " + t.getMessage() );
-
-                }
-            });
-            retrofit_clientes = new Retrofit.Builder()
-                    .baseUrl(ManagerURI.getURL_Base())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .client(ManagerURI.ConfigTimeOut())
-                    .build();
-            retrofit_clientes.
-                    create(Servicio.class).
-                    obtenerListaClientes().
-                    enqueue(new Callback<Respuesta_clientes>() {
-                @Override
-                public void onResponse(Call<Respuesta_clientes> call, Response<Respuesta_clientes> response) {
-                    if(response.isSuccessful()){
-                        Respuesta_clientes clRespuesta = response.body();
-                        Log.d(TAG, "onResponse: Clientes "  + clRespuesta.getCount());
-                        Clientes_model.SaveClientes(AgendaActivity.this,clRespuesta .getResults());
-                    }else{
-                        pdialog.dismiss();
-                        Log.d(TAG, "onResponse: " + response.errorBody() );
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Respuesta_clientes> call, Throwable t) {
-                    pdialog.dismiss();
-                    Log.d(TAG, "onResponse: " + t.getMessage() );
-
-                }
-            });
-            retrofit_puntos = new Retrofit.Builder()
-                    .baseUrl(ManagerURI.getURL_Base())
-                    .client(ManagerURI.ConfigTimeOut())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            retrofit_puntos.create(Servicio.class)
-                    .obtenerFacturasPuntos()
-                    .enqueue(new Callback<Respuesta_puntos>() {
-                @Override
-                public void onResponse(Call<Respuesta_puntos> call, Response<Respuesta_puntos> response) {
-                    if(response.isSuccessful()){
-                        Respuesta_puntos clpuntos = response.body();
-                        Log.d(TAG, "onResponse: Facturas "  + clpuntos.getCount());
-                        Clientes_model.SaveFacturas(AgendaActivity.this,clpuntos.getResults());
-                        Alerta();
-                    }else{
-                        pdialog.dismiss();
-                        Log.d(TAG, "onResponse: " + response.errorBody() );
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Respuesta_puntos> call, Throwable t) {
-                    pdialog.dismiss();
-                    Log.d(TAG, "onResponse: " + t.getMessage() );
-                }
-            });
-            editor.putString("lst",Clock.getTimeStamp()).apply();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            pdialog.dismiss();
-            super.onPostExecute(s);
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
+        if (Integer.parseInt(Clock.getDiferencia(Clock.StringToDate(Clock.getNow()),Clock.StringToDate(preferences.getString("lstUnload","00/00/0000")))) >= 3){
+            new TaskUnload(AgendaActivity.this).execute(0);
         }
     }
 
-    private void Alerta() {
-        new AlertDialog.Builder(AgendaActivity.this).setTitle("RECIBIDO").setMessage("Informacion Recibida...").setCancelable(false).setPositiveButton("OK",null).show();
-    }
+
+
+
 }
