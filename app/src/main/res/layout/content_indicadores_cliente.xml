@@ -154,6 +154,25 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="C$ 4,000.00" />
             </TableRow>
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="10dp">
+                <TextView
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Puntos Disp." />
+                <TextView
+                    android:textColor="@color/button_info"
+                    android:id="@+id/txtPuntos"
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="C$ 4,000.00" />
+            </TableRow>
 
 
         </TableLayout>

@@ -36,6 +36,7 @@
         <item>CHEQUE</item>
         <item>TRANSFERENCIA</item>
     </string-array>
+    <string name="title_activity_facturas">FacturasActivity</string>
 
 </resources>
 

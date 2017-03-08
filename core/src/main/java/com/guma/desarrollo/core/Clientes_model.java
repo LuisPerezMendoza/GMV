@@ -148,6 +148,67 @@ public class Clientes_model {
             if(myDbHelper != null) { myDbHelper.close(); }
         }
     }
+    public static void  SaveFacturas(Context context, ArrayList<Facturas> Indica){
+        SQLiteDatabase myDataBase = null;
+        SQLiteHelper myDbHelper = null;
+        try
+        {
+            myDbHelper = new SQLiteHelper(ManagerURI.getDirDb(), context);
+            myDataBase = myDbHelper.getWritableDatabase();
+            SQLiteHelper.ExecuteSQL(ManagerURI.getDirDb(), context,"DELETE FROM FACTURAS_PUNTOS");
+            for(int i=0;i<Indica.size();i++){
+                Facturas a = Indica.get(i);
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("FECHA" , a.getmFecha());
+                contentValues.put("CLIENTE" , a.getmCliente());
+                contentValues.put("FACTURA" , a.getmFactura());
+                contentValues.put("PUNTOS" , a.getmPuntos());
+                contentValues.put("REMANENTE" , a.getmRemanente());
+                myDataBase.insert("FACTURAS_PUNTOS", null, contentValues );
+            }
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if(myDataBase != null) { myDataBase.close(); }
+            if(myDbHelper != null) { myDbHelper.close(); }
+        }
+    }
+    public static List<Facturas> getFacturas(String basedir, Context context, String Cliente) {
+        List<Facturas> lista = new ArrayList<>();
+        SQLiteDatabase myDataBase = null;
+        SQLiteHelper myDbHelper = null;
+        try
+        {
+            myDbHelper = new SQLiteHelper(basedir, context);
+            myDataBase = myDbHelper.getReadableDatabase();
+            Cursor cursor = myDataBase.query(true, "FACTURAS_PUNTOS", null, "CLIENTE"+ "=?", new String[] { Cliente }, null, null, null, null);
+            if(cursor.getCount() > 0) {
+
+                cursor.moveToFirst();
+                while(!cursor.isAfterLast()) {
+                    Facturas tmp = new Facturas();
+                    tmp.setmFecha(cursor.getString(cursor.getColumnIndex("FECHA")));
+                    tmp.setmCliente(cursor.getString(cursor.getColumnIndex("CLIENTE")));
+                    tmp.setmFactura(cursor.getString(cursor.getColumnIndex("FACTURA")));
+                    tmp.setmPuntos(cursor.getString(cursor.getColumnIndex("PUNTOS")));
+                    tmp.setmRemanente(cursor.getString(cursor.getColumnIndex("REMANENTE")));
+                    lista.add(tmp);
+                    cursor.moveToNext();
+                }
+            }
+        }
+        catch (Exception e) { e.printStackTrace(); }
+        finally
+        {
+            if(myDataBase != null) { myDataBase.close(); }
+            if(myDbHelper != null) { myDbHelper.close(); }
+        }
+        return lista;
+    }
 
     public static List<Indicadores> getIndicadores(String basedir, Context context, String Cliente) {
         List<Indicadores> lista = new ArrayList<>();

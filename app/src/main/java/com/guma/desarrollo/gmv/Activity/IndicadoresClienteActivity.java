@@ -16,6 +16,7 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.guma.desarrollo.core.Facturas;
 import com.guma.desarrollo.core.Indicadores;
 import com.guma.desarrollo.core.Clientes_model;
 import com.guma.desarrollo.core.ManagerURI;
@@ -33,9 +34,11 @@ public class IndicadoresClienteActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
 
+    private float TotalPuntos;
+
     PieChart pieChart;
 
-    TextView mpVenta,mItemFact,mLimite,mCredito,mNombre;
+    TextView mpVenta,mItemFact,mLimite,mCredito,mNombre,mPuntos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class IndicadoresClienteActivity extends AppCompatActivity {
         mLimite = (TextView) findViewById(R.id.txtLimite);
         mCredito = (TextView) findViewById(R.id.txtCredito);
         mNombre = (TextView) findViewById(R.id.txtIdNombre);
+        mPuntos = (TextView) findViewById(R.id.txtPuntos);
         List<Indicadores> obj = Clientes_model.getIndicadores(ManagerURI.getDirDb(), IndicadoresClienteActivity.this,preferences.getString("ClsSelected"," --ERROR--"));
         setTitle("PASO 3 [ Pedido ] ");
 
@@ -77,6 +81,20 @@ public class IndicadoresClienteActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        for(Facturas objFactura: Clientes_model.getFacturas(ManagerURI.getDirDb(),IndicadoresClienteActivity.this,preferences.getString("ClsSelected"," --ERROR--"))){
+            TotalPuntos += Float.parseFloat(objFactura.getmRemanente());
+
+        }
+
+        mPuntos.setText(String.valueOf(TotalPuntos));
+        mPuntos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(IndicadoresClienteActivity.this,FacturasActivity.class));
+            }
+        });
+
     }
     private void addDataSet() {
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
