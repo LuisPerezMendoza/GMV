@@ -5,7 +5,7 @@ import com.guma.desarrollo.gmv.models.Respuesta_clientes;
 import com.guma.desarrollo.gmv.models.Respuesta_indicadores;
 import com.guma.desarrollo.gmv.models.Respuesta_mora;
 
-import com.guma.desarrollo.gmv.models.UsuarioRespuesta;
+import com.guma.desarrollo.gmv.models.Respuesta_usuario;
 
 import com.guma.desarrollo.gmv.models.Respuesta_puntos;
 
@@ -34,11 +34,9 @@ public interface Servicio {
     @GET("ClientesMora")
     Call<Respuesta_mora> obtenerListaClienteMora();
 
-
     @FormUrlEncoded
     @POST("Login")
-    Call<UsuarioRespuesta> obtenerListaUsuario(@Field("usuario") String apiKey,@Field("pass") String apiKey2);
-
+    Call<Respuesta_usuario> obtenerListaUsuario(@Field("usuario") String apiKey, @Field("pass") String apiKey2);
 
     @GET("Puntos")
     Call<Respuesta_puntos> obtenerFacturasPuntos();
