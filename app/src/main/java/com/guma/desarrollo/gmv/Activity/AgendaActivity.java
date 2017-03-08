@@ -300,8 +300,10 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
         if (Integer.parseInt(Clock.getDiferencia(Clock.StringToDate(Clock.getNow()),Clock.StringToDate(preferences.getString("lstDownload","00/00/0000")))) >= 6){
             new TaskDownload(AgendaActivity.this).execute(0);
         }
+
         if (Integer.parseInt(Clock.getDiferencia(Clock.StringToDate(Clock.getNow()),Clock.StringToDate(preferences.getString("lstUnload","00/00/0000")))) >= 3){
             new TaskUnload(AgendaActivity.this).execute(0);
+
         }
     }
 
