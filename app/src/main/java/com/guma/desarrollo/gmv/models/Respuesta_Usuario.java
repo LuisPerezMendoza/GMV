@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by alder.hernandez on 03/03/2017.
  */
 
-public class UsuarioRespuesta {
+public class Respuesta_usuario {
     private static int count;
     private ArrayList<Usuario> results;
 
