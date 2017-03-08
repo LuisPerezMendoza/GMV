@@ -300,6 +300,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
         protected String doInBackground(String... params) {
             retrofit = new Retrofit.Builder().baseUrl(ManagerURI.getURL_Base()).addConverterFactory(GsonConverterFactory.create()).build();
             Servicio service = retrofit.create(Servicio.class);
+
             final Call<Respuesta_articulos> ArticuloRespuestaCall = service.obtenerListaArticulos();
             ArticuloRespuestaCall.enqueue(new Callback<Respuesta_articulos>() {
                 @Override

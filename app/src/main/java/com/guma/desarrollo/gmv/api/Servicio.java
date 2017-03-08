@@ -4,9 +4,14 @@ import com.guma.desarrollo.gmv.models.Respuesta_articulos;
 import com.guma.desarrollo.gmv.models.Respuesta_clientes;
 import com.guma.desarrollo.gmv.models.Respuesta_indicadores;
 import com.guma.desarrollo.gmv.models.Respuesta_mora;
+import com.guma.desarrollo.gmv.models.UsuarioRespuesta;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
+
 
 /**
  * Created by maryan.espinoza on 01/03/2017.
@@ -24,4 +29,9 @@ public interface Servicio {
 
     @GET("ClientesMora")
     Call<Respuesta_mora> obtenerListaClienteMora();
+
+    @FormUrlEncoded
+    @POST("Login")
+    Call<UsuarioRespuesta> obtenerListaUsuario(@Field("usuario") String apiKey,@Field("pass") String apiKey2);
+
 }

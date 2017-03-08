@@ -13,8 +13,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.guma.desarrollo.core.Mora;
+import com.guma.desarrollo.core.Usuario;
 import com.guma.desarrollo.core.Clientes_model;
 import com.guma.desarrollo.core.ManagerURI;
+import com.guma.desarrollo.core.Usuario_model;
 import com.guma.desarrollo.gmv.R;
 
 import java.util.List;
@@ -73,6 +75,8 @@ public class CobroInActivity extends AppCompatActivity {
         md120.setText("C$ " + obj.get(0).getmMd120());
         String Final= String.valueOf(Float.parseFloat(obj.get(0).getmD30()) + Float.parseFloat(obj.get(0).getmD60()) + Float.parseFloat(obj.get(0).getmD90()) + Float.parseFloat(obj.get(0).getmD120())+Float.parseFloat(obj.get(0).getmMd120()));
         mTotal.setText("C$ " + Final);
+
+
 
 
 
