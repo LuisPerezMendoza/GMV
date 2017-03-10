@@ -2,29 +2,38 @@ package com.guma.desarrollo.gmv.Activity;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.guma.desarrollo.core.Clock;
+import com.guma.desarrollo.core.Cobros;
+import com.guma.desarrollo.core.Cobros_model;
 import com.guma.desarrollo.core.Mora;
-import com.guma.desarrollo.core.Usuario;
 import com.guma.desarrollo.core.Clientes_model;
 import com.guma.desarrollo.core.ManagerURI;
-import com.guma.desarrollo.core.Usuario_model;
+import com.guma.desarrollo.core.SQLiteHelper;
 import com.guma.desarrollo.gmv.R;
+import com.guma.desarrollo.gmv.api.Notificaciones;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CobroInActivity extends AppCompatActivity {
+    EditText mImporte,mObservacion;
     TextView mSaldo,mLimite,m30,m60,m90,m120,md120,mTotal;
     private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
+    ArrayList<Cobros> mCobro = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +42,10 @@ public class CobroInActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        editor = preferences.edit();
+
+
+        mImporte = (EditText) findViewById(R.id.crbImporte);
+        mObservacion = (EditText) findViewById(R.id.crbObservacion);
 
         mSaldo = (TextView) findViewById(R.id.txtmSaldo);
         mLimite = (TextView) findViewById(R.id.txtmLimite);
@@ -46,25 +58,38 @@ public class CobroInActivity extends AppCompatActivity {
 
 
 
-        Spinner spinner = (Spinner) findViewById(R.id.sp_transac);
+        final Spinner spinner = (Spinner) findViewById(R.id.sp_transac);
         spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"EFECTIVO","CHEQUE","TRANSFERENCIA"}));
         findViewById(R.id.btnSave_Cobro_in).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(CobroInActivity.this)
-                        .setTitle("CONFIRMACION")
-                        .setMessage("Informacion Guardada")
-                        .setCancelable(false)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
-                        }).show();
+                if (TextUtils.isEmpty(mImporte.getText()) || TextUtils.isEmpty(mObservacion.getText())){
+                    new Notificaciones().snackieBar(CobroInActivity.this,"Hay Campos Vacios...", Color.RED, Color.WHITE, Color.YELLOW).show();
+                }else{
+                    int key = SQLiteHelper.getId(ManagerURI.getDirDb(),CobroInActivity.this,"COBROS");
+                    String idCobro = "F09-" + "C"+Clock.getIdDate()+String.valueOf(key);
+                    Cobros tmp = new Cobros();
+                    tmp.setmIdCobro(idCobro);
+                    tmp.setmCliente(preferences.getString("ClsSelected","0"));
+                    tmp.setmRuta("F09");
+                    tmp.setmImporte(mImporte.getText().toString().trim());
+                    tmp.setmTipo(spinner.getSelectedItem().toString());
+                    tmp.setmObservacion(mObservacion.getText().toString().trim());
+                    tmp.setmFecha(Clock.getNow());
+                    mCobro.add(tmp);
+                    Cobros_model.SaveCobro(CobroInActivity.this,mCobro);
+                    new Notificaciones().Alert(CobroInActivity.this,"COBRO","Informacion Guardada")
+                            .setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    }).show();
+                }
             }
         });
 
-        List<Mora> obj = Clientes_model.getMora(ManagerURI.getDirDb(), CobroInActivity.this,preferences.getString("ClsSelected"," --ERROR--"));
+        List<Mora> obj = Clientes_model.getMora(ManagerURI.getDirDb(), CobroInActivity.this,preferences.getString("ClsSelected","0"));
         setTitle("PASO 2 [ Cobro ] - " + obj.get(0).getmNombre());
         mSaldo.setText("C$ " + obj.get(0).getmSaldo());
         mLimite.setText("C$ " + obj.get(0).getmLimite());
@@ -75,16 +100,7 @@ public class CobroInActivity extends AppCompatActivity {
         md120.setText("C$ " + obj.get(0).getmMd120());
         String Final= String.valueOf(Float.parseFloat(obj.get(0).getmD30()) + Float.parseFloat(obj.get(0).getmD60()) + Float.parseFloat(obj.get(0).getmD90()) + Float.parseFloat(obj.get(0).getmD120())+Float.parseFloat(obj.get(0).getmMd120()));
         mTotal.setText("C$ " + Final);
-
-
-
-
-
-
-
-
-
     }
-
-
 }
+
+

@@ -12,5 +12,9 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.guma.desarrollo.gmv.Activity.BandejaCobrosActivity"
     tools:showIn="@layout/activity_bandeja_cobros">
-
+    <ListView
+        android:id="@+id/listView_cobros"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 </RelativeLayout>

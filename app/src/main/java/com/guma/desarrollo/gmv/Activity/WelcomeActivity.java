@@ -5,8 +5,12 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
+
+import com.guma.desarrollo.core.ManagerURI;
+import com.guma.desarrollo.core.SQLiteHelper;
 import com.guma.desarrollo.gmv.R;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,7 +30,12 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         }, SPLASH_SCREEN_DELAY);
 
+        try {
+            new SQLiteHelper(ManagerURI.getDirDb(),WelcomeActivity.this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
-
-
 }

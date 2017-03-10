@@ -61,8 +61,8 @@ import retrofit2.Retrofit;
 public class AgendaActivity extends AppCompatActivity  implements ConnectivityReceiver.ConnectivityReceiverListener {
 
 
-    private LinkedHashMap<String, GroupInfo> subjects = new LinkedHashMap<String, GroupInfo>();
-    private ArrayList<GroupInfo> deptList = new ArrayList<GroupInfo>();
+    private LinkedHashMap<String, GroupInfo> subjects = new LinkedHashMap<>();
+    private ArrayList<GroupInfo> deptList = new ArrayList<>();
 
     private CustomAdapter listAdapter;
     private ExpandableListView simpleExpandableListView;

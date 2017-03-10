@@ -53,11 +53,7 @@ public class LoginActivity extends AppCompatActivity  {
         editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
         checked = preferences.getBoolean("pref", false);
 
-        try {
-            new SQLiteHelper(ManagerURI.getDirDb(),LoginActivity.this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

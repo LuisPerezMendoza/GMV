@@ -71,6 +71,33 @@ public final class SQLiteHelper extends SQLiteOpenHelper
             if(myDbHelper != null) { myDbHelper.close(); }
         }
     }
+    public static int getId(String basedir, Context context,String KEY) {
+        int lista = 0;
+        SQLiteDatabase myDataBase = null;
+        SQLiteHelper myDbHelper = null;
+        try
+        {
+            myDbHelper = new SQLiteHelper(basedir, context);
+            myDataBase = myDbHelper.getReadableDatabase();
+            Cursor cursor = myDataBase.query(true, "LLAVES", null, "TIPO"+ "=?", new String[] { KEY }, null, null, null, null);
+            if(cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                while(!cursor.isAfterLast()) {
+                    lista = cursor.getInt(cursor.getColumnIndex("SECUENCIA"));
+                    lista = lista + 1;
+                    SQLiteHelper.ExecuteSQL(ManagerURI.getDirDb(), context,"UPDATE LLAVES SET SECUENCIA = "+ lista +" WHERE TIPO='"+KEY+"'");
+                    cursor.moveToNext();
+                }
+            }
+        }
+        catch (Exception e) { e.printStackTrace(); }
+        finally
+        {
+            if(myDataBase != null) { myDataBase.close(); }
+            if(myDbHelper != null) { myDbHelper.close(); }
+        }
+        return lista;
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {

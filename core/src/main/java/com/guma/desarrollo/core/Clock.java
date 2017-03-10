@@ -23,6 +23,12 @@ public class Clock {
         String sTime = now.format("%Y-%m-%d %H:%M:%S");
         return sTime;
     }
+    public static String getIdDate() {
+        Time now = new Time();
+        now.setToNow();
+        String sTime = now.format("%d%m%y");
+        return sTime;
+    }
     public static String getDiferencia(Date fechaInicial, Date fechaFinal){
 
         long diferencia = fechaFinal.getTime() - fechaInicial.getTime();
