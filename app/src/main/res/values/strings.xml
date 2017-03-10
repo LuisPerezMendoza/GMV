@@ -37,6 +37,7 @@
         <item>TRANSFERENCIA</item>
     </string-array>
     <string name="title_activity_facturas">FacturasActivity</string>
+    <string name="prompt_user_id">RUTA</string>
 
 </resources>
 
