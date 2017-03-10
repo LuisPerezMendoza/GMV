@@ -5,37 +5,46 @@ package com.guma.desarrollo.core;
  */
 
 public class Usuario {
-    private String mRuta;
-    private String mPassword;
+    private String mIdUser;
+    private String mUsuario;
     private String mNombre;
+    private String mRol;
 
-    public Usuario(String mRuta, String mPassword, String mNombre) {
-        this.mRuta = mRuta;
-        this.mPassword = mPassword;
+    public Usuario(String mIdUser, String mUsuario, String mNombre, String mRol) {
+        this.mIdUser = mIdUser;
+        this.mUsuario = mUsuario;
         this.mNombre = mNombre;
+        this.mRol = mRol;
     }
 
-    public String getmRuta() {
-        return mRuta;
+    public String getmIdUser() {
+        return mIdUser;
     }
 
-    public void setmRuta(String mRuta) {
-        this.mRuta = mRuta;
-    }
-
-    public String getmPassword() {
-        return mPassword;
-    }
-
-    public void setmPassword(String mPassword) {
-        this.mPassword = mPassword;
+    public String getmUsuario() {
+        return mUsuario;
     }
 
     public String getmNombre() {
         return mNombre;
     }
 
+    public String getmRol() {
+        return mRol;
+    }
+
+    public void setmUsuario(String mUsuario) {
+        this.mUsuario = mUsuario;
+    }
+
     public void setmNombre(String mNombre) {
         this.mNombre = mNombre;
+    }
+
+    public void setmRol(String mRol) {
+        this.mRol = mRol;
+    }
+    public void setmIdUser(String mIdUser) {
+        this.mIdUser = mIdUser;
     }
 }

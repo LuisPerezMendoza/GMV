@@ -1,6 +1,7 @@
 package com.guma.desarrollo.gmv.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -83,7 +84,11 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
         setContentView(R.layout.activity_agenda);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        /*preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = preferences.edit();
+        String userr = preferences.getString("NOMBRE"," --ERROR--");
 
+        Toast.makeText(this, "EL USUARIO ES->>"+userr.toString(), Toast.LENGTH_SHORT).show();*/
         loadData();
         simpleExpandableListView = (ExpandableListView) findViewById(R.id.simpleExpandableListView);
         listAdapter = new CustomAdapter(AgendaActivity.this, deptList);
@@ -222,7 +227,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
             }
         });
         expandAll();
-        AutoTask();
+       // AutoTask();
     }
 
     private void checkConnection() {
@@ -236,7 +241,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
     protected void onResume() {
         super.onResume();
         setTitle("Ultm. Actualizacion: " + preferences.getString("lst","00/00/0000"));
-        AutoTask();
+       // AutoTask();
         MyApplication.getInstance().setConnectivityListener(this);
     }
     @Override
