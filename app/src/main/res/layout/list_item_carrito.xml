@@ -46,6 +46,14 @@
             android:text="Precio"
             />
         <TextView
+            android:id="@+id/tbListBonificado"
+            android:layout_height="fill_parent"
+            android:layout_width="100dp"
+            android:gravity="start"
+            android:padding="5dp"
+            android:text="Bonificado"
+            />
+        <TextView
             android:layout_height="fill_parent"
             android:layout_width="0dp"
             android:layout_weight="1"
