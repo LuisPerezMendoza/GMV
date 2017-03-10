@@ -103,14 +103,16 @@ public class ArticulosActivity extends AppCompatActivity implements SearchView.O
                     @Override
                     public void afterTextChanged(Editable s) {
                         List<String> mStrings = new ArrayList<>();
-                        for (int i=0;i<Reglas.length;i++){
-                            String[] frag = Reglas[i].replace("+",",").split(",");
-                            if (Integer.parseInt(Inputcant.getText().toString()) > Integer.parseInt(frag[0])){
-                                mStrings.add(frag[0] + "+" + frag[1]);
+                        Toast.makeText(ArticulosActivity.this, "el llenght"+ Reglas.length, Toast.LENGTH_SHORT).show();
+                        if (Reglas.length >1) {
+                            for (int i = 0; i < Reglas.length; i++) {
+                                String[] frag = Reglas[i].replace("+", ",").split(",");
+                                if (Integer.parseInt(Inputcant.getText().toString()) > Integer.parseInt(frag[0])) {
+                                    mStrings.add(frag[0] + "+" + frag[1]);
+                                }
+                                spinner.setAdapter(new ArrayAdapter<>(ArticulosActivity.this, android.R.layout.simple_spinner_dropdown_item, mStrings));
                             }
-                            spinner.setAdapter(new ArrayAdapter<>(ArticulosActivity.this, android.R.layout.simple_spinner_dropdown_item,  mStrings));
                         }
-                        //TODO:QUEDA PENDIENTE QUE CUANDO LA NO EXISTA REGLA DE BONIFICADO
                     }
                 });
 
@@ -120,6 +122,10 @@ public class ArticulosActivity extends AppCompatActivity implements SearchView.O
                         .setPositiveButton("OK",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog,int id) {
+                                        String BONIFICADO = "0";
+                                        if (spinner.getSelectedItem()!=null){
+                                            BONIFICADO  = spinner.getSelectedItem().toString();
+                                        }
                                         InputExiste.setText(mnotes.getmPrecio());
                                         vLinea = Float.parseFloat(mnotes.getmPrecio()) * Float.parseFloat(Inputcant.getText().toString());
                                         SubTotalLinea = Float.parseFloat(String.valueOf(vLinea * 0.15));
@@ -130,6 +136,7 @@ public class ArticulosActivity extends AppCompatActivity implements SearchView.O
                                         strings.add(vLinea.toString());
                                         strings.add(SubTotalLinea.toString());
                                         strings.add(TotalFinalLinea.toString());
+                                        strings.add(BONIFICADO);
                                         getIntent().putStringArrayListExtra("myItem",strings);
                                         setResult(RESULT_OK,getIntent());
                                         finish();

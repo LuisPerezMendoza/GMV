@@ -100,21 +100,21 @@ public class LoginActivity extends AppCompatActivity  {
                         editor.putString("USUARIO",usuarioRespuesta.getResults().get(0).getmIdUser());
                         editor.putString("ROL",usuarioRespuesta.getResults().get(0).getmRol());
 
-                        editor.putBoolean("pref", checked);
+                        editor.putBoolean("pref", !checked);
                         editor.apply();
+                        pdialog.dismiss();
                         startActivity(new Intent(LoginActivity.this,AgendaActivity.class));
                         finish();
                     }else{
                         Toast.makeText(LoginActivity.this, "ERROR AL AUTENTICARSE", Toast.LENGTH_SHORT).show();
                         pdialog.dismiss();
-                        //checked = !checked;
                     }
                 }
                 @Override
                 public void onFailure(Call<Respuesta_usuario> call, Throwable t) {
                     Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
                     pdialog.dismiss();
-                    checked = !checked;
+                    //checked = !checked;
                 }
             });
             return null;
