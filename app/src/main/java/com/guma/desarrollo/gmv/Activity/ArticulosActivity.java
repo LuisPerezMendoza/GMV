@@ -102,8 +102,10 @@ public class ArticulosActivity extends AppCompatActivity implements SearchView.O
 
                     @Override
                     public void afterTextChanged(Editable s) {
+
                         List<String> mStrings = new ArrayList<>();
-                        Toast.makeText(ArticulosActivity.this, "el llenght"+ Reglas.length, Toast.LENGTH_SHORT).show();
+
+                        spinner.setAdapter(null);
                         if (Reglas.length >1) {
                             for (int i = 0; i < Reglas.length; i++) {
                                 String[] frag = Reglas[i].replace("+", ",").split(",");
