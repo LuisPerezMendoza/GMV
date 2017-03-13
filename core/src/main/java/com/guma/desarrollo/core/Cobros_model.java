@@ -31,7 +31,6 @@ public class Cobros_model {
                 contentValues.put("IMPORTE" , a.getmImporte());
                 contentValues.put("TIPO" , a.getmTipo());
                 contentValues.put("OBSERVACION" , a.getmObservacion());
-                contentValues.put("OBSERVACION" , a.getmFecha());
                 myDataBase.insert("COBROS", null, contentValues );
             }
 

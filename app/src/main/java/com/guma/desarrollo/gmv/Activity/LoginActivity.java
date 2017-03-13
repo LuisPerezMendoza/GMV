@@ -65,10 +65,8 @@ public class LoginActivity extends AppCompatActivity  {
                 }else if(TextUtils.isEmpty(usuario.getText())){
                     pass.setError("CAMPO REQUERIDO");
                 } else {
-
                     passw = pass.getText().toString();
                     useri = usuario.getText().toString();
-
                     pdialog = ProgressDialog.show(LoginActivity.this, "", "Procesando. Porfavor Espere...", true);
                     new TaskLogin().execute();
                 }
@@ -91,11 +89,10 @@ public class LoginActivity extends AppCompatActivity  {
                 public void onResponse(Call<Respuesta_usuario> call, Response<Respuesta_usuario> response) {
                     if(response.isSuccessful()){
                         Respuesta_usuario usuarioRespuesta = response.body();
-
                         editor.putString("NOMBRE",usuarioRespuesta.getResults().get(0).getmNombre());
                         editor.putString("USUARIO",usuarioRespuesta.getResults().get(0).getmIdUser());
                         editor.putString("ROL",usuarioRespuesta.getResults().get(0).getmRol());
-
+                        checked = !checked;
                         editor.putBoolean("pref", checked);
                         editor.apply();
                         startActivity(new Intent(LoginActivity.this,AgendaActivity.class));
@@ -103,14 +100,13 @@ public class LoginActivity extends AppCompatActivity  {
                     }else{
                         Toast.makeText(LoginActivity.this, "ERROR AL AUTENTICARSE", Toast.LENGTH_SHORT).show();
                         pdialog.dismiss();
-                        //checked = !checked;
+
                     }
                 }
                 @Override
                 public void onFailure(Call<Respuesta_usuario> call, Throwable t) {
                     Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
                     pdialog.dismiss();
-                    checked = !checked;
                 }
             });
             return null;

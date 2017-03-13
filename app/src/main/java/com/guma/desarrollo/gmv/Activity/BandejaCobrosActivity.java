@@ -1,15 +1,21 @@
 package com.guma.desarrollo.gmv.Activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.test.ServiceTestCase;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.guma.desarrollo.core.Articulo;
 import com.guma.desarrollo.core.Clientes;
@@ -28,6 +34,10 @@ import java.util.List;
 public class BandejaCobrosActivity extends AppCompatActivity {
     private ListView listView;
     ArrayList<Cobros> fList;
+    TextView mTotal;
+    float mCalTotal;
+
+    TextView mCliente,mImporte,mFecha,mObservaciones;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,11 +48,44 @@ public class BandejaCobrosActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView_cobros);
         fList = new ArrayList<>();
         if (getSupportActionBar() != null){ getSupportActionBar().setDisplayHomeAsUpEnabled(true); }
+        mTotal = (TextView) findViewById(R.id.txtTotalCobros);
 
         for(Cobros obj : Cobros_model.getCobros(ManagerURI.getDirDb(), BandejaCobrosActivity.this)) {
             fList.add(obj);
+            mCalTotal += Float.parseFloat(obj.getmImporte());
         }
+        Log.d("", "onListaCobro: " + Cobros_model.getCobros(ManagerURI.getDirDb(), BandejaCobrosActivity.this));
+        mTotal.setText("C$ " + String.valueOf(mCalTotal));
         listView.setAdapter(new Cobros_Leads(this, fList));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                LayoutInflater li = LayoutInflater.from(BandejaCobrosActivity.this);
+                final Cobros crbs = (Cobros) adapterView.getItemAtPosition(i);
+                View promptsView = li.inflate(R.layout.info_cobro, null);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BandejaCobrosActivity.this);
+                alertDialogBuilder.setView(promptsView);
+
+                mCliente = (TextView) promptsView.findViewById(R.id.txtFrmCliente);
+                mImporte = (TextView) promptsView.findViewById(R.id.txtFrmImporte);
+                mFecha = (TextView) promptsView.findViewById(R.id.txtFrmFecha);
+                mObservaciones = (TextView) promptsView.findViewById(R.id.txtFrmObservaciones);
+
+                mCliente.setText(crbs.getmCliente());
+                mImporte.setText(crbs.getmImporte());
+                mFecha.setText(crbs.getmFecha());
+                mObservaciones.setText(crbs.getmObservacion());
+
+
+                alertDialogBuilder.setCancelable(false)
+                        .setPositiveButton("OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        dialog.cancel();
+                                    }
+                                }).create().show();
+            }
+        });
 
 
     }

@@ -46,6 +46,7 @@
                 <TextView
                     android:gravity="right"
                     android:text="C$ 1,000.00"
+                    android:id="@+id/txtTotalCobros"
                     android:textColor="@color/gmvBlanco"
                     android:layout_height="fill_parent"
                     android:layout_width="0dp"

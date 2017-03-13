@@ -40,7 +40,6 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
         this.cnxt = cnxt;
         preferences = PreferenceManager.getDefaultSharedPreferences(cnxt);
         editor = preferences.edit();
-
     }
 
     @Override
@@ -178,8 +177,9 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
                         Log.d(TAG, "onResponse: " + t.getMessage() );
                     }
                 });
-
-        editor.putString("lstDownload", Clock.getTimeStamp()).apply();
+        Log.d(TAG, "onResponse: " + Clock.getTimeStamp() );
+        editor.putString("lstDownload", Clock.getTimeStamp());
+        editor.apply();
         return null;
     }
 

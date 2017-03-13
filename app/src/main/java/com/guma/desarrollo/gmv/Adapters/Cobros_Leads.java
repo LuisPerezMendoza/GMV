@@ -26,18 +26,20 @@ public class Cobros_Leads extends ArrayAdapter<Cobros> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
          if (null == convertView) {
-            convertView = inflater.inflate(R.layout.list_facturas_puntos,parent,false);
+            convertView = inflater.inflate(R.layout.list_cobros,parent,false);
          }
 
          TextView Fecha = (TextView) convertView.findViewById(R.id.lst_fecha);
          TextView Factura = (TextView) convertView.findViewById(R.id.lst_factura);
          TextView Remanente = (TextView) convertView.findViewById(R.id.lst_puntos);
+        TextView mMonto = (TextView) convertView.findViewById(R.id.lst_monto);
 
         Cobros lead = getItem(position);
 
          Factura.setText(lead.getmIdCobro());
          Fecha.setText(lead.getmFecha());
          Remanente.setText(lead.getmCliente());
+         mMonto.setText("C$ " + lead.getmImporte());
          return convertView;
     }
 }
