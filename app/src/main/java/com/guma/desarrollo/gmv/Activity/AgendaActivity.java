@@ -240,7 +240,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
     @Override
     protected void onResume() {
         super.onResume();
-        setTitle("Ultm. Actualizacion: " + preferences.getString("lst","00/00/0000"));
+        setTitle("Ultm. Actualizacion: " + preferences.getString("lstDownload","00/00/0000"));
        // AutoTask();
         MyApplication.getInstance().setConnectivityListener(this);
     }
