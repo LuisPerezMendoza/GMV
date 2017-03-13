@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -102,8 +103,8 @@ public class PedidoActivity extends AppCompatActivity {
                 new SimpleAdapter(
                         this,
                         list,
-                        R.layout.list_item_carrito, new String[] {"ITEMNAME", "ITEMCANTI","ITEMPRECIO","ITEMVALOR" },
-                        new int[] {R.id.tvListItemName,R.id.Item_cant,R.id.tvListItemPrecio,R.id.Item_valor }));
+                        R.layout.list_item_carrito, new String[] {"ITEMNAME", "ITEMCANTI","ITEMPRECIO","ITEMVALOR","BONIFICADO" },
+                        new int[] {R.id.tvListItemName,R.id.Item_cant,R.id.tvListItemPrecio,R.id.Item_valor,R.id.tbListBonificado}));
 
 
         for (Map<String, Object> obj : list){
@@ -141,6 +142,8 @@ public class PedidoActivity extends AppCompatActivity {
             map.put("ITEMVALOR", data.getStringArrayListExtra("myItem").get(3));
             map.put("ITEMSUBTOTAL", data.getStringArrayListExtra("myItem").get(4));
             map.put("ITEMVALORTOTAL", data.getStringArrayListExtra("myItem").get(5));
+            map.put("BONIFICADO", data.getStringArrayListExtra("myItem").get(6));
+
             list.add(map);
             Refresh();
         }

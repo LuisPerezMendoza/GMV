@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.guma.desarrollo.gmv.R;
 
@@ -30,9 +31,10 @@ public class ResumenActivity extends AppCompatActivity {
         setTitle("RESUMEN");
         Intent ints = getIntent();
         listView = (ListView) findViewById(R.id.ListView1);
-        List<Map<String, Object>> list = (List<Map<String, Object>>) ints.getSerializableExtra("LIST");
+        final List<Map<String, Object>> list = (List<Map<String, Object>>) ints.getSerializableExtra("LIST");
         listView.setAdapter(new SimpleAdapter(this, list,R.layout.list_item_resumen,
-                new String[] {"ITEMNAME", "ITEMCANTI","ITEMPRECIO","ITEMVALOR" }, new int[] { R.id.tvListItemName,R.id.Item_cant,R.id.tvListItemPrecio,R.id.Item_valor }));
+                new String[] {"ITEMNAME", "ITEMCANTI","ITEMPRECIO","ITEMVALOR","BONIFICADO" },
+                new int[] { R.id.tvListItemName,R.id.Item_cant,R.id.tvListItemPrecio,R.id.Item_valor,R.id.tvListBonificado }));
 
 
         SubTotal = (TextView) findViewById(R.id.SubTotal);
@@ -61,7 +63,6 @@ public class ResumenActivity extends AppCompatActivity {
         findViewById(R.id.btnSaveSale).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 new AlertDialog.Builder(ResumenActivity.this)
                         .setTitle("CONFIRMACION")
                         .setMessage("Informacion Guardada")
@@ -69,7 +70,13 @@ public class ResumenActivity extends AppCompatActivity {
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                finish();
+                                for (Map<String, Object> obj : list){
+                                    Toast.makeText(ResumenActivity.this, "EL TOTAL ES " +obj.get("ITEMNAME").toString() , Toast.LENGTH_SHORT).show();
+                                    /*vLine     += Float.parseFloat(obj.get("ITEMVALOR").toString());
+                                    subValor  += Float.parseFloat(obj.get("ITEMSUBTOTAL").toString());
+                                    vFinal    += Float.parseFloat(obj.get("ITEMVALORTOTAL").toString());*/
+                                }
+                                //finish();
                             }
                         }).show();
             }

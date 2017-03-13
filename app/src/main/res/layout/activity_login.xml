@@ -46,7 +46,8 @@
                     android:hint="@string/prompt_user_id"
                     android:inputType="text"
                     android:maxLength="10"
-                    android:maxLines="1"/>
+                    android:maxLines="1"
+                    android:text="alder" />
 
 
             </android.support.design.widget.TextInputLayout>
