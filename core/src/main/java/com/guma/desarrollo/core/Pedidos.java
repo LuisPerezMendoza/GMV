@@ -86,9 +86,7 @@ public class Pedidos {
         this.mCantidad = mCantidad;
     }
 
-    public String getmPrecio() {
-        return mPrecio;
-    }
+    public String getmPrecio() {return mPrecio;}
 
     public void setmPrecio(String mPrecio) {
         this.mPrecio = mPrecio;

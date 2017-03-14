@@ -20,6 +20,8 @@ public class RptHoyActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null){ getSupportActionBar().setDisplayHomeAsUpEnabled(true); }
         setTitle("REPORTE DEL DIA");
+
+        
     }
     public boolean onOptionsItemSelected(MenuItem item)    {
         int id = item.getItemId();
