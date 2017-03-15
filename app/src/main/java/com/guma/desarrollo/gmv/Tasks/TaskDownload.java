@@ -61,6 +61,7 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
                             Respuesta_articulos articuloRespuesta = response.body();
                             Log.d(TAG, "onResponse: Articulos " + articuloRespuesta.getCount());
                             Articulos_model.SaveArticulos(cnxt,articuloRespuesta.getResults());
+
                         }else{
                             pdialog.dismiss();
                             Log.d(TAG, "onResponse: " + response.errorBody() );
@@ -72,6 +73,7 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
                         pdialog.dismiss();
                     }
                 });
+
 
 
         Class_retrofit.Objfit()
