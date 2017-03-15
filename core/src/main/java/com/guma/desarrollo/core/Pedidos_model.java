@@ -31,6 +31,7 @@ public class Pedidos_model {
                 contentValues.put("CLIENTE" , a.getmCliente());
                 contentValues.put("NOMBRE" , a.getmNombre());
                 contentValues.put("FECHA" , a.getmFecha());
+                contentValues.put("MONTO" , a.getmPrecio());
 
                 myDataBase.insert("PEDIDO", null, contentValues );
             }
@@ -76,22 +77,26 @@ public class Pedidos_model {
             if(myDbHelper != null) { myDbHelper.close(); }
         }
     }
-    public ArrayList<String> getInfoPedidos(String basedir, Context context) {
-        ArrayList<String> mArreglo = new ArrayList<>();
-        //Integer NUMPEDIDO = 0;
+    public static List<Pedidos> getInfoPedidos(String basedir, Context context) {
+        List<Pedidos> lista = new ArrayList<>();
         SQLiteDatabase myDataBase = null;
         SQLiteHelper myDbHelper = null;
         try
         {
             myDbHelper = new SQLiteHelper(basedir, context);
             myDataBase = myDbHelper.getReadableDatabase();
-            Cursor cursor = myDataBase.rawQuery("SELECT count(IDPEDIDO) AS NUMPEDIDO,(SELECT SUM(Total)FROM PEDIDO_DETALLE) AS TOTAL  FROM PEDIDO", null);
+            Cursor cursor = myDataBase.query(true, "PEDIDO", null, null, null, null, null, null, null);
             if(cursor.getCount() > 0) {
                 cursor.moveToFirst();
-                while(!cursor.isAfterLast()){
-                    //NUMPEDIDO = Integer.parseInt(cursor.getString(cursor.getColumnIndex("NUMPEDIDO")));
-                    mArreglo.add(0,cursor.getString(cursor.getColumnIndex("NUMPEDIDO")));
-                    mArreglo.add(1,cursor.getString(cursor.getColumnIndex("TOTAL")));
+                while(!cursor.isAfterLast()) {
+                    Pedidos tmp = new Pedidos();
+                    tmp.setmIdPedido(cursor.getString(cursor.getColumnIndex("IDPEDIDO")));
+                    tmp.setmVendedor(cursor.getString(cursor.getColumnIndex("VENDEDOR")));
+                    tmp.setmCliente(cursor.getString(cursor.getColumnIndex("CLIENTE")));
+                    tmp.setmNombre(cursor.getString(cursor.getColumnIndex("NOMBRE")));
+                    tmp.setmPrecio(cursor.getString(cursor.getColumnIndex("PRECIO")));
+                    tmp.setmPrecio(cursor.getString(cursor.getColumnIndex("MONTO")));
+                    lista.add(tmp);
                     cursor.moveToNext();
                 }
             }
@@ -102,6 +107,6 @@ public class Pedidos_model {
             if(myDataBase != null) { myDataBase.close(); }
             if(myDbHelper != null) { myDbHelper.close(); }
         }
-        return mArreglo;
+        return lista;
     }
 }

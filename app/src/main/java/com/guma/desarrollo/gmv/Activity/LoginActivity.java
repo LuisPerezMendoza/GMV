@@ -23,6 +23,7 @@ import com.guma.desarrollo.core.SQLiteHelper;
 import com.guma.desarrollo.core.Usuario;
 import com.guma.desarrollo.gmv.R;
 import com.guma.desarrollo.gmv.api.Class_retrofit;
+import com.guma.desarrollo.gmv.api.Notificaciones;
 import com.guma.desarrollo.gmv.api.Servicio;
 import com.guma.desarrollo.gmv.models.Respuesta_usuario;
 
@@ -108,9 +109,10 @@ public class LoginActivity extends AppCompatActivity  {
                 }
                 @Override
                 public void onFailure(Call<Respuesta_usuario> call, Throwable t) {
-                    Toast.makeText(LoginActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
-                    pdialog.dismiss();
-                    //checked = !checked;
+                    Notificaciones objNotificacion = new Notificaciones();
+                    objNotificacion.Alert(LoginActivity.this,"ERROR","USUARIO O CONTRASEÑA INCORRECTO");
+
+                    //pdialog.dismiss();
                 }
             });
             return null;

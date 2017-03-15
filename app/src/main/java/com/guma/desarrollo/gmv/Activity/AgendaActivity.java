@@ -194,11 +194,6 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                             }else{
                                 if (items[which].equals(items[2])){
                                     Toast.makeText(AgendaActivity.this, "hola enviando informacion", Toast.LENGTH_SHORT).show();
-                                    Pedidos_model pedidoclas = new Pedidos_model();
-                                    ArrayList misPedidos = pedidoclas.getInfoPedidos(ManagerURI.getDirDb(),AgendaActivity.this);
-                                    Log.d("numeroPedido",misPedidos.toString());
-                                    Toast.makeText(AgendaActivity.this, "el numero de pedidos es "+misPedidos.get(0).toString(), Toast.LENGTH_SHORT).show();
-                                    Toast.makeText(AgendaActivity.this, "el total de pedidos es "+misPedidos.get(1).toString(), Toast.LENGTH_SHORT).show();
                                     new TaskUnload(AgendaActivity.this).execute();
                                 } else {
                                     if (items[which].equals(items[3])){
