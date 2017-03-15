@@ -39,6 +39,7 @@ import com.guma.desarrollo.gmv.Adapters.Clientes_Leads;
 import com.guma.desarrollo.gmv.ChildInfo;
 import com.guma.desarrollo.gmv.Tasks.TaskDownload;
 import com.guma.desarrollo.gmv.Tasks.TaskUnload;
+import com.guma.desarrollo.gmv.api.Calendario;
 import com.guma.desarrollo.gmv.api.Class_retrofit;
 import com.guma.desarrollo.gmv.api.ConnectivityReceiver;
 import com.guma.desarrollo.gmv.Adapters.CustomAdapter;
@@ -193,8 +194,14 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                                 startActivity(new Intent(AgendaActivity.this,BandejaCobrosActivity.class));
                             }else{
                                 if (items[which].equals(items[2])){
+
                                     Toast.makeText(AgendaActivity.this, "hola enviando informacion", Toast.LENGTH_SHORT).show();
                                     new TaskUnload(AgendaActivity.this).execute();
+
+                                    new Calendario().show(getSupportFragmentManager(), "datePicker");
+                                   // new TaskUnload(AgendaActivity.this).execute();
+
+
                                 } else {
                                     if (items[which].equals(items[3])){
                                             if (ManagerURI.isOnlinea(AgendaActivity.this)==true){

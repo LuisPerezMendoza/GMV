@@ -13,110 +13,8 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.guma.desarrollo.gmv.Activity.RptHoyActivity"
     tools:showIn="@layout/activity_rpt_hoy">
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="4dp"
-    card_view:cardUseCompatPadding="true">
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_margin="10dp">
-                <TextView
-                    android:layout_height="fill_parent"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Nº PEDIDOS" />
-                <TextView
-                    android:layout_height="fill_parent"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="MONTO" />
-
-            </TableRow>
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_margin="10dp">
-                <TextView
-                    android:gravity="center"
-                    android:layout_height="fill_parent"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="10" />
-                <TextView
-                    android:layout_height="fill_parent"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="C$ 12,000" />
-
-            </TableRow>
-        </TableLayout>
-
-    </android.support.v7.widget.CardView>
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="4dp"
-        card_view:cardUseCompatPadding="true">
-
-    <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_margin="10dp">
-                <TextView
-                    android:layout_height="fill_parent"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Nº COBROS" />
-                <TextView
-                    android:layout_height="fill_parent"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="MONTO" />
-
-            </TableRow>
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_margin="10dp">
-                <TextView
-                    android:gravity="center"
-                    android:layout_height="fill_parent"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="5" />
-                <TextView
-                    android:layout_height="fill_parent"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="C$ 5,000" />
-
-            </TableRow>
-        </TableLayout>
-
-    </android.support.v7.widget.CardView>
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -130,29 +28,97 @@
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_margin="10dp">
-                <TextView
-                    android:layout_height="fill_parent"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="OTRAS GESTIONES" />
-
+                android:layout_margin="0dp">
 
             </TableRow>
             <TableRow
+                android:layout_marginTop="10dp"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_margin="10dp">
-                <TextView
-                    android:gravity="center"
-                    android:layout_height="fill_parent"
+                android:layout_marginLeft="20dp">
+                <LinearLayout
+                    android:layout_marginLeft="10dp"
+                    android:layout_height="wrap_content"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="5" />
+                    android:orientation="vertical">
+                    <TextView
+                        android:textSize="20sp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:text="Pedido" />
+                    <TextView
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorCelesteOscuro"
+                        android:id="@+id/txtRptPedido"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:text="0" />
+                    <TextView
+                        android:id="@+id/txtRptPedidoMonto"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:text="Equivalente a C$ 0" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginLeft="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:textSize="20sp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:text="Cobros" />
+                    <TextView
+                        android:textStyle="bold"
+                        android:textColor="@color/colorCelesteOscuro"
+                        android:textSize="18sp"
+                        android:id="@+id/txtRptCobro"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"/>
+                    <TextView
+                        android:id="@+id/txtRptCobroMonto"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:text="Equivalente a C$ 0" />
 
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_marginLeft="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:textSize="20sp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:text="Otras Razones" />
+                    <TextView
+                        android:textStyle="bold"
+                        android:textColor="@color/colorCelesteOscuro"
+                        android:textSize="18sp"
+                        android:id="@+id/txtRptOtros"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:text="0" />
+                </LinearLayout>
+            </TableRow>
+            <View style="@style/Divider"/>
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="0dp">
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp"
+                    android:text=""
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="10dp" />
             </TableRow>
         </TableLayout>
 
