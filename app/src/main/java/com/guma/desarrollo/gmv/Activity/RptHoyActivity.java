@@ -28,6 +28,7 @@ public class RptHoyActivity extends AppCompatActivity {
         if (getSupportActionBar() != null){ getSupportActionBar().setDisplayHomeAsUpEnabled(true); }
         setTitle("REPORTE DEL DIA");
 
+
         for(Cobros obj : Cobros_model.getCobros(ManagerURI.getDirDb(), RptHoyActivity.this)) {
             mCobroTotal += Float.parseFloat(obj.getmImporte());
             countCobro++;
@@ -42,6 +43,7 @@ public class RptHoyActivity extends AppCompatActivity {
         mTotalCobro.setText("Equivalente a C$" + String.valueOf(mCobroTotal));
 
         mOtros =(TextView) findViewById(R.id.txtRptOtros);
+
 
 
     }

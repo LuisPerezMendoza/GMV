@@ -91,6 +91,10 @@ public class ResumenActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (CodCls!="") {
+                                    Float nTotal= 0.0f;
+                                    for (Map<String, Object> obj : list) {
+                                        nTotal += Float.parseFloat(obj.get("ITEMVALOR").toString());
+                                    }
                                     preferences.getString("NameClsSelected", " CLIENTE NO ENCONTRADO");
                                     SimpleDateFormat mdformat = new SimpleDateFormat("dd/MM/yyyy ");
                                     String strDate = mdformat.format(Calendar.getInstance().getTime());
@@ -100,6 +104,7 @@ public class ResumenActivity extends AppCompatActivity {
                                     tmp.setmCliente(CodCls);
                                     tmp.setmNombre(preferences.getString("NameClsSelected", " CLIENTE NO ENCONTRADO"));
                                     tmp.setmFecha(strDate.toString());
+                                    tmp.setmPrecio(String.valueOf(nTotal));
                                     mPedido.add(tmp);
                                     Pedidos_model.SavePedido(ResumenActivity.this, mPedido);
                                     for (Map<String, Object> obj : list) {

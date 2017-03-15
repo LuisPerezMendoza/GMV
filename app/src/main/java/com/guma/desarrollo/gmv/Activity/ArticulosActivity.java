@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,82 +74,104 @@ public class ArticulosActivity extends AppCompatActivity implements SearchView.O
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, final View view, final int position, long id) {
-                LayoutInflater li = LayoutInflater.from(ArticulosActivity.this);
                 final Articulo mnotes = (Articulo) parent.getItemAtPosition(position);
-                View promptsView = li.inflate(R.layout.input_cant, null);
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ArticulosActivity.this);
-                alertDialogBuilder.setView(promptsView);
-
                 final String[] Reglas = mnotes.getmReglas().split(",");
 
-                Inputcant = (EditText) promptsView.findViewById(R.id.txtFrmCantidad);
-                InputPrecio = (EditText) promptsView.findViewById(R.id.txtFrmPrecio);
-                InputPrecio.setText(mnotes.getmPrecio());
-                spinner = (Spinner) promptsView.findViewById(R.id.sp_boni);
-                //spinner.setAdapter(new ArrayAdapter<>(ArticulosActivity.this, android.R.layout.simple_spinner_dropdown_item,  Reglas));
-                InputExiste= (EditText) promptsView.findViewById(R.id.txtFrmExistencia);
-                InputExiste.setText(mnotes.getmExistencia()+" [ "+ mnotes.getmUnidad() + " ]");
+                    LayoutInflater li = LayoutInflater.from(ArticulosActivity.this);
 
-                Inputcant.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    View promptsView = li.inflate(R.layout.input_cant, null);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ArticulosActivity.this);
 
-                    }
+                    alertDialogBuilder.setView(promptsView);
 
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                    }
 
-                    @Override
-                    public void afterTextChanged(Editable s) {
+                    Inputcant = (EditText) promptsView.findViewById(R.id.txtFrmCantidad);
+                    InputPrecio = (EditText) promptsView.findViewById(R.id.txtFrmPrecio);
+                    InputPrecio.setText(mnotes.getmPrecio());
+                    spinner = (Spinner) promptsView.findViewById(R.id.sp_boni);
+                    //spinner.setAdapter(new ArrayAdapter<>(ArticulosActivity.this, android.R.layout.simple_spinner_dropdown_item,  Reglas));
+                    InputExiste = (EditText) promptsView.findViewById(R.id.txtFrmExistencia);
+                    InputExiste.setText(mnotes.getmExistencia() + " [ " + mnotes.getmUnidad() + " ]");
 
-                        List<String> mStrings = new ArrayList<>();
+                    Inputcant.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                        spinner.setAdapter(null);
-                        if (Reglas.length >1) {
-                            for (int i = 0; i < Reglas.length; i++) {
-                                String[] frag = Reglas[i].replace("+", ",").split(",");
-                                if (Integer.parseInt(Inputcant.getText().toString()) > Integer.parseInt(frag[0])) {
-                                    mStrings.add(frag[0] + "+" + frag[1]);
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            List<String> mStrings = new ArrayList<>();
+                            spinner.setAdapter(null);
+                            if (s.length() != 0) {
+                                if (Reglas.length > 1) {
+                                    for (int i = 0; i < Reglas.length; i++) {
+                                        String[] frag = Reglas[i].replace("+", ",").split(",");
+                                        if (Integer.parseInt(Inputcant.getText().toString()) > Integer.parseInt(frag[0])) {
+                                            mStrings.add(frag[0] + "+" + frag[1]);
+                                        }
+                                        spinner.setAdapter(new ArrayAdapter<>(ArticulosActivity.this, android.R.layout.simple_spinner_dropdown_item, mStrings));
+                                    }
                                 }
-                                spinner.setAdapter(new ArrayAdapter<>(ArticulosActivity.this, android.R.layout.simple_spinner_dropdown_item, mStrings));
                             }
                         }
-                    }
-                });
+                    });
+                    alertDialogBuilder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                        @Override
+                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                            // Prevent dialog close on back press button
+                            return keyCode == KeyEvent.KEYCODE_BACK;
+                        }
+                    });
+                    InputPrecio.setEnabled(false);
+                    InputExiste.setEnabled(false);
+                    alertDialogBuilder.setCancelable(false)
+                            .setPositiveButton("OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
 
-                InputPrecio.setEnabled(false);
-                InputExiste.setEnabled(false);
-                alertDialogBuilder.setCancelable(false)
-                        .setPositiveButton("OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
-                                        String BONIFICADO = "0";
-                                        if (spinner.getSelectedItem()!=null){
-                                            BONIFICADO  = spinner.getSelectedItem().toString();
+                                            Float Precio = Float.parseFloat(mnotes.getmExistencia());
+                                            if (Precio !=0.0) {
+                                                if (Inputcant.length()!= 0) {
+                                                    String BONIFICADO = "0";
+                                                    if (spinner.getSelectedItem() != null) {
+                                                        BONIFICADO = spinner.getSelectedItem().toString();
+                                                    }
+                                                    InputExiste.setText(mnotes.getmPrecio());
+                                                    vLinea = Float.parseFloat(mnotes.getmPrecio()) * Float.parseFloat(Inputcant.getText().toString());
+                                                    SubTotalLinea = Float.parseFloat(String.valueOf(vLinea * 0.15));
+                                                    TotalFinalLinea = vLinea + SubTotalLinea;
+                                                    strings.add(mnotes.getmName());
+                                                    strings.add(mnotes.getmCodigo());
+                                                    strings.add(Inputcant.getText().toString());
+                                                    strings.add(vLinea.toString());
+                                                    strings.add(SubTotalLinea.toString());
+                                                    strings.add(TotalFinalLinea.toString());
+                                                    strings.add(BONIFICADO);
+                                                    getIntent().putStringArrayListExtra("myItem", strings);
+                                                    setResult(RESULT_OK, getIntent());
+                                                    finish();
+                                                }else{
+                                                    Toast.makeText(ArticulosActivity.this, "INGRESE UNA CANTIDAD POR FAVOR", Toast.LENGTH_SHORT).show();
+                                                    dialog.dismiss();
+                                                }
+                                            }else{
+                                                Toast.makeText(ArticulosActivity.this, "ARTICULO SIN EXISTENCIA, FAVOR ACTUALICE", Toast.LENGTH_SHORT).show();
+                                            }
                                         }
-                                        InputExiste.setText(mnotes.getmPrecio());
-                                        vLinea = Float.parseFloat(mnotes.getmPrecio()) * Float.parseFloat(Inputcant.getText().toString());
-                                        SubTotalLinea = Float.parseFloat(String.valueOf(vLinea * 0.15));
-                                        TotalFinalLinea = vLinea + SubTotalLinea;
-                                        strings.add(mnotes.getmName());
-                                        strings.add(mnotes.getmCodigo());
-                                        strings.add(Inputcant.getText().toString());
-                                        strings.add(vLinea.toString());
-                                        strings.add(SubTotalLinea.toString());
-                                        strings.add(TotalFinalLinea.toString());
-                                        strings.add(BONIFICADO);
-                                        getIntent().putStringArrayListExtra("myItem",strings);
-                                        setResult(RESULT_OK,getIntent());
-                                        finish();
-                                    }
-                                })
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
-                                        dialog.cancel();
-                                    }}).create().show();
+                                    })
+                            .setNegativeButton("Cancel",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    }).create().show();
 
 
                 /*new AlertDialog.Builder(ArticulosActivity.this)
@@ -167,13 +190,12 @@ public class ArticulosActivity extends AppCompatActivity implements SearchView.O
                                 finish();
                             }
                         }).show();*/
-                //Lead currentLead = listView.getItem(position);
-                //Toast.makeText(ArticulosActivity.this,"Iniciar screen de detalle para: \n" + currentLead.getName(),Toast.LENGTH_SHORT).show();
+                    //Lead currentLead = listView.getItem(position);
+                    //Toast.makeText(ArticulosActivity.this,"Iniciar screen de detalle para: \n" + currentLead.getName(),Toast.LENGTH_SHORT).show();
+
 
             }
         });
-
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
