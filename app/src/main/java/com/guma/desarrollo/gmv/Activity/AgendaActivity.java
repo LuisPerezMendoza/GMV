@@ -1,10 +1,7 @@
 package com.guma.desarrollo.gmv.Activity;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +17,6 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -29,11 +25,12 @@ import android.content.DialogInterface;
 
 import android.support.v7.app.AlertDialog;
 
-import com.guma.desarrollo.core.Articulos_model;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.guma.desarrollo.core.Clientes;
-import com.guma.desarrollo.core.Clientes_model;
 import com.guma.desarrollo.core.Clock;
 import com.guma.desarrollo.core.ManagerURI;
+import com.guma.desarrollo.core.Pedidos;
 import com.guma.desarrollo.core.Pedidos_model;
 import com.guma.desarrollo.gmv.Adapters.Clientes_Leads;
 import com.guma.desarrollo.gmv.ChildInfo;
@@ -46,19 +43,14 @@ import com.guma.desarrollo.gmv.Adapters.CustomAdapter;
 import com.guma.desarrollo.gmv.GroupInfo;
 import com.guma.desarrollo.gmv.MyApplication;
 import com.guma.desarrollo.gmv.R;
+import com.guma.desarrollo.gmv.api.Notificaciones;
 import com.guma.desarrollo.gmv.api.Servicio;
 import com.guma.desarrollo.gmv.models.Clientes_Repository;
-import com.guma.desarrollo.gmv.models.Respuesta_articulos;
-import com.guma.desarrollo.gmv.models.Respuesta_indicadores;
-import com.guma.desarrollo.gmv.models.Respuesta_mora;
-import com.guma.desarrollo.gmv.models.Respuesta_clientes;
-import com.guma.desarrollo.gmv.models.Respuesta_puntos;
 
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class AgendaActivity extends AppCompatActivity  implements ConnectivityReceiver.ConnectivityReceiverListener {
 
@@ -195,7 +187,13 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                             }else{
                                 if (items[which].equals(items[2])){
 
+
                                     Toast.makeText(AgendaActivity.this, "hola enviando informacion", Toast.LENGTH_SHORT).show();
+                                    List<Pedidos> as = Pedidos_model.getInfoPedidos(ManagerURI.getDirDb(),AgendaActivity.this);
+                                    Gson gson = new Gson();
+                                    Toast.makeText(AgendaActivity.this, as.get(0).toString(), Toast.LENGTH_SHORT).show();
+                                    Log.d("ARREGLO: ",gson.toJson(as));
+
                                     new TaskUnload(AgendaActivity.this).execute();
 
                                     new Calendario().show(getSupportFragmentManager(), "datePicker");

@@ -29,14 +29,14 @@ import java.util.List;
 import java.util.Map;
 
 public class ResumenActivity extends AppCompatActivity {
-    TextView lblNombreClliente,lblNombreVendedor,countArti,SubTotal,ivaTotal,Total;;
+    TextView lblNombreClliente,lblNombreVendedor,countArti,SubTotal,ivaTotal,Total,Atendio,txtidPedido;
     private static ListView listView;
     float vLine = 0,subValor=0,vFinal=0;
     ArrayList<Pedidos> mPedido = new ArrayList<>();
     ArrayList<Pedidos> mDetallePedido = new ArrayList<>();
     public SharedPreferences preferences;
     public SharedPreferences.Editor editor;
-    String CodCls;
+    String CodCls,idPedido;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +46,11 @@ public class ResumenActivity extends AppCompatActivity {
         setTitle("RESUMEN");
         Intent ints = getIntent();
         listView = (ListView) findViewById(R.id.ListView1);
+
+
+        TextView prueba = (TextView)findViewById(R.id.tvListItemName);
+
+        //Toast.makeText(this, "el texto es ->"+ prueba.getText().toString(), Toast.LENGTH_SHORT).show();
         final List<Map<String, Object>> list = (List<Map<String, Object>>) ints.getSerializableExtra("LIST");
         listView.setAdapter(new SimpleAdapter(this, list,R.layout.list_item_resumen,
                 new String[] {"ITEMNAME", "ITEMCANTI","ITEMPRECIO","ITEMVALOR","BONIFICADO" },
@@ -54,11 +59,18 @@ public class ResumenActivity extends AppCompatActivity {
         editor = preferences.edit();
         CodCls =  preferences.getString("ClsSelected","");
 
+        int key = SQLiteHelper.getIdTemporal(ManagerURI.getDirDb(),ResumenActivity.this,"PEDIDOS");
+        idPedido = "F09-" + "P"+ Clock.getIdDate()+String.valueOf(key);
+
         SubTotal = (TextView) findViewById(R.id.SubTotal);
         ivaTotal = (TextView) findViewById(R.id.ivaTotal);
         Total = (TextView) findViewById(R.id.Total);
+        Atendio = (TextView) findViewById(R.id.NombreVendedor);
+        txtidPedido = (TextView) findViewById(R.id.IdPedido);
 
-
+        txtidPedido.setText(idPedido.toString());
+        Atendio.setText(preferences.getString("NOMBRE","").toString());
+        Toast.makeText(this, idPedido.toString(), Toast.LENGTH_SHORT).show();
 
         lblNombreClliente = (TextView) findViewById(R.id.NombreCliente);
         lblNombreVendedor = (TextView) findViewById(R.id.NombreVendedor);
@@ -78,8 +90,7 @@ public class ResumenActivity extends AppCompatActivity {
         Total.setText("TOTAL C$ "+ String.valueOf(vFinal));
 
         findViewById(R.id.btnSaveSale).setOnClickListener(new View.OnClickListener() {
-            int key = SQLiteHelper.getId(ManagerURI.getDirDb(),ResumenActivity.this,"PEDIDOS");
-            String idPedido = "F09-" + "P"+ Clock.getIdDate()+String.valueOf(key);
+
 
             @Override
             public void onClick(View v) {
@@ -88,9 +99,12 @@ public class ResumenActivity extends AppCompatActivity {
                         .setMessage("Informacion Guardada")
                         .setCancelable(false)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (CodCls!="") {
+                                    int key = SQLiteHelper.getId(ManagerURI.getDirDb(),ResumenActivity.this,"PEDIDOS");
+                                    idPedido = "F09-" + "P"+ Clock.getIdDate()+String.valueOf(key);
                                     Float nTotal= 0.0f;
                                     for (Map<String, Object> obj : list) {
                                         nTotal += Float.parseFloat(obj.get("ITEMVALOR").toString());
@@ -117,10 +131,6 @@ public class ResumenActivity extends AppCompatActivity {
                                         tmpDetalle.setmBonificado(obj.get("BONIFICADO").toString());
                                         mDetallePedido.add(tmpDetalle);
                                         Pedidos_model.SaveDetallePedido(ResumenActivity.this, mDetallePedido);
-
-                                    /*vLine     += Float.parseFloat(obj.get("ITEMVALOR").toString());
-                                    subValor  += Float.parseFloat(obj.get("ITEMSUBTOTAL").toString());
-                                    vFinal    += Float.parseFloat(obj.get("ITEMVALORTOTAL").toString());*/
                                     }
                                     finish();
                                 }else {

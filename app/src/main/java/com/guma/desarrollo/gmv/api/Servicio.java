@@ -1,5 +1,7 @@
 package com.guma.desarrollo.gmv.api;
 
+import com.google.gson.JsonObject;
+import com.guma.desarrollo.core.Pedidos_model;
 import com.guma.desarrollo.gmv.models.Respuesta_articulos;
 import com.guma.desarrollo.gmv.models.Respuesta_clientes;
 import com.guma.desarrollo.gmv.models.Respuesta_indicadores;
@@ -11,6 +13,8 @@ import com.guma.desarrollo.gmv.models.Respuesta_puntos;
 
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -37,6 +41,10 @@ public interface Servicio {
     @FormUrlEncoded
     @POST("Login")
     Call<Respuesta_usuario> obtenerListaUsuario(@Field("usuario") String apiKey, @Field("pass") String apiKey2);
+
+    @FormUrlEncoded
+    @POST("url_ordenes")
+    Call<Boolean> enviarPedidos(@Field("usuario") JsonObject pedidos,  Callback<Boolean> success);
 
     @GET("Puntos")
     Call<Respuesta_puntos> obtenerFacturasPuntos();

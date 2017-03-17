@@ -94,8 +94,23 @@ public class Pedidos_model {
                     tmp.setmVendedor(cursor.getString(cursor.getColumnIndex("VENDEDOR")));
                     tmp.setmCliente(cursor.getString(cursor.getColumnIndex("CLIENTE")));
                     tmp.setmNombre(cursor.getString(cursor.getColumnIndex("NOMBRE")));
-                    tmp.setmPrecio(cursor.getString(cursor.getColumnIndex("PRECIO")));
                     tmp.setmPrecio(cursor.getString(cursor.getColumnIndex("MONTO")));
+                    tmp.setmFecha(cursor.getString(cursor.getColumnIndex("FECHA")));
+                    lista.add(tmp);
+                    cursor.moveToNext();
+                }
+            }
+            Cursor cursor2 = myDataBase.query(true, "PEDIDO_DETALLE", null, null, null, null, null, null, null);
+            if(cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                while(!cursor.isAfterLast()) {
+                    Pedidos tmp = new Pedidos();
+                    tmp.getdetalles().add(cursor.getString(cursor.getColumnIndex("IDPEDIDO")));
+                    tmp.getdetalles().add(cursor.getString(cursor.getColumnIndex("VENDEDOR")));
+                    tmp.getdetalles().add(cursor.getString(cursor.getColumnIndex("CLIENTE")));
+                    tmp.getdetalles().add(cursor.getString(cursor.getColumnIndex("NOMBRE")));
+                    tmp.getdetalles().add(cursor.getString(cursor.getColumnIndex("MONTO")));
+                    tmp.getdetalles().add(cursor.getString(cursor.getColumnIndex("FECHA")));
                     lista.add(tmp);
                     cursor.moveToNext();
                 }
