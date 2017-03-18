@@ -2,6 +2,7 @@ package com.guma.desarrollo.gmv.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -46,6 +47,8 @@ import com.guma.desarrollo.gmv.R;
 import com.guma.desarrollo.gmv.api.Notificaciones;
 import com.guma.desarrollo.gmv.api.Servicio;
 import com.guma.desarrollo.gmv.models.Clientes_Repository;
+import com.guma.desarrollo.gmv.models.Respuesta_pedidos;
+import com.guma.desarrollo.gmv.models.Respuesta_usuario;
 
 
 import retrofit2.Call;
@@ -186,20 +189,40 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                                 startActivity(new Intent(AgendaActivity.this,BandejaCobrosActivity.class));
                             }else{
                                 if (items[which].equals(items[2])){
-
-
-                                    Toast.makeText(AgendaActivity.this, "hola enviando informacion", Toast.LENGTH_SHORT).show();
-                                    List<Pedidos> as = Pedidos_model.getInfoPedidos(ManagerURI.getDirDb(),AgendaActivity.this);
+                                    List<Pedidos> listPedidos = Pedidos_model.getInfoPedidos(ManagerURI.getDirDb(),AgendaActivity.this);
                                     Gson gson = new Gson();
-                                    Toast.makeText(AgendaActivity.this, as.get(0).toString(), Toast.LENGTH_SHORT).show();
-                                    Log.d("ARREGLO: ",gson.toJson(as));
+                                    if (listPedidos.size()>0) {
+                                        Class_retrofit.Objfit().create(Servicio.class).enviarPedidos(gson.toJson(listPedidos)).enqueue(new Callback<Respuesta_pedidos>() {
+                                            @Override
+                                            public void onResponse(Call<Respuesta_pedidos> call, Response<Respuesta_pedidos> response) {
+                                                if(response.isSuccessful()){
+                                                    Respuesta_pedidos pedidoRespuesta = response.body();
+                                                    Log.d("RESULTADOS",pedidoRespuesta.getResults().get(0).getmIdPedido());
+                                                    Toast.makeText(AgendaActivity.this, "SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT).show();
+                                                }else{
+                                                    Toast.makeText(AgendaActivity.this, "ERROR AL ENVIAR", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                            @Override
+                                            public void onFailure(Call<Respuesta_pedidos> call, Throwable t) {
+                                                Log.d("ERROR_SEND",t.getMessage().toString());
+                                                new Notificaciones().Alert(AgendaActivity.this,"ERROR",t.getMessage().toString())
+                                                        .setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                    }
+                                                }).show();
+                                            }
+                                        });
+                                        Log.d("ARREGLO: ", gson.toJson(listPedidos));
+                                    }else{
+                                        Toast.makeText(AgendaActivity.this, "no hay pedidos", Toast.LENGTH_SHORT).show();
+                                    }
+
 
                                     new TaskUnload(AgendaActivity.this).execute();
-
-                                    new Calendario().show(getSupportFragmentManager(), "datePicker");
+                                    //new Calendario().show(getSupportFragmentManager(), "datePicker");
                                    // new TaskUnload(AgendaActivity.this).execute();
-
-
                                 } else {
                                     if (items[which].equals(items[3])){
                                             if (ManagerURI.isOnlinea(AgendaActivity.this)==true){
@@ -315,8 +338,4 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
 
         }
     }
-
-
-
-
 }

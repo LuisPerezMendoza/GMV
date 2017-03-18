@@ -159,6 +159,7 @@ public class ArticulosActivity extends AppCompatActivity implements SearchView.O
                                                         strings.add(SubTotalLinea.toString());
                                                         strings.add(TotalFinalLinea.toString());
                                                         strings.add(BONIFICADO);
+                                                        strings.add(InputPrecio.getText().toString());
                                                         getIntent().putStringArrayListExtra("myItem", strings);
                                                         setResult(RESULT_OK, getIntent());
                                                         finish();

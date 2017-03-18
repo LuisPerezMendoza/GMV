@@ -1,5 +1,7 @@
 package com.guma.desarrollo.core;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,10 +10,13 @@ import java.util.List;
  */
 
 public class Pedidos {
-    String mIdPedido,mVendedor,mCliente,mNombre,mFecha,mArticulo,mDescripcion,mCantidad,mPrecio,mBonificado;
-    private List<String> detalles = new ArrayList<String>();
+    String mIdPedido,mVendedor,mCliente,mNombre,mFecha,mArticulo,mDescripcion,mCantidad,mPrecio,mBonificado,mEstado;
+    //private List<String> detalles = new ArrayList<>();
+    JSONObject detalles = new JSONObject();
 
-    public Pedidos(String mIdPedido, String mVendedor, String mCliente, String mNombre, String mFecha, String mArticulo, String mDescripcion, String mCantidad, String mPrecio, String mBonificado, List<String> detalles) {
+
+
+    public Pedidos(String mIdPedido, String mVendedor, String mCliente, String mNombre, String mFecha, String mArticulo, String mDescripcion, String mCantidad, String mPrecio, String mBonificado,String mEstado, JSONObject detalles) {
         this.mIdPedido = mIdPedido;
         this.mVendedor = mVendedor;
         this.mCliente = mCliente;
@@ -23,6 +28,7 @@ public class Pedidos {
         this.mPrecio = mPrecio;
         this.mBonificado = mBonificado;
         this.detalles = detalles;
+        this.mEstado = mEstado;
     }
 
 
@@ -106,10 +112,18 @@ public class Pedidos {
         this.mBonificado = mBonificado;
     }
 
-    public List<String> getdetalles() {
+    public String getmEstado() {
+        return mEstado;
+    }
+
+    public void setmEstado(String mEstado) {
+        this.mEstado = mEstado;
+    }
+
+    public JSONObject getdetalles() {
         return detalles;
     }
-    public void setdetalles(List<String> detalles) {
+    public void setdetalles(JSONObject detalles) {
         this.detalles = detalles;
     }
 }

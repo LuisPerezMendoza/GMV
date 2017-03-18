@@ -7,6 +7,7 @@ import com.guma.desarrollo.gmv.models.Respuesta_clientes;
 import com.guma.desarrollo.gmv.models.Respuesta_indicadores;
 import com.guma.desarrollo.gmv.models.Respuesta_mora;
 
+import com.guma.desarrollo.gmv.models.Respuesta_pedidos;
 import com.guma.desarrollo.gmv.models.Respuesta_usuario;
 
 import com.guma.desarrollo.gmv.models.Respuesta_puntos;
@@ -43,8 +44,8 @@ public interface Servicio {
     Call<Respuesta_usuario> obtenerListaUsuario(@Field("usuario") String apiKey, @Field("pass") String apiKey2);
 
     @FormUrlEncoded
-    @POST("url_ordenes")
-    Call<Boolean> enviarPedidos(@Field("usuario") JsonObject pedidos,  Callback<Boolean> success);
+    @POST("url_pedidos")
+    Call<Respuesta_pedidos> enviarPedidos(@Field("PEDIDOS") String pedidos);
 
     @GET("Puntos")
     Call<Respuesta_puntos> obtenerFacturasPuntos();

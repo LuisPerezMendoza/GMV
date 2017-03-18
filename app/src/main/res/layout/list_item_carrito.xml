@@ -16,7 +16,14 @@
             android:gravity="start"
             android:padding="5dp"
             android:text="ARTICULO"/>
-
+        <TextView
+            android:id="@+id/item_codigo"
+            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:gravity="start"
+            android:padding="5dp"
+            android:text="ARTICULO"/>
 
     </LinearLayout>
     <LinearLayout

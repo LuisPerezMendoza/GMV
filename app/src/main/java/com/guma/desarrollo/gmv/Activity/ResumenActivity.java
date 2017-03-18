@@ -48,13 +48,12 @@ public class ResumenActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.ListView1);
 
 
-        TextView prueba = (TextView)findViewById(R.id.tvListItemName);
-
-        //Toast.makeText(this, "el texto es ->"+ prueba.getText().toString(), Toast.LENGTH_SHORT).show();
         final List<Map<String, Object>> list = (List<Map<String, Object>>) ints.getSerializableExtra("LIST");
-        listView.setAdapter(new SimpleAdapter(this, list,R.layout.list_item_resumen,
-                new String[] {"ITEMNAME", "ITEMCANTI","ITEMPRECIO","ITEMVALOR","BONIFICADO" },
-                new int[] { R.id.tvListItemName,R.id.Item_cant,R.id.tvListItemPrecio,R.id.Item_valor,R.id.tvListBonificado }));
+        listView.setAdapter(
+                new SimpleAdapter(this, list,R.layout.list_item_resumen,
+                new String[] {"ITEMNAME", "ITEMCANTI","ITEMCODIGO","ITEMVALOR","BONIFICADO","PRECIO" },
+                new int[] { R.id.tvListItemName,R.id.Item_cant,R.id.Item_descr,R.id.Item_valor,R.id.tvListBonificado,R.id.tvListItemPrecio })
+        );
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = preferences.edit();
         CodCls =  preferences.getString("ClsSelected","");
@@ -62,15 +61,15 @@ public class ResumenActivity extends AppCompatActivity {
         int key = SQLiteHelper.getIdTemporal(ManagerURI.getDirDb(),ResumenActivity.this,"PEDIDOS");
         idPedido = "F09-" + "P"+ Clock.getIdDate()+String.valueOf(key);
 
-        SubTotal = (TextView) findViewById(R.id.SubTotal);
-        ivaTotal = (TextView) findViewById(R.id.ivaTotal);
+        /*SubTotal = (TextView) findViewById(R.id.SubTotal);
+        ivaTotal = (TextView) findViewById(R.id.ivaTotal);*/
         Total = (TextView) findViewById(R.id.Total);
         Atendio = (TextView) findViewById(R.id.NombreVendedor);
         txtidPedido = (TextView) findViewById(R.id.IdPedido);
 
         txtidPedido.setText(idPedido.toString());
         Atendio.setText(preferences.getString("NOMBRE","").toString());
-        Toast.makeText(this, idPedido.toString(), Toast.LENGTH_SHORT).show();
+
 
         lblNombreClliente = (TextView) findViewById(R.id.NombreCliente);
         lblNombreVendedor = (TextView) findViewById(R.id.NombreVendedor);
@@ -82,12 +81,12 @@ public class ResumenActivity extends AppCompatActivity {
 
         for (Map<String, Object> obj : list){
             vLine     += Float.parseFloat(obj.get("ITEMVALOR").toString());
-            subValor  += Float.parseFloat(obj.get("ITEMSUBTOTAL").toString());
-            vFinal    += Float.parseFloat(obj.get("ITEMVALORTOTAL").toString());
+            /*subValor  += Float.parseFloat(obj.get("ITEMSUBTOTAL").toString());
+            vFinal    += Float.parseFloat(obj.get("ITEMVALORTOTAL").toString());*/
         }
-        SubTotal.setText("SubTotal C$ " + String.valueOf(vLine));
-        ivaTotal.setText("IVA C$ " + String.valueOf(subValor));
-        Total.setText("TOTAL C$ "+ String.valueOf(vFinal));
+        /*SubTotal.setText("SubTotal C$ " + String.valueOf(vLine));
+        ivaTotal.setText("IVA C$ " + String.valueOf(subValor));*/
+        Total.setText("TOTAL C$ "+ String.valueOf(vLine));
 
         findViewById(R.id.btnSaveSale).setOnClickListener(new View.OnClickListener() {
 
@@ -96,7 +95,7 @@ public class ResumenActivity extends AppCompatActivity {
             public void onClick(View v) {
                 new AlertDialog.Builder(ResumenActivity.this)
                         .setTitle("CONFIRMACION")
-                        .setMessage("Informacion Guardada")
+                        .setMessage("¿DESEA GUARDAR EL PEDIDO?")
                         .setCancelable(false)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
@@ -110,6 +109,9 @@ public class ResumenActivity extends AppCompatActivity {
                                         nTotal += Float.parseFloat(obj.get("ITEMVALOR").toString());
                                     }
                                     preferences.getString("NameClsSelected", " CLIENTE NO ENCONTRADO");
+                                    /*for (Map<String, Object> obj2 : list) {
+                                        Toast.makeText(ResumenActivity.this, "---> " + obj2.get("PRECIO").toString(), Toast.LENGTH_SHORT).show();
+                                    }*/
                                     SimpleDateFormat mdformat = new SimpleDateFormat("dd/MM/yyyy ");
                                     String strDate = mdformat.format(Calendar.getInstance().getTime());
                                     Pedidos tmp = new Pedidos();
@@ -119,19 +121,21 @@ public class ResumenActivity extends AppCompatActivity {
                                     tmp.setmNombre(preferences.getString("NameClsSelected", " CLIENTE NO ENCONTRADO"));
                                     tmp.setmFecha(strDate.toString());
                                     tmp.setmPrecio(String.valueOf(nTotal));
+                                    tmp.setmEstado("0");
                                     mPedido.add(tmp);
                                     Pedidos_model.SavePedido(ResumenActivity.this, mPedido);
-                                    for (Map<String, Object> obj : list) {
+                                    for (Map<String, Object> obj2 : list) {
                                         Pedidos tmpDetalle = new Pedidos();
                                         tmpDetalle.setmIdPedido(idPedido);
-                                        tmpDetalle.setmArticulo(obj.get("ITEMPRECIO").toString());
-                                        tmpDetalle.setmDescripcion(obj.get("ITEMNAME").toString());
-                                        tmpDetalle.setmCantidad(obj.get("ITEMCANTI").toString());
-                                        tmpDetalle.setmPrecio(obj.get("ITEMVALOR").toString());
-                                        tmpDetalle.setmBonificado(obj.get("BONIFICADO").toString());
+                                        tmpDetalle.setmArticulo(obj2.get("ITEMCODIGO").toString());
+                                        tmpDetalle.setmDescripcion(obj2.get("ITEMNAME").toString());
+                                        tmpDetalle.setmCantidad(obj2.get("ITEMCANTI").toString());
+                                        tmpDetalle.setmPrecio(obj2.get("PRECIO").toString());
+                                        tmpDetalle.setmBonificado(obj2.get("BONIFICADO").toString());
+                                        //Toast.makeText(ResumenActivity.this, "GUARDANDO "+obj2.get("ITEMNAME").toString(), Toast.LENGTH_SHORT).show();
                                         mDetallePedido.add(tmpDetalle);
-                                        Pedidos_model.SaveDetallePedido(ResumenActivity.this, mDetallePedido);
                                     }
+                                    Pedidos_model.SaveDetallePedido(ResumenActivity.this, mDetallePedido);
                                     finish();
                                 }else {
                                     Toast.makeText(ResumenActivity.this, "ERROR AL GUARDAR PEDIDO, INTENTELO MAS TARDE", Toast.LENGTH_SHORT).show();
