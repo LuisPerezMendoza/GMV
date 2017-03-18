@@ -1,18 +1,37 @@
 package com.guma.desarrollo.gmv.Tasks;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.guma.desarrollo.core.Clock;
+import com.guma.desarrollo.core.Cobros;
+import com.guma.desarrollo.core.Cobros_model;
+import com.guma.desarrollo.core.ManagerURI;
+import com.guma.desarrollo.core.SQLiteHelper;
+import com.guma.desarrollo.gmv.Activity.AgendaActivity;
+import com.guma.desarrollo.gmv.api.Class_retrofit;
+import com.guma.desarrollo.gmv.api.Notificaciones;
+import com.guma.desarrollo.gmv.api.Servicio;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by maryan.espinoza on 08/03/2017.
  */
 
 public class TaskUnload extends AsyncTask<Integer,Integer,String> {
+    public ProgressDialog pdialog;
     Context cnxt;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -20,20 +39,37 @@ public class TaskUnload extends AsyncTask<Integer,Integer,String> {
         this.cnxt = cnxt;
         preferences = PreferenceManager.getDefaultSharedPreferences(cnxt);
         editor = preferences.edit();
-
     }
     @Override
     protected void onPreExecute() {
+        pdialog = ProgressDialog.show(cnxt, "","Iniciando...", true);
         super.onPreExecute();
     }
 
     @Override
     protected String doInBackground(Integer... para) {
+        List<Cobros> obj = Cobros_model.getCobros(ManagerURI.getDirDb(), cnxt);
+        if (obj.size()>0){
+            Class_retrofit.Objfit().create(Servicio.class).InserCorbos(new Gson().toJson(obj)).enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    if (response.isSuccessful()){
+                        if (Boolean.valueOf(response.body())){
+                            SQLiteHelper.ExecuteSQL(ManagerURI.getDirDb(),cnxt,"DELETE FROM COBROS");
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {}
+            });
+        }else {
+            pdialog.dismiss();
+        }
+        pdialog.dismiss();
         editor.putString("lstUnload", Clock.getTimeStamp()).apply();
-        //Alerta();
+        //Alerta("CONFIRMACION","La Informacion fue enviada.");
         return null;
     }
-
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
@@ -43,7 +79,7 @@ public class TaskUnload extends AsyncTask<Integer,Integer,String> {
     protected void onProgressUpdate(Integer... values) {
         super.onProgressUpdate(values);
     }
-    private void Alerta() {
-        new AlertDialog.Builder(cnxt).setTitle("RECIBIDO").setMessage("Informacion Recibida...").setCancelable(false).setPositiveButton("OK",null).show();
+    private void Alerta(String Titulo,String Mensaje) {
+        new AlertDialog.Builder(cnxt).setTitle(Titulo).setMessage(Mensaje).setCancelable(false).setPositiveButton("OK",null).show();
     }
 }

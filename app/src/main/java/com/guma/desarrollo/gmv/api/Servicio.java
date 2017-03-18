@@ -41,4 +41,9 @@ public interface Servicio {
     @GET("Puntos")
     Call<Respuesta_puntos> obtenerFacturasPuntos();
 
+
+    @FormUrlEncoded
+    @POST("InsertCobros")
+    Call<String> InserCorbos(@Field("pCobros") String pCobros);
+
 }

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.guma.desarrollo.gmv.ChildInfo;
 import com.guma.desarrollo.gmv.GroupInfo;
@@ -79,8 +80,7 @@ public class CustomAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isLastChild, View view,
-                             ViewGroup parent) {
+    public View getGroupView(int groupPosition, boolean isLastChild, View view, ViewGroup parent) {
 
         GroupInfo headerInfo = (GroupInfo) getGroup(groupPosition);
         if (view == null) {
