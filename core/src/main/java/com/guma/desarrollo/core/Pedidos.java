@@ -1,13 +1,22 @@
 package com.guma.desarrollo.core;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by alder.hernandez on 13/03/2017.
  */
 
 public class Pedidos {
-    String mIdPedido,mVendedor,mCliente,mNombre,mFecha,mArticulo,mDescripcion,mCantidad,mPrecio,mBonificado;
+    String mIdPedido,mVendedor,mCliente,mNombre,mFecha,mArticulo,mDescripcion,mCantidad,mPrecio,mBonificado,mEstado;
+    //private List<String> detalles = new ArrayList<>();
+    JSONObject detalles = new JSONObject();
 
-    public Pedidos(String mIdPedido, String mVendedor, String mCliente, String mNombre, String mFecha, String mArticulo, String mDescripcion, String mCantidad, String mPrecio, String mBonificado) {
+
+
+    public Pedidos(String mIdPedido, String mVendedor, String mCliente, String mNombre, String mFecha, String mArticulo, String mDescripcion, String mCantidad, String mPrecio, String mBonificado,String mEstado, JSONObject detalles) {
         this.mIdPedido = mIdPedido;
         this.mVendedor = mVendedor;
         this.mCliente = mCliente;
@@ -18,7 +27,10 @@ public class Pedidos {
         this.mCantidad = mCantidad;
         this.mPrecio = mPrecio;
         this.mBonificado = mBonificado;
+        this.detalles = detalles;
+        this.mEstado = mEstado;
     }
+
 
     public Pedidos(){ }
 
@@ -98,5 +110,20 @@ public class Pedidos {
 
     public void setmBonificado(String mBonificado) {
         this.mBonificado = mBonificado;
+    }
+
+    public String getmEstado() {
+        return mEstado;
+    }
+
+    public void setmEstado(String mEstado) {
+        this.mEstado = mEstado;
+    }
+
+    public JSONObject getdetalles() {
+        return detalles;
+    }
+    public void setdetalles(JSONObject detalles) {
+        this.detalles = detalles;
     }
 }

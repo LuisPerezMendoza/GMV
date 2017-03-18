@@ -82,4 +82,5 @@ public class TaskUnload extends AsyncTask<Integer,Integer,String> {
     private void Alerta(String Titulo,String Mensaje) {
         new AlertDialog.Builder(cnxt).setTitle(Titulo).setMessage(Mensaje).setCancelable(false).setPositiveButton("OK",null).show();
     }
+
 }

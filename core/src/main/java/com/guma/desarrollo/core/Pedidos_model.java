@@ -14,17 +14,15 @@ import java.util.List;
  */
 
 public class Pedidos_model {
-    public static void  SavePedido(Context context, ArrayList<Pedidos> ARTI){
+    public static void  SavePedido(Context context, ArrayList<Pedidos> PEDIDO){
         SQLiteDatabase myDataBase = null;
         SQLiteHelper myDbHelper = null;
         try
         {
             myDbHelper = new SQLiteHelper(ManagerURI.getDirDb(), context);
             myDataBase = myDbHelper.getWritableDatabase();
-
-            for(int i=0;i<ARTI.size();i++){
-
-                Pedidos a = ARTI.get(i);
+            for(int i=0;i<PEDIDO.size();i++){
+                Pedidos a = PEDIDO.get(i);
                 ContentValues contentValues = new ContentValues();
                 contentValues.put("IDPEDIDO" , a.getmIdPedido());
                 contentValues.put("VENDEDOR" , a.getmVendedor());
@@ -32,6 +30,7 @@ public class Pedidos_model {
                 contentValues.put("NOMBRE" , a.getmNombre());
                 contentValues.put("FECHA" , a.getmFecha());
                 contentValues.put("MONTO" , a.getmPrecio());
+                contentValues.put("ESTADO" , a.getmEstado());
 
                 myDataBase.insert("PEDIDO", null, contentValues );
             }
@@ -45,7 +44,7 @@ public class Pedidos_model {
             if(myDbHelper != null) { myDbHelper.close(); }
         }
     }
-    public static void  SaveDetallePedido(Context context, ArrayList<Pedidos> ARTI){
+    public static void  SaveDetallePedido(Context context, ArrayList<Pedidos> DETPEDIDO){
         SQLiteDatabase myDataBase = null;
         SQLiteHelper myDbHelper = null;
         try
@@ -53,9 +52,8 @@ public class Pedidos_model {
             myDbHelper = new SQLiteHelper(ManagerURI.getDirDb(), context);
             myDataBase = myDbHelper.getWritableDatabase();
 
-            for(int i=0;i<ARTI.size();i++){
-
-                Pedidos a = ARTI.get(i);
+            for(int i=0;i<DETPEDIDO.size();i++){
+                Pedidos a = DETPEDIDO.get(i);
 
                 ContentValues contentValues = new ContentValues();
                 contentValues.put("IDPEDIDO" , a.getmIdPedido());
@@ -83,19 +81,35 @@ public class Pedidos_model {
         SQLiteHelper myDbHelper = null;
         try
         {
+            Integer i =0;
             myDbHelper = new SQLiteHelper(basedir, context);
             myDataBase = myDbHelper.getReadableDatabase();
             Cursor cursor = myDataBase.query(true, "PEDIDO", null, null, null, null, null, null, null);
             if(cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 while(!cursor.isAfterLast()) {
+
                     Pedidos tmp = new Pedidos();
                     tmp.setmIdPedido(cursor.getString(cursor.getColumnIndex("IDPEDIDO")));
                     tmp.setmVendedor(cursor.getString(cursor.getColumnIndex("VENDEDOR")));
                     tmp.setmCliente(cursor.getString(cursor.getColumnIndex("CLIENTE")));
                     tmp.setmNombre(cursor.getString(cursor.getColumnIndex("NOMBRE")));
-                    tmp.setmPrecio(cursor.getString(cursor.getColumnIndex("PRECIO")));
                     tmp.setmPrecio(cursor.getString(cursor.getColumnIndex("MONTO")));
+                    tmp.setmFecha(cursor.getString(cursor.getColumnIndex("FECHA")));
+                    tmp.setmEstado(cursor.getString(cursor.getColumnIndex("ESTADO")));
+                    Cursor cursor2 = myDataBase.query(true, "PEDIDO_DETALLE", null, "IDPEDIDO"+ "=?", new String[] { cursor.getString(cursor.getColumnIndex("IDPEDIDO")) }, null, null, null, null);
+                    cursor2.moveToFirst();
+                    while(!cursor2.isAfterLast()) {//DETALLES DE PEDIDO
+                        tmp.getdetalles().put("ID"+i,cursor2.getString(cursor2.getColumnIndex("IDPEDIDO")));
+                        tmp.getdetalles().put("ARTICULO"+i,cursor2.getString(cursor2.getColumnIndex("ARTICULO")));
+                        tmp.getdetalles().put("DESC"+i,cursor2.getString(cursor2.getColumnIndex("DESCRIPCION")));
+                        tmp.getdetalles().put("CANT"+i,cursor2.getString(cursor2.getColumnIndex("CANTIDAD")));
+                        tmp.getdetalles().put("TOTAL"+i,cursor2.getString(cursor2.getColumnIndex("TOTAL")));
+                        tmp.getdetalles().put("BONI"+i,cursor2.getString(cursor2.getColumnIndex("BONIFICADO")));
+                        cursor2.moveToNext();
+                        i++;
+                    }
+                    i=0;
                     lista.add(tmp);
                     cursor.moveToNext();
                 }

@@ -18,16 +18,15 @@
             android:padding="5dp"
             android:text="ARTICULO"
             />
+
         <TextView
             android:id="@+id/Item_descr"
-            android:layout_height="fill_parent"
             android:layout_width="0dp"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:textStyle="bold"
             android:gravity="start"
             android:padding="5dp"
-            android:text="Descripcion"
-            />
+            android:textStyle="bold" />
 
     </LinearLayout>
     <LinearLayout

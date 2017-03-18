@@ -1,6 +1,7 @@
 package com.guma.desarrollo.gmv.Activity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -109,10 +110,12 @@ public class LoginActivity extends AppCompatActivity  {
                 }
                 @Override
                 public void onFailure(Call<Respuesta_usuario> call, Throwable t) {
-                    Notificaciones objNotificacion = new Notificaciones();
-                    objNotificacion.Alert(LoginActivity.this,"ERROR","USUARIO O CONTRASEÑA INCORRECTO");
-
-                    //pdialog.dismiss();
+                    new Notificaciones().Alert(LoginActivity.this,"ERROR","USUARIO O CONTRASEÑA INCORRECTA")
+                            .setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    }).show();
                 }
             });
             return null;

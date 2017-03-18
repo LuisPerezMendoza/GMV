@@ -31,6 +31,7 @@ import com.guma.desarrollo.core.Articulo;
 import com.guma.desarrollo.core.Articulos_model;
 import com.guma.desarrollo.core.ManagerURI;
 import com.guma.desarrollo.gmv.Adapters.Articulo_Leads;
+import com.guma.desarrollo.gmv.api.Notificaciones;
 import com.guma.desarrollo.gmv.models.Articulo_Repository;
 import com.guma.desarrollo.gmv.R;
 
@@ -137,32 +138,54 @@ public class ArticulosActivity extends AppCompatActivity implements SearchView.O
                                         public void onClick(DialogInterface dialog, int id) {
 
                                             Float Precio = Float.parseFloat(mnotes.getmExistencia());
+                                            Float Exist = Float.parseFloat(mnotes.getmExistencia());
+
                                             if (Precio !=0.0) {
                                                 if (Inputcant.length()!= 0) {
-                                                    String BONIFICADO = "0";
-                                                    if (spinner.getSelectedItem() != null) {
-                                                        BONIFICADO = spinner.getSelectedItem().toString();
+                                                    Float cantida = Float.parseFloat(Inputcant.getText().toString());
+                                                    if (cantida <= Exist) {
+                                                        String BONIFICADO = "0";
+                                                        if (spinner.getSelectedItem() != null) {
+                                                            BONIFICADO = spinner.getSelectedItem().toString();
+                                                        }
+                                                        InputExiste.setText(mnotes.getmPrecio());
+                                                        vLinea = Float.parseFloat(mnotes.getmPrecio()) * Float.parseFloat(Inputcant.getText().toString());
+                                                        SubTotalLinea = Float.parseFloat(String.valueOf(vLinea * 0.15));
+                                                        TotalFinalLinea = vLinea + SubTotalLinea;
+                                                        strings.add(mnotes.getmName());
+                                                        strings.add(mnotes.getmCodigo());
+                                                        strings.add(Inputcant.getText().toString());
+                                                        strings.add(vLinea.toString());
+                                                        strings.add(SubTotalLinea.toString());
+                                                        strings.add(TotalFinalLinea.toString());
+                                                        strings.add(BONIFICADO);
+                                                        strings.add(InputPrecio.getText().toString());
+                                                        getIntent().putStringArrayListExtra("myItem", strings);
+                                                        setResult(RESULT_OK, getIntent());
+                                                        finish();
+                                                    }else{
+                                                        new Notificaciones().Alert(ArticulosActivity.this,"ERROR","LA EXISTENCIA ACTUAL ES: "+Exist.toString())
+                                                                .setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                            }
+                                                        }).show();
                                                     }
-                                                    InputExiste.setText(mnotes.getmPrecio());
-                                                    vLinea = Float.parseFloat(mnotes.getmPrecio()) * Float.parseFloat(Inputcant.getText().toString());
-                                                    SubTotalLinea = Float.parseFloat(String.valueOf(vLinea * 0.15));
-                                                    TotalFinalLinea = vLinea + SubTotalLinea;
-                                                    strings.add(mnotes.getmName());
-                                                    strings.add(mnotes.getmCodigo());
-                                                    strings.add(Inputcant.getText().toString());
-                                                    strings.add(vLinea.toString());
-                                                    strings.add(SubTotalLinea.toString());
-                                                    strings.add(TotalFinalLinea.toString());
-                                                    strings.add(BONIFICADO);
-                                                    getIntent().putStringArrayListExtra("myItem", strings);
-                                                    setResult(RESULT_OK, getIntent());
-                                                    finish();
                                                 }else{
-                                                    Toast.makeText(ArticulosActivity.this, "INGRESE UNA CANTIDAD POR FAVOR", Toast.LENGTH_SHORT).show();
-                                                    dialog.dismiss();
+                                                    new Notificaciones().Alert(ArticulosActivity.this,"ERROR","INGRESE UNA CANTIDAD POR FAVOR")
+                                                            .setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                        }
+                                                    }).show();
                                                 }
                                             }else{
-                                                Toast.makeText(ArticulosActivity.this, "ARTICULO SIN EXISTENCIA, FAVOR ACTUALICE", Toast.LENGTH_SHORT).show();
+                                                new Notificaciones().Alert(ArticulosActivity.this,"ERROR","ARTICULO SIN EXISTENCIA, FAVOR ACTUALICE")
+                                                        .setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                    }
+                                                }).show();
                                             }
                                         }
                                     })
