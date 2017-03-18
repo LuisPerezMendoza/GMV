@@ -43,24 +43,34 @@ import com.guma.desarrollo.gmv.Constants;
 import com.guma.desarrollo.gmv.api.DetectedActivitiesIntentService;
 import com.guma.desarrollo.gmv.R;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MarcarRegistroActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener, ResultCallback<Status> {
 
     private static final String TAG = MarcarRegistroActivity.class.getSimpleName();
+
     private static final String LOCATION_KEY = "location-key";
+    private static final String ACTIVITY_KEY = "activity-key";
+
+    // Location API
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private LocationSettingsRequest mLocationSettingsRequest;
     private Location mLastLocation;
-    private ActivityDetectionBroadcastReceiver mBroadcastReceiver;
+
+
     private TextView mLatitude;
     private TextView mLongitude;
+    Button btn_step_2;
+
     public static final int REQUEST_LOCATION = 1;
     public static final int REQUEST_CHECK_SETTINGS = 2;
 
-    Button btn_step_2;
+
 
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -92,6 +102,8 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
                 startActivityForResult(new Intent(MarcarRegistroActivity.this, QrActivity.class), 0);
             }
         });
+        RadioButton rb = (RadioButton) findViewById(R.id.inLocal);
+        rb.setChecked(true);
 
         mLatitude = (TextView) findViewById(R.id.txtlati);
         mLongitude = (TextView) findViewById(R.id.txtlongi);
@@ -99,11 +111,24 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
         createLocationRequest();
         buildLocationSettingsRequest();
         checkLocationSettings();
-        mBroadcastReceiver = new ActivityDetectionBroadcastReceiver();
         updateValuesFromBundle(savedInstanceState);
 
-        RadioButton rb = (RadioButton) findViewById(R.id.inLocal);
-        rb.setChecked(true);
+
+
+       /* new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Log.d(TAG, "run: ");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                       // updateLocationUI();
+                    }
+                });
+            }
+        }, 0, 5000);*/
+
     }
 
     public void onRadioButtonClicked(View view) {
@@ -125,7 +150,6 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
             stopLocationUpdates();
             stopActivityUpdates();
         }
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
@@ -135,9 +159,6 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
             startLocationUpdates();
             startActivityUpdates();
         }
-
-        IntentFilter intentFilter = new IntentFilter(Constants.BROADCAST_ACTION);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, intentFilter);
     }
 
     @Override
@@ -213,16 +234,22 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
 
                 switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
+                        Log.d(TAG, "Los ajustes de ubicación satisfacen la configuración.");
                         startLocationUpdates();
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         try {
-                            status.startResolutionForResult(MarcarRegistroActivity.this,REQUEST_CHECK_SETTINGS);
+                            Log.d(TAG, "Los ajustes de ubicación no satisfacen la configuración. " +
+                                    "Se mostrará un diálogo de ayuda.");
+                            status.startResolutionForResult(
+                                    MarcarRegistroActivity.this,
+                                    REQUEST_CHECK_SETTINGS);
                         } catch (IntentSender.SendIntentException e) {
-                            // Sin operaciones
+                            Log.d(TAG, "El Intent del diálogo no funcionó.");
                         }
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        Log.d(TAG, "Los ajustes de ubicación no son apropiados.");
                         break;
 
                 }
@@ -234,6 +261,7 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(LOCATION_KEY)) {
                 mLastLocation = savedInstanceState.getParcelable(LOCATION_KEY);
+
                 updateLocationUI();
             }
         }
@@ -269,8 +297,8 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
     private void getLastLocation() {
         if (isLocationPermissionGranted()) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             }
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         } else {
             manageDeniedPermission();
         }
@@ -313,9 +341,7 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
     }
 
     private boolean isLocationPermissionGranted() {
-        int permission = ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
+        int permission = ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION);
         return permission == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -360,14 +386,5 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
             Log.e(TAG, "Error al iniciar/remover la detección de actividad: "
                     + status.getStatusMessage());
         }
-    }
-
-    public class ActivityDetectionBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int type = intent.getIntExtra(Constants.ACTIVITY_KEY, -1);
-
-        }
-
     }
 }

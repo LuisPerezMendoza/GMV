@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ScrollingTabContainerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,8 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -27,9 +30,13 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
 import com.google.gson.Gson;
+
 import com.google.gson.JsonObject;
+import com.guma.desarrollo.core.Articulos_model;
 import com.guma.desarrollo.core.Clientes;
 import com.guma.desarrollo.core.Clock;
+import com.guma.desarrollo.core.Cobros;
+import com.guma.desarrollo.core.Cobros_model;
 import com.guma.desarrollo.core.ManagerURI;
 import com.guma.desarrollo.core.Pedidos;
 import com.guma.desarrollo.core.Pedidos_model;
@@ -47,7 +54,13 @@ import com.guma.desarrollo.gmv.R;
 import com.guma.desarrollo.gmv.api.Notificaciones;
 import com.guma.desarrollo.gmv.api.Servicio;
 import com.guma.desarrollo.gmv.models.Clientes_Repository;
+
 import com.guma.desarrollo.gmv.models.Respuesta_pedidos;
+import com.guma.desarrollo.gmv.models.Respuesta_articulos;
+import com.guma.desarrollo.gmv.models.Respuesta_indicadores;
+import com.guma.desarrollo.gmv.models.Respuesta_mora;
+import com.guma.desarrollo.gmv.models.Respuesta_clientes;
+import com.guma.desarrollo.gmv.models.Respuesta_puntos;
 import com.guma.desarrollo.gmv.models.Respuesta_usuario;
 
 
@@ -71,6 +84,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
     private ListView lstClientes;
     private List<Clientes> objects;
     private Clientes_Leads lbs;
+
 
 
     SearchView sv;
@@ -114,61 +128,70 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
             }
         });
 
-        simpleExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+
+        simpleExpandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onGroupClick(final ExpandableListView parent, View v, int groupPosition, long id) {
-                GroupInfo headerInfo = deptList.get(groupPosition);
-                //Toast.makeText(getBaseContext(), " Header is :: " + headerInfo.getName(),Toast.LENGTH_LONG).show();
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 LayoutInflater li = LayoutInflater.from(AgendaActivity.this);
                 View promptsView = li.inflate(R.layout.input_search_cliente, null);
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AgendaActivity.this);
                 alertDialogBuilder.setView(promptsView);
-                lstClientes = (ListView) promptsView.findViewById(R.id.listViewClientes);
-                lstClientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Clientes cls = (Clientes) parent.getItemAtPosition(position);
-                        Toast.makeText(AgendaActivity.this, cls.getmCliente(), Toast.LENGTH_SHORT).show();
-                        Toast.makeText(AgendaActivity.this, cls.getmNombre(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-                sv = (SearchView) promptsView.findViewById(R.id.svClientes);
-                sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String text) {
-                        text = text.toLowerCase(Locale.getDefault());
-                        ArrayList<Clientes> newList = new ArrayList<>();
-                        for(Clientes clientes:objects){
-                            if (clientes.getmNombre().toLowerCase().contains(text)){
-                                newList.add(clientes);
-                            }
+                ExpandableListView listView = (ExpandableListView) adapterView;
+                if (ExpandableListView.getPackedPositionType(l) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                    //int groupPosition = ;
+                    //int childPosition = ExpandableListView.getPackedPositionChild(l);
+                    //deptList.remove(ExpandableListView.getPackedPositionChild(listView.getExpandableListPosition(l)));
+                    //listAdapter.notifyDataSetChanged();
+                    Toast.makeText(AgendaActivity.this, "Terminar", Toast.LENGTH_SHORT).show();
+
+
+                }
+                if (ExpandableListView.getPackedPositionType(l) == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
+
+
+                    final GroupInfo mDia = deptList.get(ExpandableListView.getPackedPositionGroup(l));
+                    lstClientes = (ListView) promptsView.findViewById(R.id.listViewClientes);
+                    lstClientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Clientes cls = (Clientes) parent.getItemAtPosition(position);
+                            Log.d("", "onItemClick: " +  mDia.getName() + "\n" +  cls.getmCliente()+ "\n" + cls.getmNombre());
+
                         }
-                        lstClientes.setAdapter(new Clientes_Leads(AgendaActivity.this, newList));
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String text) {
-
-                        return false;
-                    }
-                });
-                lstClientes.setAdapter(lbs);
-
-                alertDialogBuilder.setCancelable(false)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(AgendaActivity.this, "Guardar", Toast.LENGTH_SHORT).show();
+                    });
+                    sv = (SearchView) promptsView.findViewById(R.id.svClientes);
+                    sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String text) {
+                            text = text.toLowerCase(Locale.getDefault());
+                            ArrayList<Clientes> newList = new ArrayList<>();
+                            for(Clientes clientes:objects){
+                                if (clientes.getmNombre().toLowerCase().contains(text)){
+                                    newList.add(clientes);
+                                }
                             }
-                        }).setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-                                dialog.cancel();
-                            }}).create().show();
+                            lstClientes.setAdapter(new Clientes_Leads(AgendaActivity.this, newList));
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String text) {
+
+                            return false;
+                        }
+                    });
+                    lstClientes.setAdapter(lbs);
+                    alertDialogBuilder.setCancelable(false).setNegativeButton("Cancel",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog,int id) {
+                                            dialog.cancel();
+                                        }}).create().show();
+
+                }
                 return false;
             }
         });
+
         findViewById(R.id.imgCump).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,6 +212,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                                 startActivity(new Intent(AgendaActivity.this,BandejaCobrosActivity.class));
                             }else{
                                 if (items[which].equals(items[2])){
+
                                     List<Pedidos> listPedidos = Pedidos_model.getInfoPedidos(ManagerURI.getDirDb(),AgendaActivity.this);
                                     Gson gson = new Gson();
                                     if (listPedidos.size()>0) {
@@ -218,7 +242,6 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                                     }else{
                                         Toast.makeText(AgendaActivity.this, "no hay pedidos", Toast.LENGTH_SHORT).show();
                                     }
-
 
                                     new TaskUnload(AgendaActivity.this).execute();
                                     //new Calendario().show(getSupportFragmentManager(), "datePicker");
@@ -264,6 +287,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
     private void showSnack(boolean isConnected) {
         menu.getItem(0).setIcon(isConnected ? getResources().getDrawable(R.drawable.btngreen) : getResources().getDrawable(R.drawable.btnred));
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -297,11 +321,14 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
     }
     private void loadData(){
 
-        addProduct("LUNES","FARMACIA SAN MARTIN","01006","S");
-        addProduct("MARTES","FARMACIA FARMA CENTER","01338","N");
-        addProduct("MIERCOLES","VACIO","","N");
-        addProduct("JUEVES","VACIO","","N");
-        addProduct("VIERNES","VACIO","","N");
+        String[] strDias = getResources().getStringArray(R.array.dias);
+
+        addProduct(strDias[0],"FARMACIA SAN MARTIN","01006","S");
+        addProduct(strDias[1],"FARMACIA FARMA CENTER","01338","N");
+        addProduct(strDias[1],"FARMACIA GUADALUPE","0062","N");
+        addProduct(strDias[2],"VACIO","","N");
+        addProduct(strDias[3],"VACIO","","N");
+        addProduct(strDias[4],"VACIO","","N");
     }
     private int addProduct(String department, String product,String Codigo,String Cumple){
         int groupPosition = 0;

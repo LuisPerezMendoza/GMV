@@ -14,8 +14,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.guma.desarrollo.core.Articulo;
 import com.guma.desarrollo.core.Clientes;
@@ -50,7 +52,14 @@ public class BandejaCobrosActivity extends AppCompatActivity {
         if (getSupportActionBar() != null){ getSupportActionBar().setDisplayHomeAsUpEnabled(true); }
         mTotal = (TextView) findViewById(R.id.txtTotalCobros);
 
-        for(Cobros obj : Cobros_model.getCobros(ManagerURI.getDirDb(), BandejaCobrosActivity.this)) {
+        List<Cobros> lstObj = Cobros_model.getCobros(ManagerURI.getDirDb(), BandejaCobrosActivity.this);
+
+        if (lstObj.size() == 0){
+            findViewById(R.id.imgMoneyOff) .setVisibility(View.VISIBLE);
+            findViewById(R.id.txtMoneyOff) .setVisibility(View.VISIBLE);
+        }
+
+        for(Cobros obj : lstObj) {
             fList.add(obj);
             mCalTotal += Float.parseFloat(obj.getmImporte());
         }
