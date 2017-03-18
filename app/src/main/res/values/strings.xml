@@ -38,6 +38,16 @@
     </string-array>
     <string name="title_activity_facturas">FacturasActivity</string>
     <string name="prompt_user_id">RUTA</string>
+    <string name="info_empry">No hay Informacion que Mostrar</string>
+
+    <string-array name="dias">
+        <item>LUNES</item>
+        <item>MARTES</item>
+        <item>MIERCOLES</item>
+        <item>JUEVES</item>
+        <item>VIERNES</item>
+    </string-array>
+    <string name="title_activity_crear_agenda">CrearAgendaActivity</string>
 
 </resources>
 

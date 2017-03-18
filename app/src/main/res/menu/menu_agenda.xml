@@ -11,4 +11,5 @@ tools:context=".MainActivity" >
     android:title="ADD"
     android:orderInCategory="100"
     app:showAsAction="always"/>
+
 </menu>
