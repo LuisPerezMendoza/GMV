@@ -53,7 +53,6 @@ public class Pedidos_model {
             myDataBase = myDbHelper.getWritableDatabase();
 
             for(int i=0;i<DETPEDIDO.size();i++){
-
                 Pedidos a = DETPEDIDO.get(i);
 
                 ContentValues contentValues = new ContentValues();
