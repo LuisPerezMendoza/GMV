@@ -34,6 +34,7 @@ public class CobroInActivity extends AppCompatActivity {
     TextView mSaldo,mLimite,m30,m60,m90,m120,md120,mTotal;
     private SharedPreferences preferences;
     ArrayList<Cobros> mCobro = new ArrayList<>();
+    String Usuario;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +43,7 @@ public class CobroInActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Usuario = preferences.getString("USUARIO","0");
 
 
         mImporte = (EditText) findViewById(R.id.crbImporte);
@@ -67,11 +69,11 @@ public class CobroInActivity extends AppCompatActivity {
                     new Notificaciones().snackieBar(CobroInActivity.this,"Hay Campos Vacios...", Color.RED, Color.WHITE, Color.YELLOW).show();
                 }else{
                     int key = SQLiteHelper.getId(ManagerURI.getDirDb(),CobroInActivity.this,"COBROS");
-                    String idCobro = "F09-" + "C"+Clock.getIdDate()+String.valueOf(key);
+                    String idCobro = Usuario+"-" + "C"+Clock.getIdDate()+String.valueOf(key);
                     Cobros tmp = new Cobros();
                     tmp.setmIdCobro(idCobro);
                     tmp.setmCliente(preferences.getString("ClsSelected","0"));
-                    tmp.setmRuta("F09");
+                    tmp.setmRuta(Usuario);
                     tmp.setmImporte(mImporte.getText().toString().trim());
                     tmp.setmTipo(spinner.getSelectedItem().toString());
                     tmp.setmObservacion(mObservacion.getText().toString().trim());

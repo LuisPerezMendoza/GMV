@@ -93,11 +93,10 @@ public class LoginActivity extends AppCompatActivity  {
                 public void onResponse(Call<Respuesta_usuario> call, Response<Respuesta_usuario> response) {
                     if(response.isSuccessful()){
                         Respuesta_usuario usuarioRespuesta = response.body();
-
+                        editor.putString("VENDEDOR",usuarioRespuesta.getResults().get(0).getmUsuario());
                         editor.putString("NOMBRE",usuarioRespuesta.getResults().get(0).getmNombre());
                         editor.putString("USUARIO",usuarioRespuesta.getResults().get(0).getmIdUser());
                         editor.putString("ROL",usuarioRespuesta.getResults().get(0).getmRol());
-
                         editor.putBoolean("pref", !checked);
                         editor.apply();
                         pdialog.dismiss();
