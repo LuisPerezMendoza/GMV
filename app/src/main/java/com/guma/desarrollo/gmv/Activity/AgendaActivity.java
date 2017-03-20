@@ -212,7 +212,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                                 startActivity(new Intent(AgendaActivity.this,BandejaCobrosActivity.class));
                             }else{
                                 if (items[which].equals(items[2])){
-
+                                    Toast.makeText(AgendaActivity.this, ManagerURI.getURL_Base().toString(), Toast.LENGTH_SHORT).show();
                                     List<Pedidos> listPedidos = Pedidos_model.getInfoPedidos(ManagerURI.getDirDb(),AgendaActivity.this);
                                     Gson gson = new Gson();
                                     if (listPedidos.size()>0) {
