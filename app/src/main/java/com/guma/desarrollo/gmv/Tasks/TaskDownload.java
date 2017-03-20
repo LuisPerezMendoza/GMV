@@ -20,6 +20,8 @@ import com.guma.desarrollo.gmv.models.Respuesta_indicadores;
 import com.guma.desarrollo.gmv.models.Respuesta_mora;
 import com.guma.desarrollo.gmv.models.Respuesta_puntos;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,12 +36,14 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
     Context cnxt;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
+    private String Usuario;
 
     private static final String TAG = "AgendaActivity";
     public TaskDownload(Context cnxt) {
         this.cnxt = cnxt;
         preferences = PreferenceManager.getDefaultSharedPreferences(cnxt);
         editor = preferences.edit();
+
     }
 
     @Override
@@ -50,6 +54,7 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
 
     @Override
     protected String doInBackground(Integer... params) {
+        Usuario = preferences.getString("VENDEDOR","0");
         Class_retrofit.Objfit()
                 .create(Servicio.class)
                 .obtenerListaArticulos()
@@ -61,10 +66,9 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
                             Respuesta_articulos articuloRespuesta = response.body();
                             Log.d(TAG, "onResponse: Articulos " + articuloRespuesta.getCount());
                             Articulos_model.SaveArticulos(cnxt,articuloRespuesta.getResults());
-
                         }else{
                             pdialog.dismiss();
-                            Log.d(TAG, "onResponse: " + response.errorBody() );
+                            Log.d(TAG, "onResponse: Articulos" + response.errorBody() );
                             Toast.makeText(cnxt, ""+response.errorBody(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -78,7 +82,7 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
 
         Class_retrofit.Objfit()
                 .create(Servicio.class)
-                .obtenerListaClienteMora()
+                .obtenerListaClienteMora(Usuario)
                 .enqueue(new Callback<Respuesta_mora>() {
                     @Override
                     public void onResponse(Call<Respuesta_mora> call, Response<Respuesta_mora> response) {
@@ -97,14 +101,15 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
                     public void onFailure(Call<Respuesta_mora> call, Throwable t) {
                         pdialog.dismiss();
                         Log.d(TAG, "onResponse: " + t.getMessage() );
-
                     }
                 });
 
 
-        Class_retrofit.Objfit()
+
+
+       Class_retrofit.Objfit()
                 .create(Servicio.class)
-                .obtenerListaClienteIndicadores()
+                .obtenerListaClienteIndicadores(Usuario)
                 .enqueue(new Callback<Respuesta_indicadores>() {
                     @Override
                     public void onResponse(Call<Respuesta_indicadores> call, Response<Respuesta_indicadores> response) {
@@ -129,9 +134,11 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
 
 
 
+
+
         Class_retrofit.Objfit().
                 create(Servicio.class).
-                obtenerListaClientes().
+                obtenerListaClientes(Usuario).
                 enqueue(new Callback<Respuesta_clientes>() {
                     @Override
                     public void onResponse(Call<Respuesta_clientes> call, Response<Respuesta_clientes> response) {
@@ -156,7 +163,7 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
 
 
         Class_retrofit.Objfit().create(Servicio.class)
-                .obtenerFacturasPuntos()
+                .obtenerFacturasPuntos(Usuario)
                 .enqueue(new Callback<Respuesta_puntos>() {
                     @Override
                     public void onResponse(Call<Respuesta_puntos> call, Response<Respuesta_puntos> response) {
@@ -179,7 +186,6 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
                         Log.d(TAG, "onResponse: " + t.getMessage() );
                     }
                 });
-        Log.d(TAG, "onResponse: " + Clock.getTimeStamp() );
         editor.putString("lstDownload", Clock.getTimeStamp());
         editor.apply();
         return null;
@@ -187,8 +193,6 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
 
     @Override
     protected void onPostExecute(String s) {
-
-
         super.onPostExecute(s);
     }
 
