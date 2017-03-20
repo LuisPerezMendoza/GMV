@@ -36,19 +36,21 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_margin="10dp">
-
-                <Button
-
-                    android:id="@+id/btAddFire"
-                    android:gravity="center"
-                    android:text="agregar"
+                <TextView
+                    android:gravity="right"
+                    android:textColor="@color/gmvBlanco"
                     android:layout_height="fill_parent"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-
-                    />
+                    android:layout_weight="1"/>
+                <TextView
+                    android:gravity="right"
+                    android:text="C$ 1,000.00"
+                    android:id="@+id/txtTotalPedidos"
+                    android:textColor="@color/gmvBlanco"
+                    android:layout_height="fill_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"/>
             </TableRow>
-
         </TableLayout>
 
     </LinearLayout>

@@ -3,7 +3,9 @@ package com.guma.desarrollo.core;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by alder.hernandez on 13/03/2017.
@@ -13,10 +15,10 @@ public class Pedidos {
     String mIdPedido,mVendedor,mCliente,mNombre,mFecha,mArticulo,mDescripcion,mCantidad,mPrecio,mBonificado,mEstado;
     //private List<String> detalles = new ArrayList<>();
     JSONObject detalles = new JSONObject();
+    ArrayList<HashMap<String, String>> contactList = null;
 
 
-
-    public Pedidos(String mIdPedido, String mVendedor, String mCliente, String mNombre, String mFecha, String mArticulo, String mDescripcion, String mCantidad, String mPrecio, String mBonificado,String mEstado, JSONObject detalles) {
+    public Pedidos(String mIdPedido, String mVendedor, String mCliente, String mNombre, String mFecha, String mArticulo, String mDescripcion, String mCantidad, String mPrecio, String mBonificado, String mEstado, JSONObject detalles, ArrayList<HashMap<String, String>> contactList) {
         this.mIdPedido = mIdPedido;
         this.mVendedor = mVendedor;
         this.mCliente = mCliente;
@@ -27,10 +29,10 @@ public class Pedidos {
         this.mCantidad = mCantidad;
         this.mPrecio = mPrecio;
         this.mBonificado = mBonificado;
-        this.detalles = detalles;
         this.mEstado = mEstado;
+        this.detalles = detalles;
+        this.contactList = contactList;
     }
-
 
     public Pedidos(){ }
 
@@ -120,10 +122,19 @@ public class Pedidos {
         this.mEstado = mEstado;
     }
 
-    public JSONObject getdetalles() {
+    public ArrayList<HashMap<String, String>> getContactList() {
+        return contactList;
+    }
+
+    public void setContactList(ArrayList<HashMap<String, String>> contactList) {
+        this.contactList = contactList;
+    }
+
+    public JSONObject getDetalles() {
         return detalles;
     }
-    public void setdetalles(JSONObject detalles) {
+
+    public void setDetalles(JSONObject detalles) {
         this.detalles = detalles;
     }
 }

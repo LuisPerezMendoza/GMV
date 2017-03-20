@@ -6,8 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by alder.hernandez on 13/03/2017.
@@ -77,11 +81,14 @@ public class Pedidos_model {
     }
     public static List<Pedidos> getInfoPedidos(String basedir, Context context) {
         List<Pedidos> lista = new ArrayList<>();
+
+        ArrayList<HashMap<String, String>> contactList;
+        Integer i = 0;
+        contactList = new ArrayList<>();
         SQLiteDatabase myDataBase = null;
         SQLiteHelper myDbHelper = null;
         try
         {
-            Integer i =0;
             myDbHelper = new SQLiteHelper(basedir, context);
             myDataBase = myDbHelper.getReadableDatabase();
             Cursor cursor = myDataBase.query(true, "PEDIDO", null, null, null, null, null, null, null);
@@ -99,18 +106,35 @@ public class Pedidos_model {
                     tmp.setmEstado(cursor.getString(cursor.getColumnIndex("ESTADO")));
                     Cursor cursor2 = myDataBase.query(true, "PEDIDO_DETALLE", null, "IDPEDIDO"+ "=?", new String[] { cursor.getString(cursor.getColumnIndex("IDPEDIDO")) }, null, null, null, null);
                     cursor2.moveToFirst();
-                    while(!cursor2.isAfterLast()) {//DETALLES DE PEDIDO
-                        tmp.getdetalles().put("ID"+i,cursor2.getString(cursor2.getColumnIndex("IDPEDIDO")));
-                        tmp.getdetalles().put("ARTICULO"+i,cursor2.getString(cursor2.getColumnIndex("ARTICULO")));
-                        tmp.getdetalles().put("DESC"+i,cursor2.getString(cursor2.getColumnIndex("DESCRIPCION")));
-                        tmp.getdetalles().put("CANT"+i,cursor2.getString(cursor2.getColumnIndex("CANTIDAD")));
-                        tmp.getdetalles().put("TOTAL"+i,cursor2.getString(cursor2.getColumnIndex("TOTAL")));
-                        tmp.getdetalles().put("BONI"+i,cursor2.getString(cursor2.getColumnIndex("BONIFICADO")));
-                        cursor2.moveToNext();
+
+                    HashMap<String, String> contact = new HashMap<>();
+                    while(!cursor2.isAfterLast()) {
+                        /*contact.put("IDPEDIDO", cursor2.getString(cursor2.getColumnIndex("IDPEDIDO")));
+                        contact.put("ARTICULO", cursor2.getString(cursor2.getColumnIndex("ARTICULO")));
+                        contact.put("DESCRIPCION", cursor2.getString(cursor2.getColumnIndex("DESCRIPCION")));
+                        contact.put("CANTIDAD", cursor2.getString(cursor2.getColumnIndex("CANTIDAD")));
+                        contact.put("TOTAL", cursor2.getString(cursor2.getColumnIndex("TOTAL")));
+                        contact.put("BONIFICADO", cursor2.getString(cursor2.getColumnIndex("BONIFICADO")));
+                        contactList.add(contact);
+                        tmp.setContactList(contactList);
+                        lista.add(tmp);
+                        cursor2.moveToNext();*/
+
+                        tmp.getDetalles().put("ID"+i,cursor2.getString(cursor2.getColumnIndex("IDPEDIDO")));
+                        tmp.getDetalles().put("ARTICULO"+i,cursor2.getString(cursor2.getColumnIndex("ARTICULO")));
+                        tmp.getDetalles().put("DESC"+i,cursor2.getString(cursor2.getColumnIndex("DESCRIPCION")));
+                        tmp.getDetalles().put("CANT"+i,cursor2.getString(cursor2.getColumnIndex("CANTIDAD")));
+                        tmp.getDetalles().put("TOTAL"+i,cursor2.getString(cursor2.getColumnIndex("TOTAL")));
+                        tmp.getDetalles().put("BONI"+i,cursor2.getString(cursor2.getColumnIndex("BONIFICADO")));
                         i++;
+
+                        cursor2.moveToNext();
                     }
-                    i=0;
+                    //lista.add(tmp);
                     lista.add(tmp);
+                    contact.clear();
+                    contactList.clear();
+
                     cursor.moveToNext();
                 }
             }
