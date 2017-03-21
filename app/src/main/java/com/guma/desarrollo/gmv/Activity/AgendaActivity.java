@@ -212,7 +212,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                                 startActivity(new Intent(AgendaActivity.this,BandejaCobrosActivity.class));
                             }else{
                                 if (items[which].equals(items[2])){
-                                    Toast.makeText(AgendaActivity.this, ManagerURI.getURL_Base().toString(), Toast.LENGTH_SHORT).show();
+
                                     List<Pedidos> listPedidos = Pedidos_model.getInfoPedidos(ManagerURI.getDirDb(),AgendaActivity.this);
                                     Gson gson = new Gson();
                                     if (listPedidos.size()>0) {
@@ -221,15 +221,18 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                                             public void onResponse(Call<Respuesta_pedidos> call, Response<Respuesta_pedidos> response) {
                                                 if(response.isSuccessful()){
                                                     Respuesta_pedidos pedidoRespuesta = response.body();
-                                                    Log.d("RESULTADOS",pedidoRespuesta.getResults().get(0).getmIdPedido());
-                                                    Toast.makeText(AgendaActivity.this, "SE ENVIO CORRECTAMENTE", Toast.LENGTH_SHORT).show();
+                                                    new Notificaciones().Alert(AgendaActivity.this,"EXITO","PEDIDOS ENVIADOS...")
+                                                            .setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                        }
+                                                    }).show();
                                                 }else{
-                                                    Toast.makeText(AgendaActivity.this, "ERROR AL ENVIAR", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(AgendaActivity.this, "ERROR AL ENVIAR RESPUESTA: "+response.body(), Toast.LENGTH_SHORT).show();
                                                 }
                                             }
                                             @Override
                                             public void onFailure(Call<Respuesta_pedidos> call, Throwable t) {
-                                                Log.d("ERROR_SEND",t.getMessage().toString());
                                                 new Notificaciones().Alert(AgendaActivity.this,"ERROR",t.getMessage().toString())
                                                         .setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                                     @Override
@@ -238,14 +241,18 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                                                 }).show();
                                             }
                                         });
-                                        Log.d("ARREGLO: ", gson.toJson(listPedidos));
                                     }else{
-                                        Toast.makeText(AgendaActivity.this, "no hay pedidos", Toast.LENGTH_SHORT).show();
+                                        new Notificaciones().Alert(AgendaActivity.this,"ERROR","NO HAY PEDIDOS...")
+                                                .setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                            }
+                                        }).show();
                                     }
 
                                     new TaskUnload(AgendaActivity.this).execute();
                                     //new Calendario().show(getSupportFragmentManager(), "datePicker");
-                                   // new TaskUnload(AgendaActivity.this).execute();
+                                    //new TaskUnload(AgendaActivity.this).execute();
                                 } else {
                                     if (items[which].equals(items[3])){
                                             if (ManagerURI.isOnlinea(AgendaActivity.this)==true){
