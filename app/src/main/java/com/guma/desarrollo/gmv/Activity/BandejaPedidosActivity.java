@@ -70,10 +70,6 @@ public class BandejaPedidosActivity extends AppCompatActivity {
             }
         });*/
 
-
-
-
-
     }
     public boolean onOptionsItemSelected(MenuItem item)    {
         int id = item.getItemId();
