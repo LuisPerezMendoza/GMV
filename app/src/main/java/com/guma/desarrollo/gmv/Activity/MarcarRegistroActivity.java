@@ -91,6 +91,7 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
 
+
                 String latitud = mLatitude.getText().toString();
                 //if (latitud.equals("0.0")) {
                     //Toast.makeText(MarcarRegistroActivity.this, "coordenadas no encontradas", Toast.LENGTH_SHORT).show();
@@ -109,6 +110,8 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
                     finish();
                     //Toast.makeText(MarcarRegistroActivity.this, "entro exitosamente", Toast.LENGTH_SHORT).show();
                 //}
+
+
             }
         });
 
@@ -116,6 +119,7 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 startActivityForResult(new Intent(MarcarRegistroActivity.this, QrActivity.class), 0);
+
             }
         });
         RadioButton rb = (RadioButton) findViewById(R.id.inLocal);
