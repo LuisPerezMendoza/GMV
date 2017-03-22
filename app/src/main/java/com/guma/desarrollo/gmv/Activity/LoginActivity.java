@@ -67,14 +67,11 @@ public class LoginActivity extends AppCompatActivity  {
                 }else if(TextUtils.isEmpty(usuario.getText())){
                     pass.setError("CAMPO REQUERIDO");
                 } else {
-
                     passw = pass.getText().toString();
                     useri = usuario.getText().toString();
-
                     pdialog = ProgressDialog.show(LoginActivity.this, "", "Procesando. Porfavor Espere...", true);
                     new TaskLogin().execute();
                 }
-
             }
         });
 
@@ -103,18 +100,16 @@ public class LoginActivity extends AppCompatActivity  {
                         startActivity(new Intent(LoginActivity.this,AgendaActivity.class));
                         finish();
                     }else{
-                        Toast.makeText(LoginActivity.this, "ERROR AL AUTENTICARSE", Toast.LENGTH_SHORT).show();
+                        new Notificaciones().Alert(LoginActivity.this,"ERROR","ERROR AL AUTENTIARSE, INTENTELO MAS TARDE")
+                                .setCancelable(false).setPositiveButton("OK", null).show();
                         pdialog.dismiss();
                     }
                 }
                 @Override
                 public void onFailure(Call<Respuesta_usuario> call, Throwable t) {
                     new Notificaciones().Alert(LoginActivity.this,"ERROR","USUARIO O CONTRASEÑA INCORRECTA")
-                            .setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
-                    }).show();
+                            .setCancelable(false).setPositiveButton("OK", null).show();
+                    pdialog.dismiss();
                 }
             });
             return null;

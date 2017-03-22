@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -53,9 +54,28 @@ public class AccionesActivity extends AppCompatActivity {
         findViewById(R.id.btnCV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                limpiarPref();
                 startActivity(new Intent(AccionesActivity.this,AgendaActivity.class));
                 finish();
             }
         });
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if(keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            limpiarPref();
+            startActivity(new Intent(AccionesActivity.this,AgendaActivity.class));
+            finish();
+            return true;
+        }
+        return false;
+    }
+    public void limpiarPref(){
+        editor.putString("LATITUD", "0.0");
+        editor.putString("LONGITUD", "0.0");
+        editor.putString("LUGAR_VISITA", "");
+        editor.apply();
     }
 }

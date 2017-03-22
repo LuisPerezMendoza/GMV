@@ -2,6 +2,7 @@ package com.guma.desarrollo.gmv.Tasks;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -14,11 +15,14 @@ import com.guma.desarrollo.core.Clock;
 import com.guma.desarrollo.core.Cobros;
 import com.guma.desarrollo.core.Cobros_model;
 import com.guma.desarrollo.core.ManagerURI;
+import com.guma.desarrollo.core.Pedidos;
+import com.guma.desarrollo.core.Pedidos_model;
 import com.guma.desarrollo.core.SQLiteHelper;
 import com.guma.desarrollo.gmv.Activity.AgendaActivity;
 import com.guma.desarrollo.gmv.api.Class_retrofit;
 import com.guma.desarrollo.gmv.api.Notificaciones;
 import com.guma.desarrollo.gmv.api.Servicio;
+import com.guma.desarrollo.gmv.models.Respuesta_pedidos;
 
 import java.util.List;
 
@@ -67,7 +71,45 @@ public class TaskUnload extends AsyncTask<Integer,Integer,String> {
         }
         pdialog.dismiss();
         editor.putString("lstUnload", Clock.getTimeStamp()).apply();
-        //Alerta("CONFIRMACION","La Informacion fue enviada.");
+
+        List<Pedidos> listPedidos = Pedidos_model.getInfoPedidos(ManagerURI.getDirDb(),cnxt);
+        Gson gson = new Gson();
+        if (listPedidos.size()>0) {
+            Class_retrofit.Objfit().create(Servicio.class).enviarPedidos(gson.toJson(listPedidos)).enqueue(new Callback<Respuesta_pedidos>() {
+                @Override
+                public void onResponse(Call<Respuesta_pedidos> call, Response<Respuesta_pedidos> response) {
+                    if(response.isSuccessful()){
+                        Respuesta_pedidos pedidoRespuesta = response.body();
+                        /*new Notificaciones().Alert(cnxt,"EXITO","PEDIDOS ENVIADOS...")
+                                .setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
+                        }).show();*/
+                        Toast.makeText(cnxt, "PEDIDOS ENVIADOS CORRECTAMENTE", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(cnxt, "ERROR AL ENVIAR RESPUESTA: "+response.body(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onFailure(Call<Respuesta_pedidos> call, Throwable t) {
+                    /*new Notificaciones().Alert(AgendaActivity.this,"ERROR",t.getMessage().toString())
+                            .setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    }).show();*/
+                }
+            });
+        }else{
+            /*new Notificaciones().Alert(AgendaActivity.this,"ERROR","NO HAY PEDIDOS...")
+                    .setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            }).show();*/
+        }
+
         return null;
     }
     @Override

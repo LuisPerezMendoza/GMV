@@ -213,7 +213,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                             }else{
                                 if (items[which].equals(items[2])){
 
-                                    List<Pedidos> listPedidos = Pedidos_model.getInfoPedidos(ManagerURI.getDirDb(),AgendaActivity.this);
+                                    /*List<Pedidos> listPedidos = Pedidos_model.getInfoPedidos(ManagerURI.getDirDb(),AgendaActivity.this);
                                     Gson gson = new Gson();
                                     if (listPedidos.size()>0) {
                                         Class_retrofit.Objfit().create(Servicio.class).enviarPedidos(gson.toJson(listPedidos)).enqueue(new Callback<Respuesta_pedidos>() {
@@ -248,7 +248,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                             }
                                         }).show();
-                                    }
+                                    }*/
 
                                     new TaskUnload(AgendaActivity.this).execute();
                                     //new Calendario().show(getSupportFragmentManager(), "datePicker");

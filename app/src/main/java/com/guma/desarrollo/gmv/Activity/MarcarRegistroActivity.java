@@ -27,6 +27,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -61,8 +62,6 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
     private LocationRequest mLocationRequest;
     private LocationSettingsRequest mLocationSettingsRequest;
     private Location mLastLocation;
-
-
     private TextView mLatitude;
     private TextView mLongitude;
     Button btn_step_2;
@@ -70,11 +69,8 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
     public static final int REQUEST_LOCATION = 1;
     public static final int REQUEST_CHECK_SETTINGS = 2;
 
-
-
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-
 
 
     @Override
@@ -87,12 +83,32 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
         editor = preferences.edit();
         setTitle("PASO 1 [ Registrar visita ] - " + preferences.getString("NameClsSelected"," --ERROR--"));
 
+        mLatitude = (TextView) findViewById(R.id.txtlati);
+        mLongitude = (TextView) findViewById(R.id.txtlongi);
         btn_step_2 = (Button) findViewById(R.id.btnGoToStep2);
 
         btn_step_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MarcarRegistroActivity.this, AccionesActivity.class));
+
+                String latitud = mLatitude.getText().toString();
+                //if (latitud.equals("0.0")) {
+                    //Toast.makeText(MarcarRegistroActivity.this, "coordenadas no encontradas", Toast.LENGTH_SHORT).show();
+                //}else {
+                    editor.putString("LATITUD", mLatitude.getText().toString());
+                    editor.putString("LONGITUD", mLongitude.getText().toString());
+                    RadioButton local = (RadioButton) findViewById(R.id.inLocal);
+                    if (local.isChecked()) {
+                        editor.putString("LUGAR_VISITA", "LOCAL");
+                        //Toast.makeText(MarcarRegistroActivity.this, "esta cheked", Toast.LENGTH_SHORT).show();
+                    } else {
+                        editor.putString("LUGAR_VISITA", "NOLOCAL");
+                    }
+                    editor.apply();
+                    startActivity(new Intent(MarcarRegistroActivity.this, AccionesActivity.class));
+                    finish();
+                    //Toast.makeText(MarcarRegistroActivity.this, "entro exitosamente", Toast.LENGTH_SHORT).show();
+                //}
             }
         });
 
@@ -105,15 +121,12 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
         RadioButton rb = (RadioButton) findViewById(R.id.inLocal);
         rb.setChecked(true);
 
-        mLatitude = (TextView) findViewById(R.id.txtlati);
-        mLongitude = (TextView) findViewById(R.id.txtlongi);
+
         buildGoogleApiClient();
         createLocationRequest();
         buildLocationSettingsRequest();
         checkLocationSettings();
         updateValuesFromBundle(savedInstanceState);
-
-
 
        /* new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -360,11 +373,11 @@ public class MarcarRegistroActivity extends AppCompatActivity implements
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(
+        /*Toast.makeText(
                 this,
                 "Error de conexión con el código:" + connectionResult.getErrorCode(),
                 Toast.LENGTH_LONG)
-                .show();
+                .show();*/
 
     }
 
