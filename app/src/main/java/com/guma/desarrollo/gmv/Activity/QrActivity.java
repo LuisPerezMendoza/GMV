@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.zxing.Result;
 import com.guma.desarrollo.gmv.R;
@@ -41,10 +42,11 @@ public class QrActivity extends AppCompatActivity implements ZXingScannerView.Re
         alert1.show();
 
         if (rawResult.getText()!=""){
-            strings.add(rawResult.getText());
+            Toast.makeText(this, "resultados-> "+rawResult.toString(), Toast.LENGTH_SHORT).show();
+            /*strings.add(rawResult.getText());
             getIntent().putStringArrayListExtra("myResulte",strings);
             setResult(RESULT_OK,getIntent());
-            finish();
+            finish();*/
         }
 
 

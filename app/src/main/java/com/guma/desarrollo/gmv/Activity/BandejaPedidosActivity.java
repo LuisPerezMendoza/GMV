@@ -63,16 +63,12 @@ public class BandejaPedidosActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.btAddFire).setOnClickListener(new View.OnClickListener() {
+        /*findViewById(R.id.btAddFire).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDatabase.child(ReferenciaFireBase.PEDIDOS_REFERENCE).child(UUID.randomUUID().toString()).setValue(new Pedido("01636", "0","F06"));
             }
-        });
-
-
-
-
+        });*/
 
     }
     public boolean onOptionsItemSelected(MenuItem item)    {

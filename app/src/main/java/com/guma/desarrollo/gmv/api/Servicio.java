@@ -13,6 +13,8 @@ import com.guma.desarrollo.gmv.models.Respuesta_usuario;
 import com.guma.desarrollo.gmv.models.Respuesta_puntos;
 
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.http.Body;
@@ -20,6 +22,8 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 
 /**
@@ -27,17 +31,21 @@ import retrofit2.http.POST;
  */
 
 public interface Servicio {
+
     @GET("ARTICULOS")
     Call<Respuesta_articulos> obtenerListaArticulos();
 
-    @GET("Clientes")
-    Call<Respuesta_clientes> obtenerListaClientes();
+    @FormUrlEncoded
+    @POST("Clientes")
+    Call<Respuesta_clientes> obtenerListaClientes(@Field("mVendedor") String mVendedor);
 
-    @GET("ClientesIndicadores")
-    Call<Respuesta_indicadores> obtenerListaClienteIndicadores();
+    @FormUrlEncoded
+    @POST("ClientesIndicadores")
+    Call<Respuesta_indicadores> obtenerListaClienteIndicadores(@Field("mVendedor") String mVendedor);
 
-    @GET("ClientesMora")
-    Call<Respuesta_mora> obtenerListaClienteMora();
+    @FormUrlEncoded
+    @POST("ClientesMora")
+    Call<Respuesta_mora> obtenerListaClienteMora(@Field("mVendedor") String mVendedor);
 
     @FormUrlEncoded
     @POST("Login")
@@ -47,9 +55,9 @@ public interface Servicio {
     @POST("url_pedidos")
     Call<Respuesta_pedidos> enviarPedidos(@Field("PEDIDOS") String pedidos);
 
-    @GET("Puntos")
-    Call<Respuesta_puntos> obtenerFacturasPuntos();
-
+    @FormUrlEncoded
+    @POST("Puntos")
+    Call<Respuesta_puntos> obtenerFacturasPuntos(@Field("mVendedor") String mVendedor);
 
     @FormUrlEncoded
     @POST("InsertCobros")
