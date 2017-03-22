@@ -32,7 +32,7 @@ public class Pedidos_model {
                 contentValues.put("VENDEDOR" , a.getmVendedor());
                 contentValues.put("CLIENTE" , a.getmCliente());
                 contentValues.put("NOMBRE" , a.getmNombre());
-                contentValues.put("FECHA" , a.getmFecha());
+                contentValues.put("FECHA_CREADA" , a.getmFecha());
                 contentValues.put("MONTO" , a.getmPrecio());
                 contentValues.put("ESTADO" , a.getmEstado());
 
@@ -82,9 +82,7 @@ public class Pedidos_model {
     public static List<Pedidos> getInfoPedidos(String basedir, Context context) {
         List<Pedidos> lista = new ArrayList<>();
 
-        ArrayList<HashMap<String, String>> contactList;
         Integer i = 0;
-        contactList = new ArrayList<>();
         SQLiteDatabase myDataBase = null;
         SQLiteHelper myDbHelper = null;
         try
@@ -102,24 +100,12 @@ public class Pedidos_model {
                     tmp.setmCliente(cursor.getString(cursor.getColumnIndex("CLIENTE")));
                     tmp.setmNombre(cursor.getString(cursor.getColumnIndex("NOMBRE")));
                     tmp.setmPrecio(cursor.getString(cursor.getColumnIndex("MONTO")));
-                    tmp.setmFecha(cursor.getString(cursor.getColumnIndex("FECHA")));
+                    tmp.setmFecha(cursor.getString(cursor.getColumnIndex("FECHA_CREADA")));
                     tmp.setmEstado(cursor.getString(cursor.getColumnIndex("ESTADO")));
                     Cursor cursor2 = myDataBase.query(true, "PEDIDO_DETALLE", null, "IDPEDIDO"+ "=?", new String[] { cursor.getString(cursor.getColumnIndex("IDPEDIDO")) }, null, null, null, null);
                     cursor2.moveToFirst();
 
-                    HashMap<String, String> contact = new HashMap<>();
                     while(!cursor2.isAfterLast()) {
-                        /*contact.put("IDPEDIDO", cursor2.getString(cursor2.getColumnIndex("IDPEDIDO")));
-                        contact.put("ARTICULO", cursor2.getString(cursor2.getColumnIndex("ARTICULO")));
-                        contact.put("DESCRIPCION", cursor2.getString(cursor2.getColumnIndex("DESCRIPCION")));
-                        contact.put("CANTIDAD", cursor2.getString(cursor2.getColumnIndex("CANTIDAD")));
-                        contact.put("TOTAL", cursor2.getString(cursor2.getColumnIndex("TOTAL")));
-                        contact.put("BONIFICADO", cursor2.getString(cursor2.getColumnIndex("BONIFICADO")));
-                        contactList.add(contact);
-                        tmp.setContactList(contactList);
-                        lista.add(tmp);
-                        cursor2.moveToNext();*/
-
                         tmp.getDetalles().put("ID"+i,cursor2.getString(cursor2.getColumnIndex("IDPEDIDO")));
                         tmp.getDetalles().put("ARTICULO"+i,cursor2.getString(cursor2.getColumnIndex("ARTICULO")));
                         tmp.getDetalles().put("DESC"+i,cursor2.getString(cursor2.getColumnIndex("DESCRIPCION")));
@@ -127,14 +113,9 @@ public class Pedidos_model {
                         tmp.getDetalles().put("TOTAL"+i,cursor2.getString(cursor2.getColumnIndex("TOTAL")));
                         tmp.getDetalles().put("BONI"+i,cursor2.getString(cursor2.getColumnIndex("BONIFICADO")));
                         i++;
-
                         cursor2.moveToNext();
                     }
-                    //lista.add(tmp);
                     lista.add(tmp);
-                    contact.clear();
-                    contactList.clear();
-
                     cursor.moveToNext();
                 }
             }

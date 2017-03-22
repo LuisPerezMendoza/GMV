@@ -214,28 +214,9 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                             }else{
                                 if (items[which].equals(items[2])){
 
-                                    List<Pedidos> listPedidos = Pedidos_model.getInfoPedidos(ManagerURI.getDirDb(),AgendaActivity.this);
-                                    Gson gson = new Gson();
-                                    if (listPedidos.size()>0) {
-                                        Class_retrofit.Objfit().create(Servicio.class).enviarPedidos(gson.toJson(listPedidos)).enqueue(new Callback<Respuesta_pedidos>() {
-                                            @Override
-                                            public void onResponse(Call<Respuesta_pedidos> call, Response<Respuesta_pedidos> response) {
-                                                if(response.isSuccessful()){
-                                                    Respuesta_pedidos pedidoRespuesta = response.body();
-                                                    new Notificaciones().Alert(AgendaActivity.this,"EXITO","PEDIDOS ENVIADOS...").setCancelable(false).setPositiveButton("OK", null).show();
-                                                }else{
-                                                    Toast.makeText(AgendaActivity.this, "ERROR AL ENVIAR RESPUESTA: "+response.body(), Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                            @Override
-                                            public void onFailure(Call<Respuesta_pedidos> call, Throwable t) {
-                                                new Notificaciones().Alert(AgendaActivity.this,"ERROR",t.getMessage()).setCancelable(false).setPositiveButton("OK", null).show();
-                                            }
-                                        });
-                                    }else{
+                                  
                                         new Notificaciones().Alert(AgendaActivity.this,"ERROR","NO HAY PEDIDOS...").setCancelable(false).setPositiveButton("OK", null).show();
                                     }
-
                                    // new TaskUnload(AgendaActivity.this).execute();
                                     //new Calendario().show(getSupportFragmentManager(), "datePicker");
 
