@@ -56,6 +56,7 @@ public class AccionesActivity extends AppCompatActivity {
             public void onClick(View v) {
                 limpiarPref();
                 startActivity(new Intent(AccionesActivity.this,AgendaActivity.class));
+                //startActivity(new Intent(AccionesActivity.this,AgendaActivity.class));
                 finish();
             }
         });
