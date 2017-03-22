@@ -103,23 +103,18 @@ public class ResumenActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 if (CodCls!="") {
                                     int key = SQLiteHelper.getId(ManagerURI.getDirDb(),ResumenActivity.this,"PEDIDOS");
-                                    idPedido = "F09-" + "P"+ Clock.getIdDate()+String.valueOf(key);
+                                    idPedido = preferences.getString("VENDEDOR", "00") + "P"+ Clock.getIdDate()+String.valueOf(key);
                                     Float nTotal= 0.0f;
                                     for (Map<String, Object> obj : list) {
                                         nTotal += Float.parseFloat(obj.get("ITEMVALOR").toString());
                                     }
-                                    preferences.getString("NameClsSelected", " CLIENTE NO ENCONTRADO");
-                                    /*for (Map<String, Object> obj2 : list) {
-                                        Toast.makeText(ResumenActivity.this, "---> " + obj2.get("PRECIO").toString(), Toast.LENGTH_SHORT).show();
-                                    }*/
-                                    SimpleDateFormat mdformat = new SimpleDateFormat("dd/MM/yyyy ");
-                                    String strDate = mdformat.format(Calendar.getInstance().getTime());
+
                                     Pedidos tmp = new Pedidos();
                                     tmp.setmIdPedido(idPedido);
                                     tmp.setmVendedor("F09");
                                     tmp.setmCliente(CodCls);
                                     tmp.setmNombre(preferences.getString("NameClsSelected", " CLIENTE NO ENCONTRADO"));
-                                    tmp.setmFecha(strDate.toString());
+                                    tmp.setmFecha(Clock.getNow());
                                     tmp.setmPrecio(String.valueOf(nTotal));
                                     tmp.setmEstado("0");
                                     mPedido.add(tmp);
@@ -132,7 +127,6 @@ public class ResumenActivity extends AppCompatActivity {
                                         tmpDetalle.setmCantidad(obj2.get("ITEMCANTI").toString());
                                         tmpDetalle.setmPrecio(obj2.get("PRECIO").toString());
                                         tmpDetalle.setmBonificado(obj2.get("BONIFICADO").toString());
-                                        //Toast.makeText(ResumenActivity.this, "GUARDANDO "+obj2.get("ITEMNAME").toString(), Toast.LENGTH_SHORT).show();
                                         mDetallePedido.add(tmpDetalle);
                                     }
                                     Pedidos_model.SaveDetallePedido(ResumenActivity.this, mDetallePedido);
