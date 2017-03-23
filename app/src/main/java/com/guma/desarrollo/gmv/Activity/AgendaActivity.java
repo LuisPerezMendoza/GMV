@@ -216,7 +216,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
 
                                   
                                         new Notificaciones().Alert(AgendaActivity.this,"ERROR","NO HAY PEDIDOS...").setCancelable(false).setPositiveButton("OK", null).show();
-                                    }
+
                                    // new TaskUnload(AgendaActivity.this).execute();
                                     //new Calendario().show(getSupportFragmentManager(), "datePicker");
 

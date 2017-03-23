@@ -2,6 +2,7 @@ package com.guma.desarrollo.gmv.api;
 
 import com.google.gson.JsonObject;
 import com.guma.desarrollo.core.Pedidos_model;
+import com.guma.desarrollo.gmv.models.Respuesta_actividades;
 import com.guma.desarrollo.gmv.models.Respuesta_articulos;
 import com.guma.desarrollo.gmv.models.Respuesta_clientes;
 import com.guma.desarrollo.gmv.models.Respuesta_indicadores;
@@ -62,5 +63,8 @@ public interface Servicio {
     @FormUrlEncoded
     @POST("InsertCobros")
     Call<String> InserCorbos(@Field("pCobros") String pCobros);
+
+    @GET("Actividades")
+    Call<Respuesta_actividades> obtenerListaActividades();
 
 }
