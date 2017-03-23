@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -115,6 +116,40 @@ public class Pedidos_model {
                         i++;
                         cursor2.moveToNext();
                     }
+                    lista.add(tmp);
+                    cursor.moveToNext();
+                }
+            }
+        }
+        catch (Exception e) { e.printStackTrace(); }
+        finally
+        {
+            if(myDataBase != null) { myDataBase.close(); }
+            if(myDbHelper != null) { myDbHelper.close(); }
+        }
+        return lista;
+    }
+    public static List<Pedidos> getDetalle(String basedir, Context context,String mIdPedido) {
+        List<Pedidos> lista = new ArrayList<>();
+        SQLiteDatabase myDataBase = null;
+        SQLiteHelper myDbHelper = null;
+        try
+        {
+
+            myDbHelper = new SQLiteHelper(basedir, context);
+            myDataBase = myDbHelper.getReadableDatabase();
+            Cursor cursor = myDataBase.query(true, "PEDIDO_DETALLE", null, "IDPEDIDO"+ "=?", new String[] { mIdPedido }, null, null, null, null);
+            if(cursor.getCount() > 0) {
+
+                cursor.moveToFirst();
+                while(!cursor.isAfterLast()) {
+                    Pedidos tmp = new Pedidos();
+                    tmp.setmIdPedido(cursor.getString(cursor.getColumnIndex("IDPEDIDO")));
+                    tmp.setmArticulo(cursor.getString(cursor.getColumnIndex("ARTICULO")));
+                    tmp.setmDescripcion(cursor.getString(cursor.getColumnIndex("DESCRIPCION")));
+                    tmp.setmCantidad(cursor.getString(cursor.getColumnIndex("CANTIDAD")));
+                    tmp.setmPrecio(cursor.getString(cursor.getColumnIndex("TOTAL")));
+                    tmp.setmBonificado(cursor.getString(cursor.getColumnIndex("BONIFICADO")));
                     lista.add(tmp);
                     cursor.moveToNext();
                 }

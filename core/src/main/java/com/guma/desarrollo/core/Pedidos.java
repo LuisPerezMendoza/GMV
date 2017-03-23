@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class Pedidos {
     String mIdPedido,mVendedor,mCliente,mNombre,mFecha,mArticulo,mDescripcion,mCantidad,mPrecio,mBonificado,mEstado;
-    //private List<String> detalles = new ArrayList<>();
+
     JSONObject detalles = new JSONObject();
     ArrayList<HashMap<String, String>> contactList = null;
 
@@ -120,14 +120,6 @@ public class Pedidos {
 
     public void setmEstado(String mEstado) {
         this.mEstado = mEstado;
-    }
-
-    public ArrayList<HashMap<String, String>> getContactList() {
-        return contactList;
-    }
-
-    public void setContactList(ArrayList<HashMap<String, String>> contactList) {
-        this.contactList = contactList;
     }
 
     public JSONObject getDetalles() {

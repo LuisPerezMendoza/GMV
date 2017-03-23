@@ -18,7 +18,16 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.guma.desarrollo.core.Clientes_model;
+import com.guma.desarrollo.core.Facturas;
+import com.guma.desarrollo.core.ManagerURI;
+import com.guma.desarrollo.core.Mora;
+import com.guma.desarrollo.core.Pedidos;
+import com.guma.desarrollo.core.Pedidos_model;
+import com.guma.desarrollo.gmv.Adapters.Facturas_Leads;
+import com.guma.desarrollo.gmv.Adapters.Pedidos_Leads;
 import com.guma.desarrollo.gmv.R;
+import com.guma.desarrollo.gmv.api.Notificaciones;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,7 +38,8 @@ import java.util.Map;
 public class PedidoActivity extends AppCompatActivity {
     private ListView listView;
     List<Map<String, Object>> list;
-    TextView SubTotal,ivaTotal,Total,txtCount;
+    TextView SubTotal,ivaTotal,Total,txtCount,txtItemName,txtItemCant,txtItemCod,txtItemValor,txtBonificado,txtPrecio;
+    ArrayList<Pedidos> fList;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
 
@@ -47,9 +57,6 @@ public class PedidoActivity extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = preferences.edit();
         setTitle(preferences.getString("NameClsSelected"," --ERROR--"));
-
-        //SubTotal = (TextView) findViewById(R.id.SubTotal);
-        //ivaTotal = (TextView) findViewById(R.id.ivaTotal);
         Total = (TextView) findViewById(R.id.Total);
         txtCount= (TextView) findViewById(R.id.txtCountArti);
 
@@ -91,14 +98,37 @@ public class PedidoActivity extends AppCompatActivity {
                     }).create().show();
 
                 }else{
-                    Toast.makeText(PedidoActivity.this, "VACIO", Toast.LENGTH_SHORT).show();
+                    new Notificaciones().Alert(PedidoActivity.this,"PEDIDO VACIO","INGRESE ARTICULOS AL PEDIDO...").setCancelable(false).setPositiveButton("OK", null).show();
                 }
             }
         });
 
+        String IdPedido = preferences.getString("IDPEDIDO", "");
+        if (!IdPedido.equals("")){
+            setTitle("EDICION DE PEDIDO: "+IdPedido);
+            /*List<Pedidos> obj = Pedidos_model.getDetalle(ManagerURI.getDirDb(), PedidoActivity.this,IdPedido);
+            if (obj.size()>0){*/
+                fList = new ArrayList<>();
+                for (Pedidos pedido : Pedidos_model.getDetalle(ManagerURI.getDirDb(), PedidoActivity.this,IdPedido)){
+                    fList.add(pedido);
+                }
+                listView.setAdapter(new Pedidos_Leads(this, fList));
+
+            /*Toast.makeText(this, obj.get(0).getmArticulo(), Toast.LENGTH_SHORT).show();
+                txtItemName = (TextView)findViewById(R.id.tvListItemName);
+                txtItemCant = (TextView)findViewById(R.id.Item_cant);
+                txtItemCod = (TextView)findViewById(R.id.item_codigo);
+                txtItemValor = (TextView)findViewById(R.id.Item_valor);
+                txtBonificado = (TextView)findViewById(R.id.tbListBonificado);
+                txtPrecio = (TextView)findViewById(R.id.tvListItemPrecio);
+            }*/
+
+        }
+
+
     }
     public void Refresh(){
-        float vLine = 0,subValor=0,vFinal=0;
+        float vLine = 0;
         listView.setAdapter(
                 new SimpleAdapter(
                         this,
@@ -109,11 +139,7 @@ public class PedidoActivity extends AppCompatActivity {
 
         for (Map<String, Object> obj : list){
             vLine     += Float.parseFloat(obj.get("ITEMVALOR").toString());
-            /*subValor  += Float.parseFloat(obj.get("ITEMSUBTOTAL").toString());
-            vFinal    += Float.parseFloat(obj.get("ITEMVALORTOTAL").toString());*/
         }
-        /*SubTotal.setText("SubTotal C$ " + String.valueOf(vLine));
-        ivaTotal.setText("IVA C$ " + String.valueOf(subValor));*/
         Total.setText("TOTAL C$ "+ String.valueOf(vLine));
         txtCount.setText(listView.getCount() +" Articulo");
     }
@@ -135,7 +161,7 @@ public class PedidoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==0 && resultCode==RESULT_OK){
-            Map<String, Object> map = new HashMap<String, Object>();
+            Map<String, Object> map = new HashMap<>();
             map.put("ITEMNAME", data.getStringArrayListExtra("myItem").get(0));
             map.put("ITEMCODIGO", data.getStringArrayListExtra("myItem").get(1));
             map.put("ITEMCANTI",  data.getStringArrayListExtra("myItem").get(2));

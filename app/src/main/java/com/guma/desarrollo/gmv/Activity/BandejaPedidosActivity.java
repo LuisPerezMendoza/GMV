@@ -1,44 +1,45 @@
 package com.guma.desarrollo.gmv.Activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.guma.desarrollo.core.Cobros;
-import com.guma.desarrollo.core.Cobros_model;
+
 import com.guma.desarrollo.core.ManagerURI;
 import com.guma.desarrollo.core.Pedidos;
 import com.guma.desarrollo.core.Pedidos_model;
-import com.guma.desarrollo.gmv.Adapters.AdapterPedidos;
+import com.guma.desarrollo.gmv.Adapters.Pedidos_Leads;
 import com.guma.desarrollo.gmv.Pedido;
 import com.guma.desarrollo.gmv.R;
-import com.guma.desarrollo.gmv.ReferenciaFireBase;
+import com.guma.desarrollo.gmv.api.Notificaciones;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class BandejaPedidosActivity extends AppCompatActivity {
     private ListView listView;
-    ArrayList<Pedidos> fList = null;
-    List<Pedido> lstPedidos;
+    ArrayList<Pedidos> fList;
+    public SharedPreferences preferences;
+    public SharedPreferences.Editor editor;
     TextView mTotal;
     float mCalTotal;
 
-    AdapterPedidos adapterPedidos;
+    //AdapterPedidos adapterPedidos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,23 +47,36 @@ public class BandejaPedidosActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("PEDIDOS DEL DIA");
+        editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
         if (getSupportActionBar() != null){ getSupportActionBar().setDisplayHomeAsUpEnabled(true); }
         mTotal = (TextView) findViewById(R.id.txtTotalPedidos);
+        fList = new ArrayList<>();
+        listView = (ListView) findViewById(R.id.listView_pedidos);
 
         List<Pedidos> lstObj = Pedidos_model.getInfoPedidos(ManagerURI.getDirDb(), BandejaPedidosActivity.this);
-        Log.d("", "LISTAPEDIDOS: " + lstObj.get(0).toString());
         if (lstObj.size() == 0){
-            Toast.makeText(this, "ERROR LISTA VACIA", Toast.LENGTH_SHORT).show();
+            new Notificaciones().Alert(BandejaPedidosActivity.this,"AVISO","NO HAY PEDIDOS...").setCancelable(false).setPositiveButton("OK", null).show();
         }else{
-            Toast.makeText(this, "tiene el cabron", Toast.LENGTH_SHORT).show();
+            for(Pedidos obj : lstObj) {
+                fList.add(obj);
+                mCalTotal += Float.parseFloat(obj.getmPrecio());
+            }
+            Toast.makeText(this, fList.get(0).toString(), Toast.LENGTH_SHORT).show();
+            mTotal.setText("C$ " + String.valueOf(mCalTotal));
+            listView.setAdapter(new Pedidos_Leads(this, fList));
         }
-        for(Pedidos obj : lstObj) {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                LayoutInflater li = LayoutInflater.from(BandejaPedidosActivity.this);
+                final Pedidos pedid = (Pedidos) adapterView.getItemAtPosition(i);
+                String Ekisde = ((Pedidos) adapterView.getItemAtPosition(i)).getmIdPedido();
+                editor.putString("IDPEDIDO",Ekisde);
+                editor.apply();
 
-            //fList.add(obj);
-            //Toast.makeText(this, obj.getmPrecio().toString(), Toast.LENGTH_SHORT).show();
-            //mCalTotal += Float.parseFloat(obj.getmPrecio());
-        }
-        //Toast.makeText(this, "el total->>"+String.valueOf(mCalTotal), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(BandejaPedidosActivity.this,PedidoActivity.class));
+            }
+        });
     }
     public boolean onOptionsItemSelected(MenuItem item)    {
         int id = item.getItemId();
