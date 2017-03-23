@@ -7,7 +7,8 @@ import android.content.Context;
  */
 
 public class ReferenciasContexto {
-    private static Context ContextArticulo,ContextClienteMora;
+    private static Context ContextArticulo,ContextClienteMora,ContextActividad;
+
     public static Context getContextClienteMora() {
         return ContextClienteMora;
     }
@@ -21,5 +22,12 @@ public class ReferenciasContexto {
 
     public static void setContextArticulo(Context contextArticulo) {
         ContextArticulo = contextArticulo;
+    }
+
+    public static Context getContextActividad(){
+        return ContextActividad;
+    }
+    public static void setContextActividad(Context contextActividad){
+        ContextActividad=contextActividad;
     }
 }
