@@ -67,4 +67,8 @@ public interface Servicio {
     @GET("Actividades")
     Call<Respuesta_actividades> obtenerListaActividades();
 
+    @FormUrlEncoded
+    @POST("inVisitas")
+    Call<String> inVisitas(@Field("mVisitas") String mVisitas);
+
 }
