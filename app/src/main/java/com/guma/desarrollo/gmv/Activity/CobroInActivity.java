@@ -35,7 +35,7 @@ public class CobroInActivity extends AppCompatActivity {
     TextView mSaldo,mLimite,m30,m60,m90,m120,md120,mTotal;
     private SharedPreferences preferences;
     ArrayList<Cobros> mCobro = new ArrayList<>();
-    String Usuario;
+    String Usuario,mCliente;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +45,7 @@ public class CobroInActivity extends AppCompatActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Usuario = preferences.getString("USUARIO","0");
+        mCliente= preferences.getString("ClsSelected","0");
 
 
         mImporte = (EditText) findViewById(R.id.crbImporte);
@@ -72,19 +73,22 @@ public class CobroInActivity extends AppCompatActivity {
                     int key = SQLiteHelper.getId(ManagerURI.getDirDb(),CobroInActivity.this,"COBROS");
                     String idCobro = Usuario+"-" + "C"+Clock.getIdDate()+String.valueOf(key);
                     Cobros tmp = new Cobros();
+
                     tmp.setmIdCobro(idCobro);
-                    tmp.setmCliente(preferences.getString("ClsSelected","0"));
+                    tmp.setmCliente(mCliente);
                     tmp.setmRuta(Usuario);
                     tmp.setmImporte(mImporte.getText().toString().trim());
                     tmp.setmTipo(spinner.getSelectedItem().toString());
                     tmp.setmObservacion(mObservacion.getText().toString().trim());
                     tmp.setmFecha(Clock.getNow());
                     mCobro.add(tmp);
+
                     Cobros_model.SaveCobro(CobroInActivity.this,mCobro);
                     new Notificaciones().Alert(CobroInActivity.this,"COBRO","Informacion Guardada")
                             .setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            SQLiteHelper.ExecuteSQL(ManagerURI.getDirDb(),CobroInActivity.this,"INSERT INTO VISITAS VALUES ('1','"+mCliente+"','" + Clock.getNow() + "', 'lati', 'Longi','S','','COBRO','0')");
                             finish();
                         }
                     }).show();

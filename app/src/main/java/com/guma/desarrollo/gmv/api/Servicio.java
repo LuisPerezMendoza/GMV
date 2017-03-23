@@ -63,4 +63,8 @@ public interface Servicio {
     @POST("InsertCobros")
     Call<String> InserCorbos(@Field("pCobros") String pCobros);
 
+    @FormUrlEncoded
+    @POST("inVisitas")
+    Call<String> inVisitas(@Field("mVisitas") String mVisitas);
+
 }
