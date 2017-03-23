@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.guma.desarrollo.core.Actividades_model;
 import com.guma.desarrollo.core.Articulos_model;
 import com.guma.desarrollo.core.Clientes_model;
 import com.guma.desarrollo.core.Clock;
@@ -16,6 +17,7 @@ import com.guma.desarrollo.core.ManagerURI;
 import com.guma.desarrollo.core.SQLiteHelper;
 import com.guma.desarrollo.gmv.api.Class_retrofit;
 import com.guma.desarrollo.gmv.api.Servicio;
+import com.guma.desarrollo.gmv.models.Respuesta_actividades;
 import com.guma.desarrollo.gmv.models.Respuesta_articulos;
 import com.guma.desarrollo.gmv.models.Respuesta_clientes;
 import com.guma.desarrollo.gmv.models.Respuesta_indicadores;
@@ -81,7 +83,31 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
                     }
                 });
 
-
+        /*Actividades*/
+        //Toast.makeText(cnxt, "Antes de ...", Toast.LENGTH_LONG).show();
+        Class_retrofit.Objfit()
+                .create(Servicio.class)
+                .obtenerListaActividades()
+                .enqueue(new Callback<Respuesta_actividades>() {
+                    @Override
+                    public void onResponse(Call<Respuesta_actividades> call, Response<Respuesta_actividades> response) {
+                        if(response.isSuccessful()){
+                            pdialog.setMessage("Actividades.... ");
+                            Respuesta_actividades actividadRespuesta = response.body();
+                            Log.d(TAG, "onResponse: Actividades " + actividadRespuesta.getCount());
+                            Actividades_model.SaveActividades(cnxt,actividadRespuesta.getResults());
+                        }else{
+                            pdialog.dismiss();
+                            Log.d(TAG, "onResponse: noSuccessful Actividades" + response.errorBody() );
+                            Toast.makeText(cnxt, "xxx"+response.errorBody(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<Respuesta_actividades> call, Throwable t) {
+                        Log.d(TAG, "onResponse: Failure Actividades" + t.getMessage() );
+                        pdialog.dismiss();
+                    }
+                });
 
         Class_retrofit.Objfit()
                 .create(Servicio.class)
@@ -175,7 +201,9 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
                             pdialog.dismiss();
                             Log.d(TAG, "onResponse: noSuccessful Facturas " + response.errorBody() );
                         }
+
                     }
+
 
                     @Override
                     public void onFailure(Call<Respuesta_puntos> call, Throwable t) {
@@ -185,6 +213,7 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
                 });
        editor.putString("lstDownload", Clock.getTimeStamp());
        editor.apply();
+
        return null;
     }
 

@@ -213,9 +213,18 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                                 startActivity(new Intent(AgendaActivity.this,BandejaCobrosActivity.class));
                             }else{
                                 if (items[which].equals(items[2])){
+                                      //  new Notificaciones().Alert(AgendaActivity.this,"ERROR","NO HAY PEDIDOS...").setCancelable(false).setPositiveButton("OK", null).show();
 
+<<<<<<< HEAD
                                     new Notificaciones().Alert(AgendaActivity.this,"ERROR","NO HAY PEDIDOS...").setCancelable(false).setPositiveButton("OK", null).show();
+=======
+                                  
+                                        new Notificaciones().Alert(AgendaActivity.this,"ERROR","NO HAY PEDIDOS...").setCancelable(false).setPositiveButton("OK", null).show();
+
+>>>>>>> e1bdc3b691804ffa40ebb3ac726d010dda552b36
                                    // new TaskUnload(AgendaActivity.this).execute();
+
+                                    new TaskUnload(AgendaActivity.this).execute();
                                     //new Calendario().show(getSupportFragmentManager(), "datePicker");
 
                                 } else {
