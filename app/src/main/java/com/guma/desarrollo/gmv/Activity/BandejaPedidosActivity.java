@@ -61,7 +61,7 @@ public class BandejaPedidosActivity extends AppCompatActivity {
                 fList.add(obj);
                 mCalTotal += Float.parseFloat(obj.getmPrecio());
             }
-            Toast.makeText(this, fList.get(0).toString(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, fList.get(0).toString(), Toast.LENGTH_SHORT).show();
             mTotal.setText("C$ " + String.valueOf(mCalTotal));
             listView.setAdapter(new Pedidos_Leads(this, fList));
         }
@@ -70,10 +70,13 @@ public class BandejaPedidosActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 LayoutInflater li = LayoutInflater.from(BandejaPedidosActivity.this);
                 final Pedidos pedid = (Pedidos) adapterView.getItemAtPosition(i);
-                String Ekisde = ((Pedidos) adapterView.getItemAtPosition(i)).getmIdPedido();
-                editor.putString("IDPEDIDO",Ekisde);
+                String idPedido = ((Pedidos) adapterView.getItemAtPosition(i)).getmIdPedido();
+                String Cliente = ((Pedidos) adapterView.getItemAtPosition(i)).getmNombre();
+                String idCliente = ((Pedidos) adapterView.getItemAtPosition(i)).getmCliente();
+                editor.putString("IDPEDIDO",idPedido);
+                editor.putString("CLIENTE",Cliente);
+                editor.putString("ClsSelected",idCliente);
                 editor.apply();
-
                 startActivity(new Intent(BandejaPedidosActivity.this,PedidoActivity.class));
             }
         });

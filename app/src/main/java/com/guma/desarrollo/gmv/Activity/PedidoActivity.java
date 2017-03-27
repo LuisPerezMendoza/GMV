@@ -1,6 +1,7 @@
 package com.guma.desarrollo.gmv.Activity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,15 +10,19 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.guma.desarrollo.core.Articulo;
 import com.guma.desarrollo.core.Clientes_model;
 import com.guma.desarrollo.core.Facturas;
 import com.guma.desarrollo.core.ManagerURI;
@@ -31,6 +36,7 @@ import com.guma.desarrollo.gmv.api.Notificaciones;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,6 +83,20 @@ public class PedidoActivity extends AppCompatActivity {
                 }).create().show();
             }
         });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final Articulo mnotes = (Articulo) parent.getItemAtPosition(position);
+                final String[] Reglas = mnotes.getmReglas().split(",");
+                LayoutInflater li = LayoutInflater.from(PedidoActivity.this);
+                View promptsView = li.inflate(R.layout.input_cant, null);
+                android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(PedidoActivity.this);
+
+                alertDialogBuilder.setView(promptsView);
+
+                return true;
+            }
+        });
         findViewById(R.id.txtSendPedido).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,29 +124,57 @@ public class PedidoActivity extends AppCompatActivity {
         });
 
         String IdPedido = preferences.getString("IDPEDIDO", "");
+        String cliente = preferences.getString("CLIENTE", "");
         if (!IdPedido.equals("")){
-            setTitle("EDICION DE PEDIDO: "+IdPedido);
-            /*List<Pedidos> obj = Pedidos_model.getDetalle(ManagerURI.getDirDb(), PedidoActivity.this,IdPedido);
-            if (obj.size()>0){*/
+            setTitle("EDICION DE PEDIDO: "+IdPedido+" "+cliente);
+            List<Pedidos> obj = Pedidos_model.getDetalle(ManagerURI.getDirDb(), PedidoActivity.this,IdPedido);
                 fList = new ArrayList<>();
-                for (Pedidos pedido : Pedidos_model.getDetalle(ManagerURI.getDirDb(), PedidoActivity.this,IdPedido)){
-                    fList.add(pedido);
+                for(Pedidos obj2 : obj) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("ITEMNAME", obj2.getmDescripcion());
+                    map.put("ITEMCODIGO", obj2.getmArticulo());
+                    map.put("PRECIO", obj2.getmPrecio());
+                    map.put("ITEMCANTI", obj2.getmCantidad());
+                    map.put("BONIFICADO", obj2.getmBonificado());
+                    map.put("ITEMVALOR", Float.parseFloat(obj2.getmCantidad())*Float.parseFloat(obj2.getmPrecio()));
+                    list.add(map);
                 }
-                listView.setAdapter(new Pedidos_Leads(this, fList));
-
-            /*Toast.makeText(this, obj.get(0).getmArticulo(), Toast.LENGTH_SHORT).show();
-                txtItemName = (TextView)findViewById(R.id.tvListItemName);
-                txtItemCant = (TextView)findViewById(R.id.Item_cant);
-                txtItemCod = (TextView)findViewById(R.id.item_codigo);
-                txtItemValor = (TextView)findViewById(R.id.Item_valor);
-                txtBonificado = (TextView)findViewById(R.id.tbListBonificado);
-                txtPrecio = (TextView)findViewById(R.id.tvListItemPrecio);
-            }*/
-
+            Refresh();
         }
-
-
     }
+    /*public void showInputBox(List<Map<String, Object>> list2,final int index){
+        final ArrayList<String> arrayList;
+        final Dialog dialogo = new Dialog(PedidoActivity.this);
+        dialogo.setTitle("EDICION DE ARTICULO");
+        dialogo.setContentView(R.layout.input_box);
+        final EditText editText = (EditText)dialogo.findViewById(R.id.txtinput);
+        editText.setText(list2.get(index).get("ITEMCANTI").toString());
+        final EditText valor = (EditText)dialogo.findViewById(R.id.txtvalor);
+        valor.setText(list2.get(index).get("PRECIO").toString());
+        Button bt = (Button)dialogo.findViewById(R.id.btnDone);
+        final Map<String, Object> map = new HashMap<>();
+        map.put("ITEMNAME", list2.get(index).get("ITEMNAME").toString());
+        map.put("ITEMCODIGO", list2.get(index).get("ITEMCODIGO").toString());
+        /*map.put("ITEMSUBTOTAL", list2.get(index).get("ITEMSUBTOTAL").toString());
+        map.put("ITEMVALORTOTAL", list2.get(index).get("ITEMVALORTOTAL").toString());*/
+        /*map.put("BONIFICADO", list2.get(index).get("BONIFICADO").toString());
+        map.put("PRECIO", list2.get(index).get("PRECIO").toString());
+        bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                list.remove(index);
+                map.put("ITEMCANTI",  editText.getText().toString());
+                map.put("ITEMVALOR",  valor.getText().toString());
+
+                list.add(map);
+                list.set(index, map);
+                //Toast.makeText(PedidoActivity.this, "CANTIDAD NUEVA: "+list.get(index).get("ITEMCANTI").toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(PedidoActivity.this, "CANTIDAD NUEVA: "+String.valueOf(index), Toast.LENGTH_SHORT).show();
+                Refresh();
+            }
+        });
+        dialogo.show();
+    }*/
     public void Refresh(){
         float vLine = 0;
         listView.setAdapter(

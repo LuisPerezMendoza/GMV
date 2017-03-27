@@ -78,7 +78,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:gravity="center"
-                android:text="Le Atendio:"/>
+
+                android:text="@string/atendio"/>
 
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
@@ -93,7 +94,7 @@
                 android:gravity="center"/>
         </android.support.design.widget.TextInputLayout>
         <LinearLayout
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
             <TextView
@@ -125,10 +126,6 @@
                 android:layout_gravity="center_horizontal"
                 />
         </android.support.design.widget.TextInputLayout>
-
-
-
-
     </LinearLayout>
 
 

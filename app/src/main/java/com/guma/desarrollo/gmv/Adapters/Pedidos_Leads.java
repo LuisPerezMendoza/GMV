@@ -41,6 +41,7 @@ public class Pedidos_Leads extends ArrayAdapter<Pedidos>{
         mCliente.setText(lead.getmCliente()+" "+lead.getmNombre());
         mMonto.setText("C$ " + lead.getmPrecio());
 
+
         mEstado.setText("ESTADO:  " + lead.getmEstado());
         return convertView;
     }

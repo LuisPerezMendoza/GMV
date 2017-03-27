@@ -27,7 +27,8 @@
                 android:layout_marginLeft="0dp"
                 android:layout_marginTop="30dp"
                 android:adjustViewBounds="false"
-                android:src="@drawable/carro" />
+                android:src="@drawable/carro"
+                />
             <LinearLayout
                 android:layout_marginLeft="10dp"
                 android:layout_height="wrap_content"
@@ -60,7 +61,6 @@
                     android:textAppearance="?android:attr/textAppearanceListItem"
                     tools:text="FECHA" />
             </LinearLayout>
-
         </TableRow>
         <TableRow
         android:layout_width="fill_parent"
@@ -72,7 +72,6 @@
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:text=""
                 android:id="@+id/txt_id_cliente" />
-
             <TextView
                 android:id="@+id/txt_id_estado"
                 android:gravity="end"
@@ -81,8 +80,13 @@
                 android:layout_weight="1"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:text="" />
+            <ImageView
 
+                android:layout_width="50dip"
+                android:layout_height="fill_parent"
+                android:src="@drawable/done"
+                android:layout_marginLeft="3dip"
+                android:scaleType="center"/>
         </TableRow>
-
 </TableLayout>
 </RelativeLayout>
