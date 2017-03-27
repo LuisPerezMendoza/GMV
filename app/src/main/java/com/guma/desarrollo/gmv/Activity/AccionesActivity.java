@@ -42,6 +42,8 @@ public class AccionesActivity extends AppCompatActivity {
         findViewById(R.id.btnPD).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editor.putString("IDPEDIDO","");
+                editor.apply();
                 startActivity(new Intent(AccionesActivity.this,IndicadoresClienteActivity.class));
             }
         });
@@ -57,7 +59,6 @@ public class AccionesActivity extends AppCompatActivity {
             public void onClick(View v) {
                 limpiarPref();
                 startActivity(new Intent(AccionesActivity.this,AgendaActivity.class));
-                //startActivity(new Intent(AccionesActivity.this,AgendaActivity.class));
                 finish();
             }
         });

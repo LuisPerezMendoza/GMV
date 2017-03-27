@@ -64,7 +64,7 @@ public class ArticulosActivity extends AppCompatActivity implements SearchView.O
         listView = (ListView) findViewById(R.id.listView);
         if (getSupportActionBar() != null){ getSupportActionBar().setDisplayHomeAsUpEnabled(true); }
         ReferenciasContexto.setContextArticulo(ArticulosActivity.this);
-
+        Toast.makeText(this, "HOLLLA", Toast.LENGTH_SHORT).show();
         objects = Articulo_Repository.getInstance().getArticulos();
         lbs = new Articulo_Leads(this, objects);
         listView.setAdapter(lbs);
@@ -85,7 +85,7 @@ public class ArticulosActivity extends AppCompatActivity implements SearchView.O
 
                     alertDialogBuilder.setView(promptsView);
 
-
+                Toast.makeText(ArticulosActivity.this, "AQUI ESSSSS", Toast.LENGTH_SHORT).show();
 
                     Inputcant = (EditText) promptsView.findViewById(R.id.txtFrmCantidad);
                     InputPrecio = (EditText) promptsView.findViewById(R.id.txtFrmPrecio);
@@ -195,28 +195,6 @@ public class ArticulosActivity extends AppCompatActivity implements SearchView.O
                                             dialog.cancel();
                                         }
                                     }).create().show();
-
-
-                /*new AlertDialog.Builder(ArticulosActivity.this)
-                        .setTitle("CONFIRMACION")
-                        .setMessage("builder form")
-                        .setCancelable(false)
-                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                listView.setFocusable(true);
-                            }
-                        })
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
-                        }).show();*/
-                    //Lead currentLead = listView.getItem(position);
-                    //Toast.makeText(ArticulosActivity.this,"Iniciar screen de detalle para: \n" + currentLead.getName(),Toast.LENGTH_SHORT).show();
-
-
             }
         });
     }

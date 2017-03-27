@@ -9,14 +9,19 @@ public class Usuario {
     private String mUsuario;
     private String mNombre;
     private String mRol;
+    private String mPass;
 
-    public Usuario(String mIdUser, String mUsuario, String mNombre, String mRol) {
+    public Usuario(String mIdUser, String mUsuario, String mNombre, String mRol, String mPass) {
         this.mIdUser = mIdUser;
         this.mUsuario = mUsuario;
         this.mNombre = mNombre;
         this.mRol = mRol;
+        this.mPass = mPass;
     }
 
+    public Usuario() {
+
+    }
     public String getmIdUser() {
         return mIdUser;
     }
@@ -46,5 +51,13 @@ public class Usuario {
     }
     public void setmIdUser(String mIdUser) {
         this.mIdUser = mIdUser;
+    }
+
+    public String getmPass() {
+        return mPass;
+    }
+
+    public void setmPass(String mPass) {
+        this.mPass = mPass;
     }
 }
