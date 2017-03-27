@@ -103,7 +103,7 @@
             android:name=".Activity.FacturasActivity"
             android:label="@string/title_activity_facturas"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activity.RazonActivity"></activity>
+        <activity android:name=".Activity.RazonActivity" />
     </application>
 
 </manifest>

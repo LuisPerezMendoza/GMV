@@ -134,7 +134,6 @@ public class Clientes_model {
                 contentValues.put("DISPONIBLE" , a.getmDisponible());
                 myDataBase.insert("CLIENTES", null, contentValues );
             }
-
         }
         catch (Exception e) {
             e.printStackTrace();

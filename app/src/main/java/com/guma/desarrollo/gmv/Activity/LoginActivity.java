@@ -14,14 +14,17 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
 
 import com.guma.desarrollo.core.ManagerURI;
+
+import com.guma.desarrollo.core.Pedidos;
+import com.guma.desarrollo.core.Pedidos_model;
 import com.guma.desarrollo.core.SQLiteHelper;
 import com.guma.desarrollo.core.Usuario;
+import com.guma.desarrollo.core.Usuario_model;
 import com.guma.desarrollo.gmv.R;
 import com.guma.desarrollo.gmv.api.Class_retrofit;
 import com.guma.desarrollo.gmv.api.Notificaciones;
@@ -29,6 +32,8 @@ import com.guma.desarrollo.gmv.api.Servicio;
 import com.guma.desarrollo.gmv.models.Respuesta_usuario;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,11 +46,12 @@ public class LoginActivity extends AppCompatActivity  {
     private boolean checked;
     private Retrofit retrofit;
     public ProgressDialog pdialog;
-
+    ArrayList<Usuario> mDetalleUser = new ArrayList<>();
     public EditText usuario;
     public EditText pass;
     public String useri;
     public String passw;
+    //List<Usuario> Existe;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +76,21 @@ public class LoginActivity extends AppCompatActivity  {
                     passw = pass.getText().toString();
                     useri = usuario.getText().toString();
                     pdialog = ProgressDialog.show(LoginActivity.this, "", "Procesando. Porfavor Espere...", true);
-                    new TaskLogin().execute();
+                    List<Usuario> Existe = Usuario_model.ValidarUser(useri,passw,LoginActivity.this);
+                    if (Existe.size()>0){
+                        Log.d("RESULTADOS",Existe.get(0).getmNombre());
+                        editor.putString("VENDEDOR",Existe.get(0).getmUsuario());
+                        editor.putString("NOMBRE",Existe.get(0).getmNombre());
+                        editor.putString("USUARIO",Existe.get(0).getmIdUser());
+                        editor.putBoolean("pref", !checked);
+                        editor.apply();
+                        pdialog.dismiss();
+                        startActivity(new Intent(LoginActivity.this,AgendaActivity.class));
+                        finish();
+                    }else{
+                        new TaskLogin().execute();
+                    }
+
                 }
             }
         });
@@ -95,6 +115,16 @@ public class LoginActivity extends AppCompatActivity  {
                         editor.putString("USUARIO",usuarioRespuesta.getResults().get(0).getmIdUser());
                         editor.putString("ROL",usuarioRespuesta.getResults().get(0).getmRol());
                         editor.putBoolean("pref", !checked);
+
+                        Usuario tmpUser = new Usuario();
+                        tmpUser.setmIdUser(usuarioRespuesta.getResults().get(0).getmIdUser());
+                        tmpUser.setmUsuario(usuarioRespuesta.getResults().get(0).getmUsuario());
+                        tmpUser.setmNombre(usuarioRespuesta.getResults().get(0).getmNombre());
+                        tmpUser.setmPass(usuarioRespuesta.getResults().get(0).getmPass());
+                        tmpUser.setmRol(usuarioRespuesta.getResults().get(0).getmRol());
+                        mDetalleUser.add(tmpUser);
+                        Usuario_model.SaveUsuario(LoginActivity.this, mDetalleUser);
+
                         editor.apply();
                         pdialog.dismiss();
                         startActivity(new Intent(LoginActivity.this,AgendaActivity.class));
