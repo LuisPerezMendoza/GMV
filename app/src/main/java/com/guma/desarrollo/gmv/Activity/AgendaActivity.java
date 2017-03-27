@@ -32,6 +32,8 @@ import android.support.v7.app.AlertDialog;
 import com.google.gson.Gson;
 
 import com.google.gson.JsonObject;
+import com.guma.desarrollo.core.Actividad;
+import com.guma.desarrollo.core.Actividades_model;
 import com.guma.desarrollo.core.Articulos_model;
 import com.guma.desarrollo.core.Clientes;
 import com.guma.desarrollo.core.Clientes_model;
@@ -42,6 +44,7 @@ import com.guma.desarrollo.core.ManagerURI;
 import com.guma.desarrollo.core.Pedidos;
 import com.guma.desarrollo.core.Pedidos_model;
 import com.guma.desarrollo.gmv.Adapters.Clientes_Leads;
+import com.guma.desarrollo.gmv.CategoriaInfo;
 import com.guma.desarrollo.gmv.ChildInfo;
 import com.guma.desarrollo.gmv.Tasks.TaskDownload;
 import com.guma.desarrollo.gmv.Tasks.TaskUnload;
@@ -199,6 +202,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
                 startActivity(new Intent(AgendaActivity.this,CumpleannoActivity.class));
             }
         });
+
         findViewById(R.id.imgMenu).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,6 +300,7 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
             simpleExpandableListView.collapseGroup(i);
         }
     }
+
     private void loadData(){
 
         /*

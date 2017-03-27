@@ -30,7 +30,6 @@ public class Actividades_model {
                 contentValues.put("Actividad" , a.getmActividad());
                 myDataBase.insert("ACTIVIDAD", null, contentValues );
             }
-
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -56,8 +55,8 @@ public class Actividades_model {
                 while(!cursor.isAfterLast()) {
                     Actividad tmp = new Actividad();
                     tmp.setmIdAE(cursor.getString(cursor.getColumnIndex("IdAE")));
-                    tmp.setmCategoria(cursor.getString(cursor.getColumnIndex("ACTIVIDAD")));
-                    tmp.setmActividad(cursor.getString(cursor.getColumnIndex("IDCATEGORIA")));
+                    tmp.setmCategoria(cursor.getString(cursor.getColumnIndex("Categoria")));
+                    tmp.setmActividad(cursor.getString(cursor.getColumnIndex("Actividad")));
                     lista.add(tmp);
                     cursor.moveToNext();
                 }

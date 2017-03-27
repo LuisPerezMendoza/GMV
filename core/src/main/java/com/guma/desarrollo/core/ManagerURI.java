@@ -18,9 +18,9 @@ public class ManagerURI {
    //private static String SERVER = "10.0.3.2:8080";    
 
     //private static String SERVER = "165.98.75.219:8448";//SERVIDOR
-    //private static String SERVER = "192.168.1.155:8080";//LOCAL LP
+    private static String SERVER = "192.168.1.155:8080";//LOCAL LP
 
-    private static String SERVER = "165.98.75.219:8448";
+    //private static String SERVER = "165.98.75.219:8448";
 
     private static String URL_Base= "http://"+ SERVER + "/gmv_rest/index.php/";
     private static String  DIR_DB = "/data/data/com.guma.desarrollo.gmv/";
