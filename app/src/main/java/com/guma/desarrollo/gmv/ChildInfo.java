@@ -1,5 +1,7 @@
 package com.guma.desarrollo.gmv;
 
+import java.util.ArrayList;
+
 public class ChildInfo {
 
     private String sequence = "";

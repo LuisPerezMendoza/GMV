@@ -10,11 +10,11 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.guma.desarrollo.gmv.Activity.AgendaActivity"
-    tools:showIn="@layout/activity_agenda">
+    tools:context="com.guma.desarrollo.gmv.Activity.RazonActivity"
+    tools:showIn="@layout/activity_razon">
 
     <ExpandableListView
-        android:id="@+id/simpleExpandableListView"
+        android:id="@+id/simpleExpandableListViewRazon"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:dividerHeight="1dp"

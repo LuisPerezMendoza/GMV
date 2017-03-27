@@ -6,6 +6,11 @@
     android:fitsSystemWindows="true"
     tools:context="com.guma.desarrollo.gmv.Activity.AgendaActivity">
 
-    <include layout="@layout/content_razon" />
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+        <include layout="@layout/content_razon" />
+    </TableLayout>>
 
 </android.support.design.widget.CoordinatorLayout>
