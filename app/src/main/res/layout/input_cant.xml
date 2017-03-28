@@ -18,7 +18,7 @@
             android:layout_width="fill_parent"
             android:layout_height="30dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="INFORMACION DEL MARTICULO"
+            android:text="INFORMACION DEL ARTÍCULO"
             />
     </TableRow>
         <TableRow

@@ -1,11 +1,14 @@
 package com.guma.desarrollo.gmv.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.guma.desarrollo.core.Pedidos;
 
@@ -40,9 +43,20 @@ public class Pedidos_Leads extends ArrayAdapter<Pedidos>{
         midPedido.setText(lead.getmIdPedido());
         mCliente.setText(lead.getmCliente()+" "+lead.getmNombre());
         mMonto.setText("C$ " + lead.getmPrecio());
-
-
-        mEstado.setText("ESTADO:  " + lead.getmEstado());
+        Log.d("estado",lead.getmEstado());
+        ImageView img= (ImageView)convertView.findViewById(R.id.img);
+        Integer estado = Integer.valueOf(lead.getmEstado());
+        if (estado.equals(0)){
+            img.setImageResource(R.drawable.uno2);
+        }else if (estado.equals(1)){
+            img.setImageResource(R.drawable.uno1);
+        }else if (estado.equals(2)){
+            img.setImageResource(R.drawable.doble2);
+        }else{
+            img.setImageResource(R.drawable.doble1);
+        }
+        img.setImageResource(R.drawable.uno2);
+        //mEstado.setText("ESTADO:  " + lead.getmEstado());
         return convertView;
     }
 }
