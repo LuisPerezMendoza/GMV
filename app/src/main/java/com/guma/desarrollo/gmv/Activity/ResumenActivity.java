@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -99,7 +100,7 @@ public class ResumenActivity extends AppCompatActivity {
                                 if (CodCls!="") {
                                         Toast.makeText(ResumenActivity.this, "GUARDANDO CASO: "+bandera, Toast.LENGTH_SHORT).show();
                                         guardar(list);
-                                        Pedidos_model.SaveDetallePedido(ResumenActivity.this, mDetallePedido);
+                                        //Pedidos_model.SaveDetallePedido(ResumenActivity.this, mDetallePedido);
                                         finish();
                                 }else {
                                     Toast.makeText(ResumenActivity.this, "ERROR AL GUARDAR PEDIDO, INTENTELO MAS TARDE", Toast.LENGTH_SHORT).show();
@@ -110,6 +111,9 @@ public class ResumenActivity extends AppCompatActivity {
         });
     }
     public void guardar(List<Map<String, Object>> list){
+        Float total;
+        Total = (TextView) findViewById(R.id.Total);
+        total = Float.parseFloat(Total.getText().toString().replace("TOTAL C$ ",""));
         if (bandera=="1"){
             SQLiteHelper.ExecuteSQL(ManagerURI.getDirDb(),ResumenActivity.this,"DELETE FROM PEDIDO_DETALLE WHERE IDPEDIDO = '"+idPedido+"'");
             for (Map<String, Object> obj2 : list) {
@@ -121,7 +125,9 @@ public class ResumenActivity extends AppCompatActivity {
                 tmpDetalle.setmPrecio(obj2.get("PRECIO").toString());
                 tmpDetalle.setmBonificado(obj2.get("BONIFICADO").toString());
                 mDetallePedido.add(tmpDetalle);
+                Log.d("guardado",obj2.get("ITEMNAME").toString()+" "+obj2.get("PRECIO").toString());
             }
+            SQLiteHelper.ExecuteSQL(ManagerURI.getDirDb(),ResumenActivity.this,"UPDATE PEDIDO SET MONTO = "+total+" WHERE IDPEDIDO = '"+idPedido+"'");
             Pedidos_model.SaveDetallePedido(ResumenActivity.this, mDetallePedido);
         }else{
             int key = SQLiteHelper.getId(ManagerURI.getDirDb(), ResumenActivity.this, "PEDIDOS");
@@ -139,6 +145,7 @@ public class ResumenActivity extends AppCompatActivity {
             tmp.setmPrecio(String.valueOf(nTotal));
             tmp.setmEstado("0");
             mPedido.add(tmp);
+            Log.d("guardado",String.valueOf(nTotal));
             Pedidos_model.SavePedido(ResumenActivity.this, mPedido);
             for (Map<String, Object> obj2 : list) {
                 Pedidos tmpDetalle = new Pedidos();
@@ -149,6 +156,7 @@ public class ResumenActivity extends AppCompatActivity {
                 tmpDetalle.setmPrecio(obj2.get("PRECIO").toString());
                 tmpDetalle.setmBonificado(obj2.get("BONIFICADO").toString());
                 mDetallePedido.add(tmpDetalle);
+                Log.d("guardado",obj2.get("ITEMNAME").toString());
             }
             Pedidos_model.SaveDetallePedido(ResumenActivity.this, mDetallePedido);
         }

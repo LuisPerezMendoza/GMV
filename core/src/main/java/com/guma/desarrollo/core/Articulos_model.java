@@ -79,4 +79,33 @@ public class Articulos_model {
         }
         return lista;
     }
+    public static List<String> getReglas( Context context,String mArticulo) {
+        //String[] lista = null;
+        List<String> lista = new ArrayList<>();
+        SQLiteDatabase myDataBase = null;
+        SQLiteHelper myDbHelper = null;
+        try
+        {
+            myDbHelper = new SQLiteHelper(ManagerURI.getDirDb(), context);
+            myDataBase = myDbHelper.getReadableDatabase();
+            Cursor cursor = myDataBase.query(true, "ARTICULOS", new String[] { "REGLAS","EXISTENCIA" }, "ARTICULO"+ "=?", new String[] { mArticulo }, null, null, null, null);
+            if(cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                while(!cursor.isAfterLast()) {
+                    Articulo tmp = new Articulo();
+                    //lista = cursor.getString(cursor.getColumnIndex("REGLAS"));
+                    lista.add(0,cursor.getString(cursor.getColumnIndex("REGLAS")));
+                    lista.add(1,cursor.getString(cursor.getColumnIndex("EXISTENCIA")));
+                    cursor.moveToNext();
+                }
+            }
+        }
+        catch (Exception e) { e.printStackTrace(); }
+        finally
+        {
+            if(myDataBase != null) { myDataBase.close(); }
+            if(myDbHelper != null) { myDbHelper.close(); }
+        }
+        return lista;
+    }
 }

@@ -9,20 +9,26 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.guma.desarrollo.core.Articulo;
+import com.guma.desarrollo.core.Articulos_model;
 import com.guma.desarrollo.core.Clientes_model;
 import com.guma.desarrollo.core.Facturas;
 import com.guma.desarrollo.core.ManagerURI;
@@ -36,7 +42,6 @@ import com.guma.desarrollo.gmv.api.Notificaciones;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,10 +49,12 @@ import java.util.Map;
 public class PedidoActivity extends AppCompatActivity {
     private ListView listView;
     List<Map<String, Object>> list;
-    TextView SubTotal,ivaTotal,Total,txtCount,txtItemName,txtItemCant,txtItemCod,txtItemValor,txtBonificado,txtPrecio;
+    TextView Total,txtCount,txtItemName,txtItemCant,txtItemCod,txtItemValor,txtBonificado,txtPrecio;
+    EditText Inputcant,Exist;
     ArrayList<Pedidos> fList;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
+    Spinner spinner;
 
 
     @Override
@@ -85,15 +92,8 @@ public class PedidoActivity extends AppCompatActivity {
         });
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final Articulo mnotes = (Articulo) parent.getItemAtPosition(position);
-                final String[] Reglas = mnotes.getmReglas().split(",");
-                LayoutInflater li = LayoutInflater.from(PedidoActivity.this);
-                View promptsView = li.inflate(R.layout.input_cant, null);
-                android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(PedidoActivity.this);
-
-                alertDialogBuilder.setView(promptsView);
-
+            public boolean onItemLongClick(final AdapterView<?> parent, View view, int position, long id) {
+                showInputBox(parent,list,position);
                 return true;
             }
         });
@@ -142,39 +142,83 @@ public class PedidoActivity extends AppCompatActivity {
             Refresh();
         }
     }
-    /*public void showInputBox(List<Map<String, Object>> list2,final int index){
-        final ArrayList<String> arrayList;
+    public void showInputBox(AdapterView<?> parent,final List<Map<String, Object>> list2, final int index){
         final Dialog dialogo = new Dialog(PedidoActivity.this);
         dialogo.setTitle("EDICION DE ARTICULO");
         dialogo.setContentView(R.layout.input_box);
-        final EditText editText = (EditText)dialogo.findViewById(R.id.txtinput);
-        editText.setText(list2.get(index).get("ITEMCANTI").toString());
-        final EditText valor = (EditText)dialogo.findViewById(R.id.txtvalor);
-        valor.setText(list2.get(index).get("PRECIO").toString());
+
+
+        Inputcant = (EditText) dialogo.findViewById(R.id.txtFrmCantidad);
+        Exist = (EditText) dialogo.findViewById(R.id.txtFrmExistencia);
+        Inputcant.setText(list2.get(index).get("ITEMCANTI").toString());
+        spinner = (Spinner) dialogo.findViewById(R.id.sp_boni);
         Button bt = (Button)dialogo.findViewById(R.id.btnDone);
         final Map<String, Object> map = new HashMap<>();
         map.put("ITEMNAME", list2.get(index).get("ITEMNAME").toString());
         map.put("ITEMCODIGO", list2.get(index).get("ITEMCODIGO").toString());
-        /*map.put("ITEMSUBTOTAL", list2.get(index).get("ITEMSUBTOTAL").toString());
-        map.put("ITEMVALORTOTAL", list2.get(index).get("ITEMVALORTOTAL").toString());*/
-        /*map.put("BONIFICADO", list2.get(index).get("BONIFICADO").toString());
         map.put("PRECIO", list2.get(index).get("PRECIO").toString());
+
+        List<String> Reglas = Articulos_model.getReglas(PedidoActivity.this, list2.get(index).get("ITEMCODIGO").toString());
+        final String[] Reglas2 = Reglas.get(0).split(",");
+        Exist.setText(Reglas.get(1).toString());
+        List<String> mStrings = new ArrayList<>();
+        mStrings.add(list2.get(index).get("BONIFICADO").toString());
+        spinner.setAdapter(new ArrayAdapter<>(PedidoActivity.this, android.R.layout.simple_spinner_dropdown_item, mStrings));
+        Inputcant.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //Toast.makeText(PedidoActivity.this, "adadas", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                List<String> mStrings = new ArrayList<>();
+                spinner.setAdapter(null);
+                if (s.length() != 0) {
+                    if (Reglas2.length > 1) {
+                        for (int i = 0; i < Reglas2.length; i++) {
+                            String[] frag = Reglas2[i].replace("+", ",").split(",");
+                            if (Integer.parseInt(Inputcant.getText().toString()) > Integer.parseInt(frag[0])) {
+                                mStrings.add(frag[0] + "+" + frag[1]);
+                            }
+                            else{
+                                mStrings.add("0");
+                            }
+                        }
+                    }else{
+                        mStrings.add("0");
+                    }
+                    spinner.setAdapter(new ArrayAdapter<>(PedidoActivity.this, android.R.layout.simple_spinner_dropdown_item, mStrings));
+                }
+            }
+        });
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                list.remove(index);
-                map.put("ITEMCANTI",  editText.getText().toString());
-                map.put("ITEMVALOR",  valor.getText().toString());
+                String cadena = Inputcant.getText().toString();
 
-                list.add(map);
-                list.set(index, map);
-                //Toast.makeText(PedidoActivity.this, "CANTIDAD NUEVA: "+list.get(index).get("ITEMCANTI").toString(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(PedidoActivity.this, "CANTIDAD NUEVA: "+String.valueOf(index), Toast.LENGTH_SHORT).show();
-                Refresh();
+                if (cadena.equals("")) {
+                    Toast.makeText(PedidoActivity.this, "VALOR MINIMO ES 1", Toast.LENGTH_SHORT).show();
+                }else{
+                    Integer numero = Integer.valueOf(Inputcant.getText().toString());
+                    if (numero>0) {
+                        map.put("BONIFICADO", list2.get(index).get("BONIFICADO").toString());
+                        map.put("ITEMCANTI", Inputcant.getText().toString());
+                        map.put("ITEMVALOR", Float.parseFloat(list2.get(index).get("PRECIO").toString()) * Float.parseFloat(Inputcant.getText().toString()));
+                        list.add(index, map);
+                        list.remove(index + 1);
+                        Refresh();
+                        dialogo.dismiss();
+                    }
+                }
             }
         });
         dialogo.show();
-    }*/
+        Window window = dialogo.getWindow();
+        window.setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
+    }
     public void Refresh(){
         float vLine = 0;
         listView.setAdapter(
@@ -186,6 +230,7 @@ public class PedidoActivity extends AppCompatActivity {
 
 
         for (Map<String, Object> obj : list){
+            //Log.d("carajo",obj.get("ITEMNAME").toString()+ " "+ obj.get("ITEMVALOR").toString());
             vLine     += Float.parseFloat(obj.get("ITEMVALOR").toString());
         }
         Total.setText("TOTAL C$ "+ String.valueOf(vLine));

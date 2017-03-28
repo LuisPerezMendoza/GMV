@@ -81,10 +81,10 @@
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:text="" />
             <ImageView
-
+                android:id="@+id/img"
                 android:layout_width="50dip"
                 android:layout_height="fill_parent"
-                android:src="@drawable/done"
+                android:src="@drawable/uno2"
                 android:layout_marginLeft="3dip"
                 android:scaleType="center"/>
         </TableRow>
