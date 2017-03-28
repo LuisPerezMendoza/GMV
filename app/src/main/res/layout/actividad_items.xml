@@ -13,15 +13,9 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_margin="10dp">
-            <TextView
-                android:layout_marginLeft="40dp"
-                android:id="@+id/IdAEItem"
-                android:layout_height="fill_parent"
-                android:layout_width="1dp"
-                android:layout_weight="1"
-                android:layout_alignParentTop="true"
-                android:visibility="gone"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <CheckBox
+                android:id="@+id/ActividadChk"
+                />
 
             <TextView
                 android:layout_marginLeft="0dp"
@@ -31,9 +25,15 @@
                 android:layout_weight="1"
                 android:layout_alignParentTop="true"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
-            <CheckBox
-                android:id="@+id/ActividadChk"
-                />
+            <TextView
+                android:layout_marginLeft="40dp"
+                android:id="@+id/IdAEItem"
+                android:layout_height="fill_parent"
+                android:layout_width="1dp"
+                android:layout_weight="1"
+                android:layout_alignParentTop="true"
+                android:visibility="gone"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
 
     </TableLayout>

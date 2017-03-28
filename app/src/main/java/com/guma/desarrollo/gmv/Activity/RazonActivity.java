@@ -1,6 +1,8 @@
 package com.guma.desarrollo.gmv.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +30,9 @@ public class RazonActivity extends AppCompatActivity {
 
     private ActividadesAdapter listAdapter;
     private ExpandableListView simpleExpandableListView;
+
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
 
     private void loadActividades(){
         for (Actividad obj : Actividades_model.getActividades(ManagerURI.getDirDb(),RazonActivity.this))
@@ -62,6 +67,11 @@ public class RazonActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_razon);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = preferences.edit();
+        setTitle(preferences.getString("NameClsSelected"," --ERROR--"));
+
         loadActividades();
         simpleExpandableListView = (ExpandableListView) findViewById(R.id.simpleExpandableListViewRazon);
         listAdapter = new ActividadesAdapter(RazonActivity.this,deptList);
