@@ -64,7 +64,7 @@ public class ArticulosActivity extends AppCompatActivity implements SearchView.O
         listView = (ListView) findViewById(R.id.listView);
         if (getSupportActionBar() != null){ getSupportActionBar().setDisplayHomeAsUpEnabled(true); }
         ReferenciasContexto.setContextArticulo(ArticulosActivity.this);
-        Toast.makeText(this, "HOLLLA", Toast.LENGTH_SHORT).show();
+
         objects = Articulo_Repository.getInstance().getArticulos();
         lbs = new Articulo_Leads(this, objects);
         listView.setAdapter(lbs);
@@ -85,7 +85,7 @@ public class ArticulosActivity extends AppCompatActivity implements SearchView.O
 
                     alertDialogBuilder.setView(promptsView);
 
-                Toast.makeText(ArticulosActivity.this, "AQUI ESSSSS", Toast.LENGTH_SHORT).show();
+
 
                     Inputcant = (EditText) promptsView.findViewById(R.id.txtFrmCantidad);
                     InputPrecio = (EditText) promptsView.findViewById(R.id.txtFrmPrecio);
