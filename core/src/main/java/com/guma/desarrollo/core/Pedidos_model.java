@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -90,7 +91,10 @@ public class Pedidos_model {
         {
             myDbHelper = new SQLiteHelper(basedir, context);
             myDataBase = myDbHelper.getReadableDatabase();
-            Cursor cursor = myDataBase.query(true, "PEDIDO", null, null, null, null, null, null, null);
+           // Cursor cursor = myDataBase.query(true, "PEDIDO", null, null, null, null, null, null, null);
+
+            Cursor cursor = myDataBase.query(true, "PEDIDO",null, "ESTADO IN ("+ TextUtils.join(",", new String[] { "0", "1", "2", "3" } )+")", null, null, null, null, null);
+
             if(cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 while(!cursor.isAfterLast()) {
@@ -162,5 +166,32 @@ public class Pedidos_model {
             if(myDbHelper != null) { myDbHelper.close(); }
         }
         return lista;
+    }
+
+    public static void  actualizarPedidos(Context context, ArrayList<Pedidos> PEDIDOS){
+        SQLiteDatabase myDataBase = null;
+        SQLiteHelper myDbHelper = null;
+        try
+        {
+            myDbHelper = new SQLiteHelper(ManagerURI.getDirDb(), context);
+            myDataBase = myDbHelper.getWritableDatabase();
+
+            for(int i=0;i<PEDIDOS.size();i++){
+
+                Pedidos a = PEDIDOS.get(i);
+                Log.d("guardando",a.getmIdPedido());
+                Log.d("guardando",a.getmEstado());
+                SQLiteHelper.ExecuteSQL(ManagerURI.getDirDb(),context,"UPDATE PEDIDO SET ESTADO = '"+a.getmEstado()+"' WHERE IDPEDIDO = '"+a.getmIdPedido()+"'");
+            }
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if(myDataBase != null) { myDataBase.close(); }
+            if(myDbHelper != null) { myDbHelper.close(); }
+        }
     }
 }

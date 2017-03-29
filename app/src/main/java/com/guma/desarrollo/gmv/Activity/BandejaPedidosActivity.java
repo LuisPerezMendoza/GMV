@@ -78,6 +78,7 @@ public class BandejaPedidosActivity extends AppCompatActivity {
                 editor.putString("ClsSelected",idCliente);
                 editor.apply();
                 startActivity(new Intent(BandejaPedidosActivity.this,PedidoActivity.class));
+                finish();
             }
         });
     }

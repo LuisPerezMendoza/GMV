@@ -100,8 +100,6 @@ public class ResumenActivity extends AppCompatActivity {
                                 if (CodCls!="") {
                                         Toast.makeText(ResumenActivity.this, "GUARDANDO CASO: "+bandera, Toast.LENGTH_SHORT).show();
                                         guardar(list);
-                                        //Pedidos_model.SaveDetallePedido(ResumenActivity.this, mDetallePedido);
-                                        finish();
                                 }else {
                                     Toast.makeText(ResumenActivity.this, "ERROR AL GUARDAR PEDIDO, INTENTELO MAS TARDE", Toast.LENGTH_SHORT).show();
                                 }
@@ -125,10 +123,12 @@ public class ResumenActivity extends AppCompatActivity {
                 tmpDetalle.setmPrecio(obj2.get("PRECIO").toString());
                 tmpDetalle.setmBonificado(obj2.get("BONIFICADO").toString());
                 mDetallePedido.add(tmpDetalle);
-                Log.d("guardado",obj2.get("ITEMNAME").toString()+" "+obj2.get("PRECIO").toString());
+                //Log.d("guardado",obj2.get("ITEMNAME").toString()+" "+obj2.get("PRECIO").toString());
             }
             SQLiteHelper.ExecuteSQL(ManagerURI.getDirDb(),ResumenActivity.this,"UPDATE PEDIDO SET MONTO = "+total+" WHERE IDPEDIDO = '"+idPedido+"'");
             Pedidos_model.SaveDetallePedido(ResumenActivity.this, mDetallePedido);
+            startActivity(new Intent(ResumenActivity.this,BandejaPedidosActivity.class));
+            finish();
         }else{
             int key = SQLiteHelper.getId(ManagerURI.getDirDb(), ResumenActivity.this, "PEDIDOS");
             idPedido = preferences.getString("VENDEDOR", "00") + "P" + Clock.getIdDate() + String.valueOf(key);
@@ -145,7 +145,7 @@ public class ResumenActivity extends AppCompatActivity {
             tmp.setmPrecio(String.valueOf(nTotal));
             tmp.setmEstado("0");
             mPedido.add(tmp);
-            Log.d("guardado",String.valueOf(nTotal));
+            //Log.d("guardado",String.valueOf(nTotal));
             Pedidos_model.SavePedido(ResumenActivity.this, mPedido);
             for (Map<String, Object> obj2 : list) {
                 Pedidos tmpDetalle = new Pedidos();
@@ -156,9 +156,11 @@ public class ResumenActivity extends AppCompatActivity {
                 tmpDetalle.setmPrecio(obj2.get("PRECIO").toString());
                 tmpDetalle.setmBonificado(obj2.get("BONIFICADO").toString());
                 mDetallePedido.add(tmpDetalle);
-                Log.d("guardado",obj2.get("ITEMNAME").toString());
+                //Log.d("guardado",obj2.get("ITEMNAME").toString());
             }
             Pedidos_model.SaveDetallePedido(ResumenActivity.this, mDetallePedido);
+            //startActivity(new Intent(ResumenActivity.this,BandejaPedidosActivity.class));
+            finish();
         }
     }
 }

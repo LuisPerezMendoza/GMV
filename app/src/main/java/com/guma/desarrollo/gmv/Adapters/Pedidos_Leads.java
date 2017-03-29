@@ -55,7 +55,7 @@ public class Pedidos_Leads extends ArrayAdapter<Pedidos>{
         }else{
             img.setImageResource(R.drawable.doble1);
         }
-        img.setImageResource(R.drawable.uno2);
+        //img.setImageResource(R.drawable.uno2);
         //mEstado.setText("ESTADO:  " + lead.getmEstado());
         return convertView;
     }
