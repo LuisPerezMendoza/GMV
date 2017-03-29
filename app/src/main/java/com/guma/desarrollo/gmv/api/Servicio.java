@@ -57,6 +57,10 @@ public interface Servicio {
     Call<Respuesta_pedidos> enviarPedidos(@Field("PEDIDOS") String pedidos);
 
     @FormUrlEncoded
+    @POST("updatePedidos")
+    Call<Respuesta_pedidos> actualizarPedidos(@Field("PEDIDOS") String pedidos);
+
+    @FormUrlEncoded
     @POST("Puntos")
     Call<Respuesta_puntos> obtenerFacturasPuntos(@Field("mVendedor") String mVendedor);
 
@@ -70,5 +74,4 @@ public interface Servicio {
     @FormUrlEncoded
     @POST("inVisitas")
     Call<String> inVisitas(@Field("mVisitas") String mVisitas);
-
 }

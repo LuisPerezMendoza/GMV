@@ -9,12 +9,14 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.guma.desarrollo.core.Actividades_model;
 import com.guma.desarrollo.core.Articulos_model;
 import com.guma.desarrollo.core.Clientes_model;
 import com.guma.desarrollo.core.Clock;
 import com.guma.desarrollo.core.ManagerURI;
-import com.guma.desarrollo.core.SQLiteHelper;
+import com.guma.desarrollo.core.Pedidos;
+import com.guma.desarrollo.core.Pedidos_model;
 import com.guma.desarrollo.gmv.api.Class_retrofit;
 import com.guma.desarrollo.gmv.api.Servicio;
 import com.guma.desarrollo.gmv.models.Respuesta_actividades;
@@ -22,8 +24,10 @@ import com.guma.desarrollo.gmv.models.Respuesta_articulos;
 import com.guma.desarrollo.gmv.models.Respuesta_clientes;
 import com.guma.desarrollo.gmv.models.Respuesta_indicadores;
 import com.guma.desarrollo.gmv.models.Respuesta_mora;
+import com.guma.desarrollo.gmv.models.Respuesta_pedidos;
 import com.guma.desarrollo.gmv.models.Respuesta_puntos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -99,7 +103,7 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
                         }else{
                             pdialog.dismiss();
                             Log.d(TAG, "onResponse: noSuccessful Actividades" + response.errorBody() );
-                            Toast.makeText(cnxt, "xxx"+response.errorBody(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(cnxt, "xxx"+response.errorBody(), Toast.LENGTH_LONG).show();
                         }
                     }
                     @Override
@@ -134,7 +138,36 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
                 });
 
 
+        List<Pedidos> listPedidos = Pedidos_model.getInfoPedidos(ManagerURI.getDirDb(),cnxt);
 
+        Gson gson = new Gson();
+        //Log.d("TaskPedidos","el gson-> "+gson.toJson(listPedidos));
+
+        //if (listPedidos.size()>0) {
+            Class_retrofit.Objfit()
+                    .create(Servicio.class)
+                    .actualizarPedidos(gson.toJson(listPedidos))
+                    .enqueue(new Callback<Respuesta_pedidos>() {
+                        @Override
+                        public void onResponse(Call<Respuesta_pedidos> call, Response<Respuesta_pedidos> response) {
+                            if (response.isSuccessful()) {
+                                pdialog.setMessage("Actualizando pedidos....");
+                                Respuesta_pedidos pedidosRespuesta = response.body();
+                                Log.d("TaskPedidos", "onResponse: PEDIDOS " + response.body().getResults().get(0).getmEstado());
+                                Pedidos_model.actualizarPedidos(cnxt, pedidosRespuesta.getResults());
+                            } else {
+                                pdialog.dismiss();
+                                Log.d("TaskPedidos", "onResponse: noSuccessful PEDIDOS " + response.errorBody());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Respuesta_pedidos> call, Throwable t) {
+                            pdialog.dismiss();
+                            Log.d("TaskPedidos", "onResponse: Failure update pedidos" + t.getMessage());
+                        }
+                    });
+        //}
 
        Class_retrofit.Objfit()
                 .create(Servicio.class)

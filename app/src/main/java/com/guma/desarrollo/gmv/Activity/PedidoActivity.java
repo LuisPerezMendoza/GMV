@@ -11,8 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,16 +26,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.guma.desarrollo.core.Articulo;
 import com.guma.desarrollo.core.Articulos_model;
-import com.guma.desarrollo.core.Clientes_model;
-import com.guma.desarrollo.core.Facturas;
 import com.guma.desarrollo.core.ManagerURI;
-import com.guma.desarrollo.core.Mora;
 import com.guma.desarrollo.core.Pedidos;
 import com.guma.desarrollo.core.Pedidos_model;
-import com.guma.desarrollo.gmv.Adapters.Facturas_Leads;
-import com.guma.desarrollo.gmv.Adapters.Pedidos_Leads;
 import com.guma.desarrollo.gmv.R;
 import com.guma.desarrollo.gmv.api.Notificaciones;
 
@@ -144,7 +137,11 @@ public class PedidoActivity extends AppCompatActivity {
     }
     public void showInputBox(AdapterView<?> parent,final List<Map<String, Object>> list2, final int index){
         final Dialog dialogo = new Dialog(PedidoActivity.this);
-        dialogo.setTitle("EDICION DE ARTICULO");
+        dialogo.setTitle(list2.get(index).get("ITEMNAME").toString());
+        TextView textView = (TextView) dialogo.findViewById(android.R.id.title);
+        textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+
         dialogo.setContentView(R.layout.input_box);
 
 
@@ -182,9 +179,6 @@ public class PedidoActivity extends AppCompatActivity {
                             String[] frag = Reglas2[i].replace("+", ",").split(",");
                             if (Integer.parseInt(Inputcant.getText().toString()) > Integer.parseInt(frag[0])) {
                                 mStrings.add(frag[0] + "+" + frag[1]);
-                            }
-                            else{
-                                mStrings.add("0");
                             }
                         }
                     }else{
@@ -247,7 +241,6 @@ public class PedidoActivity extends AppCompatActivity {
         if (id == R.id.accion_new) {
             startActivityForResult(new Intent(this,ArticulosActivity.class),0);
         }
-
         return super.onOptionsItemSelected(item);
     }
     @Override
@@ -267,5 +260,14 @@ public class PedidoActivity extends AppCompatActivity {
             list.add(map);
             Refresh();
         }
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startActivity(new Intent(PedidoActivity.this,BandejaPedidosActivity.class));
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
