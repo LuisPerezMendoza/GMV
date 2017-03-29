@@ -4,6 +4,7 @@ import android.view.animation.AccelerateInterpolator;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,76 +14,70 @@ import java.util.HashMap;
 
 public class Razon {
 
-    String mIdRazon, mVendedor, mCliente, mFecha, mIdAE, mActividad, mCategoria;
+    String mIdRazon, mVendedor, mCliente, mFecha, mObservacion;
+    ArrayList<RazonDetalle> rdet;
 
     JSONObject detalles = new JSONObject();
     ArrayList<HashMap<String, String>> contactList = null;
 
+    public ArrayList<RazonDetalle> getRdet() {
+        return rdet;
+    }
+
+    public void setRdet(ArrayList<RazonDetalle> rdet) {
+        this.rdet = rdet;
+    }
+
+
+
     public Razon(){}
 
-    public Razon(String Vendedor, String Cliente, String Fecha, String IdAE, String Actividad, String Categoria){
+    public Razon(String IdRazon, String Vendedor, String Cliente, String Fecha, String Observacion){
+        mIdRazon=IdRazon;
         mVendedor=Vendedor;
         mCliente=Cliente;
         mFecha=Fecha;
-        mIdAE=IdAE;
-        mActividad= Actividad;
-        mCategoria=Categoria;
+        mObservacion=Observacion;
     }
 
     public String getmIdRazon() {
         return mIdRazon;
     }
 
-    public void setmIdRazon(String idRazon) {
-        mIdRazon = idRazon;
-    }
-
-    public String getmIdAE() {
-        return mIdAE;
-    }
-
-    public void setmIdAE(String mIdAE) {
-        this.mIdAE = mIdAE;
-    }
-
-    public String getmActividad() {
-        return mActividad;
-    }
-
-    public void setmActividad(String mActividad) {
-        this.mActividad = mActividad;
-    }
-
-    public String getmCategoria() {
-        return mCategoria;
-    }
-
-    public void setmCategoria(String mCategoria) {
-        this.mCategoria = mCategoria;
+    public void setmIdRazon(String mIdRazon) {
+        this.mIdRazon = mIdRazon;
     }
 
     public String getmVendedor() {
         return mVendedor;
     }
 
-    public void setmVendedor(String vendedor) {
-        mVendedor = vendedor;
+    public void setmVendedor(String mVendedor) {
+        this.mVendedor = mVendedor;
     }
 
     public String getmCliente() {
         return mCliente;
     }
 
-    public void setmCliente(String cliente) {
-        mCliente = cliente;
+    public void setmCliente(String mCliente) {
+        this.mCliente = mCliente;
     }
 
     public String getmFecha() {
         return mFecha;
     }
 
-    public void setmFecha(String fecha) {
-        mFecha = fecha;
+    public void setmFecha(String mFecha) {
+        this.mFecha = mFecha;
+    }
+
+    public String getmObservacion() {
+        return mObservacion;
+    }
+
+    public void setmObservacion(String mObservacion) {
+        this.mObservacion = mObservacion;
     }
 
     public JSONObject getDetalles(){

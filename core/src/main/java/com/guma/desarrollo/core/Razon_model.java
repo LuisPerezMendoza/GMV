@@ -57,9 +57,6 @@ public class Razon_model {
                 Razon r = RAZON_DETALLE.get(i);
                 ContentValues contentValues = new ContentValues();
                 contentValues.put("",r.getmIdRazon());
-                contentValues.put("",r.getmIdAE());
-                contentValues.put("",r.getmActividad());
-                contentValues.put("",r.getmCategoria());
 
                 myDataBase.insert("RAZON_DETALLE",null,contentValues);
             }
@@ -91,6 +88,7 @@ public class Razon_model {
                     tmp.setmVendedor(cursor.getString(cursor.getColumnIndex("Vendedor")));
                     tmp.setmCliente(cursor.getString(cursor.getColumnIndex("Cliente")));
                     tmp.setmFecha(cursor.getString(cursor.getColumnIndex("Fecha")));
+                    tmp.setmObservacion(cursor.getString(cursor.getColumnIndex("Observacion")));
                     Cursor cursor2 = myDataBase.query(true, "RAZON_DETALLE", null, "IdRazon"+ "=?", new String[] { cursor.getString(cursor.getColumnIndex("IdRazon")) }, null, null, null, null);
                     cursor2.moveToFirst();
                     while (!cursor2.isAfterLast()){
@@ -130,9 +128,6 @@ public class Razon_model {
                 while (!cursor.isAfterLast()){
                     Razon tmp = new Razon();
                     tmp.setmIdRazon(cursor.getString(cursor.getColumnIndex("IdRazon")));
-                    tmp.setmIdAE(cursor.getString(cursor.getColumnIndex("IdAE")));
-                    tmp.setmActividad(cursor.getString(cursor.getColumnIndex("Actividad")));
-                    tmp.setmCategoria(cursor.getString(cursor.getColumnIndex("Categoria")));
                     lista.add(tmp);
                     cursor.moveToNext();
                 }
