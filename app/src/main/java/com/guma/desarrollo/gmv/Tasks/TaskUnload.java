@@ -98,12 +98,12 @@ public class TaskUnload extends AsyncTask<Integer,Integer,String> {
                 }
                 @Override
                 public void onFailure(Call<Respuesta_pedidos> call, Throwable t) {
-                    Toast.makeText(cnxt, "FALLO EN FAILURE", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(cnxt, "ERROR EN ENVIO DE PEDIDOS", Toast.LENGTH_SHORT).show();
                     //new Notificaciones().Alert(cnxt,"ERROR",t.getMessage().toString()).setCancelable(false).setPositiveButton("OK", null}).show();
                 }
             });
         }else{
-            Toast.makeText(cnxt, "NO HAY PEDIDOS", Toast.LENGTH_SHORT).show();
+            Log.d("ENVIO", "ERROR EN ENVIO DE PEDIDOS");
             //new Notificaciones().Alert(AgendaActivity.this,"ERROR","NO HAY PEDIDOS...").setCancelable(false).setPositiveButton("OK", null}).show();
         }
 
