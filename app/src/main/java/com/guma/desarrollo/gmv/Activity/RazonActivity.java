@@ -5,14 +5,23 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.guma.desarrollo.core.Actividad;
 import com.guma.desarrollo.core.Actividades_model;
 import com.guma.desarrollo.core.Clientes;
 import com.guma.desarrollo.core.Clientes_model;
+import com.guma.desarrollo.core.Clock;
 import com.guma.desarrollo.core.ManagerURI;
+import com.guma.desarrollo.core.Pedidos;
+import com.guma.desarrollo.core.Pedidos_model;
+import com.guma.desarrollo.core.Razon;
+import com.guma.desarrollo.core.SQLiteHelper;
 import com.guma.desarrollo.gmv.ActividadInfo;
 import com.guma.desarrollo.gmv.Adapters.ActividadesAdapter;
 import com.guma.desarrollo.gmv.Adapters.CustomAdapter;
@@ -23,6 +32,8 @@ import com.guma.desarrollo.gmv.R;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class RazonActivity extends AppCompatActivity {
     private LinkedHashMap<String, CategoriaInfo> subjects = new LinkedHashMap<>();
@@ -31,8 +42,13 @@ public class RazonActivity extends AppCompatActivity {
     private ActividadesAdapter listAdapter;
     private ExpandableListView simpleExpandableListView;
 
+    private TextView tvActividadItem;
+    private TextView tvIdAEItem;
+    private CheckBox cbActividad;
+
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
+    private String CodCls,IdRazon;
 
     private void loadActividades(){
         for (Actividad obj : Actividades_model.getActividades(ManagerURI.getDirDb(),RazonActivity.this))
@@ -84,5 +100,44 @@ public class RazonActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        findViewById(R.id.btnSaveRazon).setOnClickListener(new View.OnClickListener(){
+            private String strIdAE="";
+            private String strActividad="";
+            private boolean strValor=false;
+            @Override
+            public void onClick(View v) {
+                for (int i=0;i<simpleExpandableListView.getCount();i++)
+                {
+                    tvActividadItem = (TextView) simpleExpandableListView.getChildAt(i).findViewById(R.id.ActividadItem);
+                    tvIdAEItem = (TextView) simpleExpandableListView.getChildAt(i).findViewById(R.id.IdAEItem);
+                    cbActividad = (CheckBox) simpleExpandableListView.getChildAt(i).findViewById(R.id.ActividadChk);
+                    if (tvActividadItem !=null)
+                    {
+                        //Toast.makeText(RazonActivity.this,tvActividadItem.getText().toString(), Toast.LENGTH_LONG);
+                        strActividad=tvActividadItem.getText().toString();
+                        strIdAE=tvIdAEItem.getText().toString();
+                        strValor=cbActividad.isChecked();
+                    }
+                }
+            }
+
+        });
     }
+    public void guardar(){
+
+            /*int key = SQLiteHelper.getId(ManagerURI.getDirDb(), RazonActivity.this, "RAZON");
+            IdRazon = preferences.getString("VENDEDOR", "00") + "P" + Clock.getIdDate() + String.valueOf(key);
+            Float nTotal = 0.0f;*/
+            /*for (Map<String, Object> obj : list) {
+                nTotal += Float.parseFloat(obj.get("ITEMVALOR").toString());
+            }*/
+            for (int i=0;i<simpleExpandableListView.getCount();i++)
+            {
+                tvActividadItem = (TextView) simpleExpandableListView.getChildAt(i).findViewById(R.id.ActividadItem);
+                if (tvActividadItem !=null)
+                    Toast.makeText(RazonActivity.this,tvActividadItem.getText(), Toast.LENGTH_LONG);
+            }
+    }
+
 }
