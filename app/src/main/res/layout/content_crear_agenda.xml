@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/content_cobro_in"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.guma.desarrollo.gmv.Activity.CrearAgendaActivity"
+    tools:showIn="@layout/activity_crear_agenda">
+    <android.support.v7.widget.CardView
+        android:layout_marginTop="60dp"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="10dp"
+        card_view:cardElevation="4dp">
+    <TableLayout
+        android:layout_marginLeft="10dp"
+        android:layout_width="784dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="20dp">
+            <TextView
+                android:layout_height="fill_parent"
+                android:layout_width="150dp"
+                android:text="EJECUTIVO" />
+            <TextView
+                android:layout_height="fill_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="Tania Marquesz arcia" />
+            <TextView
+                android:layout_height="fill_parent"
+                android:layout_width="80dp"
+                android:text="RUTA:" />
+            <TextView
+                android:layout_height="fill_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="F08" />
+        </TableRow>
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="20dp">
+
+            <TextView
+                android:layout_height="fill_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="ZONA" />
+            <EditText
+                android:layout_height="fill_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_height="fill_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="SEMANA DEL" />
+            <EditText
+                android:id="@+id/startPlan"
+                android:layout_height="fill_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_height="fill_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="AL" />
+            <EditText
+                android:id="@+id/endPlan"
+                android:layout_height="fill_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"/>
+        </TableRow>
+    </TableLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:layout_marginTop="10dp"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="10dp"
+        card_view:cardElevation="4dp">
+        <TableLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="784dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+            <ExpandableListView
+                android:layout_marginLeft="20dp"
+                android:id="@+id/ExpListDias"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:dividerHeight="1dp"
+                />
+
+        </TableLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>
