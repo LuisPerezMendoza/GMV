@@ -93,7 +93,7 @@ public class Pedidos_model {
             myDataBase = myDbHelper.getReadableDatabase();
            // Cursor cursor = myDataBase.query(true, "PEDIDO", null, null, null, null, null, null, null);
 
-            Cursor cursor = myDataBase.query(true, "PEDIDO",null, "ESTADO IN ("+ TextUtils.join(",", new String[] { "0", "1", "2", "3" } )+")", null, null, null, null, null);
+            Cursor cursor = myDataBase.query(true, "PEDIDO",null, "ESTADO IN ("+ TextUtils.join(",", new String[] { "0", "1", "2", "3", "4" } )+")", null, null, null, null, null);
 
             if(cursor.getCount() > 0) {
                 cursor.moveToFirst();
