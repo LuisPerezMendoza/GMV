@@ -132,6 +132,13 @@ public class AgendaActivity extends AppCompatActivity  implements ConnectivityRe
             }
         });
 
+        findViewById(R.id.txtIdAgenda).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(AgendaActivity.this,CrearAgendaActivity.class));
+            }
+        });
+
 
         simpleExpandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override

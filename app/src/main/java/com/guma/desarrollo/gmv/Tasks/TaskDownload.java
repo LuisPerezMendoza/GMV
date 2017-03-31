@@ -143,7 +143,7 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
         Gson gson = new Gson();
         //Log.d("TaskPedidos","el gson-> "+gson.toJson(listPedidos));
 
-        //if (listPedidos.size()>0) {
+        if (listPedidos.size()>0) {
             Class_retrofit.Objfit()
                     .create(Servicio.class)
                     .actualizarPedidos(gson.toJson(listPedidos))
@@ -153,21 +153,21 @@ public class TaskDownload extends AsyncTask<Integer,Integer,String> {
                             if (response.isSuccessful()) {
                                 pdialog.setMessage("Actualizando pedidos....");
                                 Respuesta_pedidos pedidosRespuesta = response.body();
-                                Log.d("TaskPedidos", "onResponse: PEDIDOS " + response.body().getResults().get(0).getmEstado());
+                                Log.d("", "onResponse: PEDIDOS " + response.body().getResults().get(0).getmEstado());
                                 Pedidos_model.actualizarPedidos(cnxt, pedidosRespuesta.getResults());
                             } else {
                                 pdialog.dismiss();
-                                Log.d("TaskPedidos", "onResponse: noSuccessful PEDIDOS " + response.errorBody());
+                                Log.d(TAG, "onResponse: noSuccessful PEDIDOS " + response.errorBody());
                             }
                         }
 
                         @Override
                         public void onFailure(Call<Respuesta_pedidos> call, Throwable t) {
                             pdialog.dismiss();
-                            Log.d("TaskPedidos", "onResponse: Failure update pedidos" + t.getMessage());
+                            Log.d(TAG, "onResponse: Failure update pedidos" + t.getMessage());
                         }
                     });
-        //}
+        }
 
        Class_retrofit.Objfit()
                 .create(Servicio.class)

@@ -130,14 +130,14 @@ public class LoginActivity extends AppCompatActivity  {
                         startActivity(new Intent(LoginActivity.this,AgendaActivity.class));
                         finish();
                     }else{
-                        new Notificaciones().Alert(LoginActivity.this,"ERROR","ERROR AL AUTENTIARSE, INTENTELO MAS TARDE")
+                        new Notificaciones().Alert(LoginActivity.this,"ERROR","ERROR AL AUTENTIARSE, INTENTELO MAS TARDE ekisde")
                                 .setCancelable(false).setPositiveButton("OK", null).show();
                         pdialog.dismiss();
                     }
                 }
                 @Override
                 public void onFailure(Call<Respuesta_usuario> call, Throwable t) {
-                    new Notificaciones().Alert(LoginActivity.this,"ERROR","USUARIO O CONTRASEÑA INCORRECTA")
+                    new Notificaciones().Alert(LoginActivity.this,"ERROR",t.getMessage())
                             .setCancelable(false).setPositiveButton("OK", null).show();
                     pdialog.dismiss();
                 }
@@ -145,15 +145,4 @@ public class LoginActivity extends AppCompatActivity  {
             return null;
         }
     }
-
 }
-
-
-
-
-
-
-
-
-
-
