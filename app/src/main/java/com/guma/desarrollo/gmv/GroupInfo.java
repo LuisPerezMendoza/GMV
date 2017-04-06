@@ -6,6 +6,11 @@ public class GroupInfo {
 
     private String name;
     private ArrayList<ChildInfo> list = new ArrayList<ChildInfo>();
+    private int count;
+
+    public int getCount() {
+        return count = list.size();
+    }
 
     public String getName() {
         return name;
